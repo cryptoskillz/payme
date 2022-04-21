@@ -25,8 +25,7 @@ this sets the currency type and uses this for the conversion.  It defaults to GB
 
 A normal URL would look a little something like this 
 
-https://cryptoskillz.com/payme/?amount=100&id=1&currencytype=usd
-
+[example](https://cryptoskillz.com/payme/?amount=100&id=1&currencytype=usd)
 
 
 
