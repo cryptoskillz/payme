@@ -27,12 +27,18 @@
             <button type="" class="btn btn-primary mb-2" id="inputAmountButton">Go</button>
         </div>
     </div>
-    <div id="paymentqrcode" class="d-none">
-        <div class="d-flex justify-content-center">
-            <a href="bitcoin:bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj">bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj</a>
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-warning" role="status" id="spinner">
+            <span class="sr-only"></span>
         </div>
-        <div class="d-flex justify-content-center">
-            <img src="qrcode.png" />
+    </div>
+    <div id="paymentqrcode" class="d-none">
+
+        <div class="d-flex justify-content-center" id="btcaddress">
+            
+        </div>
+        <div class="d-flex justify-content-center" id="qrcodeimg">
+            
         </div>
         <div class="d-flex justify-content-center" id="paymentamount">
         </div>
@@ -49,6 +55,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="payme2.js"></script>
+
+
 </body>
 
 </html>
