@@ -22,15 +22,19 @@ set time out / error trap qrcode
 
 */
 
+//this lets us use the xpuaas service to fetch a Bitcoin address if you want to just just use the backup address then set this to 0 
+let useXpubaas = 1;
+//hold the backup address
+//note:  this is very exploitable if someone hijacks and chnages the address to one of their own, use this at your own risk.
 let _backupAddress = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
+//Set a customers array. You could replace this with a XHR call if you want but we have very few customers so can keep it in an array.
+var customers = [{ id: 1, name: "customer 1" }, { id: 2, name: "customer 2" }]
+
 //get the paramaters
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
 let buildPaymentPage = (theAddress) => {
-    //debug
-    //console.log(theAddress)
-
     //show the qrcode image
     document.getElementById('qrcodeimg').innerHTML = `<img src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${theAddress}"/>`
     //show the btc address
@@ -77,15 +81,21 @@ const getAddress = async () => {
 }
 
 const addressFetch = async () => {
-    //show spinner
-    document.getElementById('spinner').classList.remove('d-none')
-    let _address = await getAddress()
-    //check for an error and of there is set the address to the back up btc address
-    let theAddress = _backupAddress
-    if (_address.address != undefined)
-        theAddress = _address.address;
-    //build  QR
-    buildPaymentPage(_address.address)
+    //set the address to the backup address
+    let _theAddress = _backupAddress
+    //check if we are getting and address from the server
+    if (useXpubaas == 1)
+    {
+        //show spinner
+        document.getElementById('spinner').classList.remove('d-none')
+        let _address = await getAddress()
+        //check that we got an address from xpubaas
+        if (_address.address != undefined)
+            _theAddress = _address.address;
+    }
+
+    //build the payment page
+    buildPaymentPage(_theAddress)
 }
 
 //address check boolean
@@ -96,11 +106,39 @@ let amount = urlParams.get('amount');
 if (amount == null)
 {
     getAddressCheck = 0;
+    //check the customer id
+    let customerId = urlParams.get('id');
+    if (customerId == null)
+        customerId = 0
+
+    //check if the customer is in the array
+    if (customerId != 0) {
+        for (var i = 0; i < customers.length; i++) {
+            if (customerId == customers[i].id) {
+                console.log(customers[i])
+                document.getElementById('exampleFormControlInput1').innerHTML = `${customers[i].name} please enter invoice amount`
+                //alert('found it')
+            }
+        }
+
+    }
+
     //show the input amount div
     document.getElementById('paymentinput').classList.remove('d-none');
     amount = 0;
 }
 
+//set the currency symbol
+let currencySymbol = "£"
+//get the currency type
+let currencyType = urlParams.get('currencytype');
+if (currencyType == null)
+    currencyType = "GBP";
+//we could make this dynamic
+if (currencyType == "usd")
+    currencySymbol = "$"
+
+//there was an amount  passed in so we can fetch an address
 if (getAddressCheck == 1)
     addressFetch();
 
@@ -134,32 +172,3 @@ document.getElementById('inputAmountButton').addEventListener('click', function(
 end of click events
 
 */
-/*
-//set the currency symbol
-let currencySymbol = "£"
-//get the currency type
-let currencyType = urlParams.get('currencytype');
-if (currencyType == null)
-    currencyType = "GBP";
-//we could make this dynamic
-if (currencyType == "usd")
-    currencySymbol = "$"
-
-//check the customer id
-let customerId = urlParams.get('id');
-if (customerId == null)
-    customerId = 0
-
-//check if the customer is in the array
-if (customerId != 0) {
-    for (var i = 0; i < customers.length; i++) {
-        if (customerId == customers[i].id) {
-            console.log(customers[i])
-            document.getElementById('exampleFormControlInput1').innerHTML = `${customers[i].name} please enter invoice amount`
-            //alert('found it')
-        }
-    }
-
-}
-*/
-//start()
