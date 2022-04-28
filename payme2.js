@@ -15,8 +15,14 @@ https://jlopp.github.io/xpub-converter/
 zpub6mdt5gwgL3FjtHAnbFBqj1Kip7vxwUu2TpWyt49uVHHn7MukkxkF1ut7k1PYzTNKR6eqePCnSFULySUVVdkVcKsqaL5MHTdn7a3rYdSEc2K
 xpub6CatWdiZiodmUeTDp8LT5or8nmbKNcuyvz7WyksVFkKB4RHwCD3XyuvPEbvqAQY3rAPshWcMLoP2fMFMKHPJ4ZeZXYVUhLv1VMrjPC7PW6V
 
+TODO
+
+set time out / error trap qrcode 
+
 
 */
+
+let _backupAddress = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
 
 let buildPaymentPage =  (theAddress) => {
 	//debug
@@ -50,23 +56,32 @@ const getAddress = async () => {
     let numberofaddresses = 100
     //get a random address (overrides startaddress and uses this as the start of the loop if addresscheck is 1)
     let randomaddress = 0
-    //local urk
+    //local url
     let url = "http://127.0.0.1:5001/xpub/"
     //demo url
     //let url  = "https://xpub.cryptoskillz.com/xpub"
     let xpuburl = `${url}?xpub=${xpub}&network=${network}&biptype=${biptype}&addresscheck=${addresscheck}&startaddress=${startaddress}&numberofaddresses=${numberofaddresses}&randomaddress=${randomaddress}`
     return await fetch(xpuburl)
         .then(function(response) {
+        	//console.log("response")
+        	//console.log(response)
             return response.json();
         })
         .then(function(json) {
             //console.log(json)
             return(json);
-        });
+        })
+        .catch((error) => {
+  			console.log(error)
+		});
 }
 
 const start = async () => {
-   const _address = await getAddress()
+   let  _address = await getAddress()
+   //check for an error and of there is set the address to the back up btc address
+   let theAddress =  _backupAddress
+   if (_address.address !=  undefined)
+        theAddress = _address.address;
    //build  QR
    buildPaymentPage(_address.address)
 }
