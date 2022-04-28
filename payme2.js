@@ -23,16 +23,19 @@ set time out / error trap qrcode
 */
 
 let _backupAddress = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
+//get the paramaters
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
 
-let buildPaymentPage =  (theAddress) => {
-	//debug
-	//console.log(theAddress)
+let buildPaymentPage = (theAddress) => {
+    //debug
+    //console.log(theAddress)
 
-	//show the qrcode image
-	document.getElementById('qrcodeimg').innerHTML = `<img src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${theAddress}"/>`
-	//show the btc address
-	document.getElementById('btcaddress').innerHTML  = `<a href="bitcoin:${theAddress}">${theAddress}</a>`
-	//show the got payment
+    //show the qrcode image
+    document.getElementById('qrcodeimg').innerHTML = `<img src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${theAddress}"/>`
+    //show the btc address
+    document.getElementById('btcaddress').innerHTML = `<a href="bitcoin:${theAddress}">${theAddress}</a>`
+    //show the got payment
     document.getElementById('paymentqrcode').classList.remove('d-none');
     //hide the spinner
     document.getElementById('spinner').classList.add('d-none')
@@ -63,24 +66,100 @@ const getAddress = async () => {
     let xpuburl = `${url}?xpub=${xpub}&network=${network}&biptype=${biptype}&addresscheck=${addresscheck}&startaddress=${startaddress}&numberofaddresses=${numberofaddresses}&randomaddress=${randomaddress}`
     return await fetch(xpuburl)
         .then(function(response) {
-            return response.json();
+            return (response.json());
         })
         .then(function(json) {
-            return(json);
+            return (json);
         })
         .catch((error) => {
-  			console.log(error)
-		});
+            console.log(error)
+        });
 }
 
-const start = async () => {
-   let  _address = await getAddress()
-   //check for an error and of there is set the address to the back up btc address
-   let theAddress =  _backupAddress
-   if (_address.address !=  undefined)
+const addressFetch = async () => {
+    //show spinner
+    document.getElementById('spinner').classList.remove('d-none')
+    let _address = await getAddress()
+    //check for an error and of there is set the address to the back up btc address
+    let theAddress = _backupAddress
+    if (_address.address != undefined)
         theAddress = _address.address;
-   //build  QR
-   buildPaymentPage(_address.address)
+    //build  QR
+    buildPaymentPage(_address.address)
 }
 
-start()
+//address check boolean
+let getAddressCheck = 1;
+//check for an amount
+let amount = urlParams.get('amount');
+//check if it is blank
+if (amount == null)
+{
+    getAddressCheck = 0;
+    //show the input amount div
+    document.getElementById('paymentinput').classList.remove('d-none');
+    amount = 0;
+}
+
+if (getAddressCheck == 1)
+    addressFetch();
+
+
+/*
+
+start of click events
+
+*/
+
+//add a listener event as want to know when it is been clicked
+document.getElementById('inputAmountButton').addEventListener('click', function() {
+    //get the amount
+    let inputAmountEl = document.getElementById('inputAmount').value;
+    //check the user is not an idiot
+    //note : we should check they added a number
+    //note : we could get the invoice id here as well for the webhook
+    if (inputAmountEl != "") {
+        //hide the spinner
+        document.getElementById('paymentinput').classList.add('d-none');
+        amount = inputAmountEl;
+        addressFetch();
+    } else
+        alert('come on put in a value!')
+
+})
+
+
+/*
+
+end of click events
+
+*/
+/*
+//set the currency symbol
+let currencySymbol = "£"
+//get the currency type
+let currencyType = urlParams.get('currencytype');
+if (currencyType == null)
+    currencyType = "GBP";
+//we could make this dynamic
+if (currencyType == "usd")
+    currencySymbol = "$"
+
+//check the customer id
+let customerId = urlParams.get('id');
+if (customerId == null)
+    customerId = 0
+
+//check if the customer is in the array
+if (customerId != 0) {
+    for (var i = 0; i < customers.length; i++) {
+        if (customerId == customers[i].id) {
+            console.log(customers[i])
+            document.getElementById('exampleFormControlInput1').innerHTML = `${customers[i].name} please enter invoice amount`
+            //alert('found it')
+        }
+    }
+
+}
+*/
+//start()
