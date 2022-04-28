@@ -18,6 +18,7 @@ xpub6CatWdiZiodmUeTDp8LT5or8nmbKNcuyvz7WyksVFkKB4RHwCD3XyuvPEbvqAQY3rAPshWcMLoP2
 TODO
 
 set time out / error trap qrcode 
+format money input amount box
 
 
 */
@@ -84,8 +85,7 @@ const addressFetch = async () => {
     //set the address to the backup address
     let _theAddress = _backupAddress
     //check if we are getting and address from the server
-    if (useXpubaas == 1)
-    {
+    if (useXpubaas == 1) {
         //show spinner
         document.getElementById('spinner').classList.remove('d-none')
         let _address = await getAddress()
@@ -103,8 +103,7 @@ let getAddressCheck = 1;
 //check for an amount
 let amount = urlParams.get('amount');
 //check if it is blank
-if (amount == null)
-{
+if (amount == null) {
     getAddressCheck = 0;
     //check the customer id
     let customerId = urlParams.get('id');
