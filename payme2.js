@@ -63,12 +63,9 @@ const getAddress = async () => {
     let xpuburl = `${url}?xpub=${xpub}&network=${network}&biptype=${biptype}&addresscheck=${addresscheck}&startaddress=${startaddress}&numberofaddresses=${numberofaddresses}&randomaddress=${randomaddress}`
     return await fetch(xpuburl)
         .then(function(response) {
-        	//console.log("response")
-        	//console.log(response)
             return response.json();
         })
         .then(function(json) {
-            //console.log(json)
             return(json);
         })
         .catch((error) => {
