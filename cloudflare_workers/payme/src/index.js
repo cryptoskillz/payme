@@ -1,13 +1,12 @@
-
 addEventListener('fetch', event => {
     try {
-      console.log(BTCADDRESS);
+        console.log(BTCADDRESS);
 
-       //setInterval(function () {"Hello"}, 1000);
+        //setInterval(function () {"Hello"}, 1000);
 
-       let _backupAddress = BTCADDRESS
+        let _backupAddress = BTCADDRESS
 
-       let htmlContent = `<style>
+        let htmlContent = `<style>
 .center {
   text-align: center;
 }
@@ -24,8 +23,8 @@ addEventListener('fetch', event => {
 <h1 class="center">PAY CRYPTOSKILLZ IN BITCOIN</h1>
 <h2 class="center">${_backupAddress}</h2>
 <div class="center">Click here to <a href="${URL}">check</a> for payment</div>`;
-       return event.respondWith(new Response(htmlContent, {headers: {'content-type': 'text/html;charset=UTF-8',},}));
-} catch (e) {
+        return event.respondWith(new Response(htmlContent, { headers: { 'content-type': 'text/html;charset=UTF-8', }, }));
+    } catch (e) {
         return event.respondWith(new Response('Error thrown ' + e.message));
     }
 });
