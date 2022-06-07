@@ -1,0 +1,11 @@
+name = "payme"
+main = "src/index.js"
+compatibility_date = "2022-06-07"
+[vars]
+BTCADDRESS = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
+URL = "http://localhost:8787/"
+[env.production]
+name = "payme"
+[env.production.vars]
+URL = "https://checkpayment.cryptoskillz.com/"
+BTCADDRESS = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"

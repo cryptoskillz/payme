@@ -152,7 +152,7 @@ start of click events
 document.getElementById('inputAmountButton').addEventListener('click', function() {
     //get the amount
     let inputAmountEl = document.getElementById('inputAmount').value;
-    //check the user is not an idiot
+    //check if the user is not an idiot
     //note : we should check they added a number
     //note : we could get the invoice id here as well for the webhook
     if (inputAmountEl != "") {
