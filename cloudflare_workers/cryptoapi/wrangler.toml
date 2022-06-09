@@ -1,0 +1,5 @@
+name = "cryptoapi"
+main = "src/index.js"
+compatibility_date = "2022-06-09"
+[vars]
+APIKEY = "cba38c2ee3674ee7da15fde7c45dc99fae56cf22"

@@ -1,11 +1,22 @@
 name = "payme"
 main = "src/index.js"
 compatibility_date = "2022-06-07"
-[vars]
+
+[env.local]
+name = "payme"
+
+[env.local.vars]
+ENV="LOCAL"
 BTCADDRESS = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
 URL = "http://localhost:8787/"
+kv-namespaces = [{ binding = "PAYME", id = "2ab3b73fa2e2445bb0cf9aa54e593b4e", preview_id = "2ab3b73fa2e2445bb0cf9aa54e593b4e" }]
+
 [env.production]
 name = "payme"
+
 [env.production.vars]
+ENV="PROD"
 URL = "https://checkpayment.cryptoskillz.com/"
 BTCADDRESS = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
+kv-namespaces = [{ binding = "PAYME", id = "6bf68fe0b0ea4a2baa91f38d7d8e2d57", preview_id = "6bf68fe0b0ea4a2baa91f38d7d8e2d57" }]
+

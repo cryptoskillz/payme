@@ -1,0 +1,23 @@
+{
+  "name": "xpub",
+  "version": "0.0.0",
+  "devDependencies": {
+    "wrangler": "2.0.7"
+  },
+  "private": true,
+  "scripts": {
+    "start": "wrangler dev",
+    "publish": "wrangler publish"
+  },
+  "dependencies": {
+    "@noble/secp256k1": "^1.5.5",
+    "bip32": "^3.0.1",
+    "bs58": "^5.0.0",
+    "bs58check": "^2.1.2",
+    "crypto": "^1.0.1",
+    "hdkey": "^2.0.1",
+    "multihashing": "^0.3.4",
+    "tiny-secp256k1": "^2.2.1",
+    "typeforce": "^1.18.0"
+  }
+}
