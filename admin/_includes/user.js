@@ -4,6 +4,8 @@ TODO
 
 check the send email works for forogot password
 update all the  alert messages to user showALert
+add profile page
+add forgot password page
 
 notes
 

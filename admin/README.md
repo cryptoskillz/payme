@@ -1,5 +1,10 @@
 This is cryptoskillz generic admin for cloudflare pages that can be found in the current repo
 
+clone this the directory of you choice then run  the following 2 commands
+
+npm install --save-dev @11ty/eleventy
+npm install 
+
 
 Change variables:
 
@@ -37,7 +42,28 @@ Building
 
 	The api endpoints are all in the functions/api directory
 
-	
+
+	publishing
+
+	https://developers.cloudflare.com/pages/get-started/
+
+	create a new KV name space here
+
+	https://dash.cloudflare.com/8851e575353a23f4511fbe2d1a74505e/workers/kv/namespaces
+
+	add the following your cloudflare pages dashboard
+
+	settings/enviorment-variables 
+
+	API : the root of your project
+	SECRET : A secret phrase for JWT
+
+	setttings/functions
+
+	add a kv binding
+
+	KDATA = Your namespace you created earlier
+
 
 
 
