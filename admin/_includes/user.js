@@ -2,7 +2,8 @@
 
 TODO 
 
-check the sendemail works for forogot password
+check the send email works for forogot password
+update all the  alert messages to user showALert
 
 notes
 
@@ -32,16 +33,8 @@ whenDocumentReady(isReady = () => {
         }
     }
 
-
-
-
-
-
-
     if (checkElement("btn-profile-update") == true) {
         document.getElementById('btn-profile-update').addEventListener('click', function() {
-
-
             //set the valid var
             let valid = 1;
             let username = document.getElementById('inp-username');
@@ -193,11 +186,7 @@ whenDocumentReady(isReady = () => {
                 }
                 //call the create account endpoint
                 xhrcall(0, "auth/forgot-password", bodyobjectjson, "json", "", forgotPasswordDone)
-
-
-
             }
-
 
         });
     }
@@ -205,18 +194,12 @@ whenDocumentReady(isReady = () => {
 
     if (checkElement("btn-create-account") == true) {
         document.getElementById('btn-create-account').addEventListener('click', function() {
-            /*
-            todo : 
-            */
-
-
             //set the valid var
             let valid = 1;
             //get the details
             let email = document.getElementById('inp-email');
             let password1 = document.getElementById('inp-password1');
             let password2 = document.getElementById('inp-password2');
-
             //validate the email
             if (validateEmail(email.value)) {
                 //its valid we don't really have to do anything but we may extend this so no harm done leaving it.
@@ -229,7 +212,6 @@ whenDocumentReady(isReady = () => {
                 error.innerHTML = "Invalid Email Address"
                 error.classList.remove('d-none')
             }
-
             //validate the password
             if (password1.value == "") {
                 //error with the password
@@ -244,12 +226,9 @@ whenDocumentReady(isReady = () => {
                     valid = 0;
                     let error = document.getElementById('error-password2')
                     error.innerHTML = 'Passwords do not match.'
-                    error.classList.remove('d-none')
-
+                    error.classList.remove('d-none');
                 }
-
             }
-
             //send it.
             if (valid == 1) {
                 //build the json
@@ -266,9 +245,6 @@ whenDocumentReady(isReady = () => {
                 }
                 //call the create account endpoint
                 xhrcall(0, "api/register", bodyobjectjson, "json", "", registerDone)
-
-
-
             }
         });
     }
@@ -296,7 +272,6 @@ whenDocumentReady(isReady = () => {
                 valid = 0;
                 document.getElementById('error-email').classList.remove('d-none')
             }
-
             //validate the password
             if (password1.value == "") {
                 //password is blank
@@ -305,7 +280,6 @@ whenDocumentReady(isReady = () => {
                 error.innerHTML = 'Password cannot be blank'
                 error.classList.remove('d-none')
             }
-
             //send it.
             if (valid == 1) {
                 //login done function
@@ -315,8 +289,7 @@ whenDocumentReady(isReady = () => {
                     //get the JWT
                     let token = res.jwt
                     //set the user object
-                    console.log(res)
-                    let user = { "username": res.user.username, "email": res.user.email, "loggedin": 1, "secret": res.user.secret }
+                    let user = { "username": res.user.username, "email": res.user.email, "loggedin": 1, "secret": res.user.secret, "datacount": res.user.datacount }
                     //clear the caches 
                     clearCache();
                     //set the local storage
@@ -325,7 +298,6 @@ whenDocumentReady(isReady = () => {
                     //direct the redirect URL
                     window.location.href = "/dashboard/"
                 }
-
                 //build the json
                 let bodyobj = {
                     identifier: email.value,
@@ -335,7 +307,6 @@ whenDocumentReady(isReady = () => {
                 var bodyobjectjson = JSON.stringify(bodyobj);
                 //call the login endpoint
                 xhrcall(0, "api/login/", bodyobjectjson, "json", "", loginDone)
-
             }
         })
     }

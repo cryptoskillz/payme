@@ -6,7 +6,7 @@ layout: layout.njk
 {% endset %}
 <!-- Page Heading -->
 <h1 class="h3 mb-2 text-gray-800">Dashboard</h1>
-<p class="mb-4">Welcome to backpage generator.</p>
+<p class="mb-4" >{{dashboardstrap}}</p>
 
 <!-- Content Row -->
 <div class="row">
@@ -18,8 +18,8 @@ layout: layout.njk
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <a href="/projects/" id="projects-cy">Invoices</a></div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="backpageprojects"></div>
+                            <a href="/{{env.DATAMAIN}}/" id="projects-cy">{{env.DATAMAIN | capitalize }}</a></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="dashboardcounter"></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-calendar fa-2x text-gray-300"></i>

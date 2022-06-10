@@ -1,5 +1,9 @@
 /*
+    this function creates a new user
+
     todo:
+
+
 
 */
 var uuid = require('uuid');
@@ -23,11 +27,13 @@ export async function onRequestPost(context) {
         const KV = context.env.kvdata;
         //see if the user exists
         let secretid = uuid.v4();
-        let json = JSON.stringify({ "jwt": "", "user": {  "username": registerData.username, "email": registerData.username,"password":registerData.password,"secret":secretid } })
+        let json = JSON.stringify({ "jwt": "", "user": {  "username": registerData.username, "email": registerData.username,"password":registerData.password,"secret":secretid,datacount:"0" } })
         //check if user exist
         const user = await KV.get("username" + registerData.username);
         if (user == null)
         {
+            //create a KV with the username and secret that we can use for any of the export functions.  If you are not going to have give you users API access then you will 
+            //not require this.
             await KV.put("username" + secretid,  JSON.stringify({username:registerData.username}));
             await KV.put("username" + registerData.username, json);
             return new Response(JSON.stringify({ status: "ok" }), { status: 200 });

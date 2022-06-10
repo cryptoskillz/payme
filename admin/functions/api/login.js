@@ -51,7 +51,7 @@ export async function onRequest(context) {
                     //await KV.put("username" + tUser.user.secret , JSON.stringify({username:credentials.identifier}));
                     //await KV.put("username" + credentials.identifier, json);
 
-                    return new Response(JSON.stringify({ "jwt": token, "user": { "username": credentials.identifier, "email": credentials.identifier, "secret": tUser.user.secret } }), { status: 200 });
+                    return new Response(JSON.stringify({ "jwt": token, "user": { "username": credentials.identifier, "email": credentials.identifier, "secret": tUser.user.secret,datacount:tUser.user.datacount } }), { status: 200 });
                 } else {
                     return new Response(JSON.stringify({ error: "invalid login" }), { status: 400 });
 

@@ -1,17 +1,32 @@
-this is a 11.ty template with sb admin to build user control panels
-
-it uses eleventy, sb admin & strapi.
-
-features
-
-strapi integration to add / login in users via JWT
-sd admin 2 integrated into eleventy
+This is cryptoskillz generic admin for cloudflare pages that can be found in the current repo
 
 
-Other links
+Change variables:
 
-https://startbootstrap.com/theme/sb-admin-2
-https://www.11ty.dev/
-https://strapi.io/
+Open _data/env.js
+	Change "Title" to your customers title
+	Change "Copyright" to your company / product name 
+	Change "DATA" if you want to call the your data view something else IE projects.
+Change env vars
+
+open .env
+	Change secret to something else, this is they Key that JWT uses. 
+
+Javacript
+
+	All the resuable javascript is in /assets/app.js and 
+	Each file has its own js file in _includes ie dashoard.njk has an accompayning _includes/dashboard.js file 
+
+Building 
+
+
+wrangler
+
+api
+
+
+
+
+
 
 
