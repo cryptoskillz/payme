@@ -1,21 +1,27 @@
-
-
 async function handleRequest(request) {
 
     //get the parameter
     let tmp = request.url.split('=');
     //set the id
     let id = tmp[1]
-    //get the details
-    let details = await PAYME.get(ENV + id);
-    //get the details
-    details = JSON.parse(details);
-    //debug
-    //{address:"1234567890",amountbtc:1,customer:"the customer"}
-    let _backupAddress = details.address;
-    if ((details.address == "") || (details.address == null)) 
-        _backupAddress = BTCADDRESS
-
+    //create a detail JSON object
+    let details = {address:"",amountbtc:"",customer:""};
+    //store the address
+    let _backupAddress = BTCADDRESS;
+    //set a customer details
+    let customerdetails = "";
+    //check that there is an id passed in.
+    if (id != undefined) {
+        //get the details from the KV store
+        let details = await PAYME.get(ENV + id);
+        //parse the details
+        details = JSON.parse(details);
+        //update the address
+        _backupAddress = details.address;
+        //update the customer details
+        customerdetails=`<div class="center">amount:${details.amountbtc} customer:${details.customer}</div>`
+    }
+    //the html
     let html = `<style>
                 .center {
                   text-align: center;
@@ -33,9 +39,9 @@ async function handleRequest(request) {
                 <img src="https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${_backupAddress}"/>
                 <h1 class="center">PAY CRYPTOSKILLZ IN BITCOIN</h1>
                 <h2 class="center">${_backupAddress}</h2>
-                <div class="center">amount:${details.amountbtc} customer:${details.customer}</div>
+                ${customerdetails}
                 <div class="center">Click here to <a href="${URL}">check</a> for payment</div>`;
-
+    //return it
     return new Response(html, {
         headers: {
             'content-type': 'text/html;charset=UTF-8',

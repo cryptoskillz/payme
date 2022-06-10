@@ -1,0 +1,51 @@
+---
+layout: layout.njk
+permalink: /project/data/template/
+---
+{% set theJs %}
+    {% include 'project-data-template.js' %}
+{% endset %}
+<!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800" id="project-header">Project Template</h1>
+        <div class="mb-3">
+            <label for="pageActions">Actions</label>
+            <select class="form-control" id="pageActionSelect">
+                <option value="0">Select</option>
+                <option value="1">View</option>
+                <option value="2">Back</option>
+            </select>
+        </div>
+    </div>
+<p class="mb-4">
+</p>
+
+
+<div class="form-group">
+   <!-- <div id="summernote"></div>-->
+<div id="projectkeys">
+
+</div>
+<input type="text" class="form-control form-control-user" id="inp-template-name" name="inp-template-name" aria-describedby="emailHelp" placeholder="Enter template name i.e /({ {id} }/" value="">
+<span class="text-danger d-none" id="error-template-name">Invalid template name </span>
+<textarea class="form-control form-control-user" id="inp-projectemplate"  rows="60" cols="50">
+</textarea>
+ <iframe id="preview"></iframe>
+
+</div>
+<button class="btn btn-primary btn-user btn-block" id="btn-template">
+    Update
+</button>
+
+    <!-- include codemirror css/js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.js" integrity="sha512-/8pAp30QGvOa8tNBv7WmWiPFgYGOg2JdVtqI8vK+xZsqWHnNd939v9s+zJHXZcJe5wPD44D66zz+CLTD3KacYA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.css" integrity="sha512-7vaQ4LLdaXd2IuMd4MUQ6LRFIGbEwJI1aq6KYqL3RjbdQyUkRFhwZKmqmkBXurTFdGlx687lTN8FSJfX6Df8Gw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+{% if env.ENVIRONMENT == 'local' %}
+    <script type="text/javascript">{{theJs | safe}}</script>
+{% else %}
+    <script type="text/javascript">{{theJs | jsmin | safe}}</script>
+{% endif %}

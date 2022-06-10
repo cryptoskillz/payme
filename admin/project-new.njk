@@ -1,0 +1,29 @@
+---
+layout: layout.njk
+permalink: /project/new/
+---
+{% set theJs %}
+    {% include 'project-new.js' %}
+{% endset %}
+<!-- Page Heading -->
+   <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800" id="project-header">Create a new project</h1>
+        <a href="/projects/" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-backward fa-sm text-white-50"></i> Back</a>
+    </div>
+<p class="mb-4">
+</p>
+
+<div class="form-group" id="formdiv">
+    <label>Project name</label>
+    <input type="text" class="form-control form-control-user" id="inp-projectname" aria-describedby="emailHelp" placeholder="Enter a project name...">
+   	<span class="text-danger d-none" id="error-projectname">Name </span>  
+</div>
+<button class="btn btn-primary btn-user btn-block" id="btn-create">
+    Create
+</button>
+{% if env.ENVIRONMENT == 'local' %}
+    <script type="text/javascript">{{theJs | safe}}</script>
+{% else %}
+    <script type="text/javascript">{{theJs | jsmin | safe}}</script>
+{% endif %}
