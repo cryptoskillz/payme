@@ -522,7 +522,7 @@ let checkLogin = () => {
                 }
             }
         } else {
-            window.location = '/login'
+            window.location = '/login/'
         }
 
     }
@@ -530,9 +530,7 @@ let checkLogin = () => {
 
 
 /* 
-
 end of global account stuff
-
 */
 
 
