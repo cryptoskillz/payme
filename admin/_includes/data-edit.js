@@ -8,36 +8,35 @@ let whenDocumentReady = (f) => {
 }
 
 whenDocumentReady(isReady = () => {
-    let projectid = getProjectId();
-    let project = getCacheProjects(projectid)
+    let dataitem = getCurrentDataItem();
     //console.log(project)
-    document.getElementById('inp-projectname').value = project.name;
-    document.getElementById('project-header').innerHTML = `Edit ${project.name}`;
+    document.getElementById('inp-dataname').value = dataitem.name;
+    document.getElementById('project-header').innerHTML = `Edit ${dataitem.name}`;
     document.getElementById('showBody').classList.remove('d-none')
-    
     document.getElementById('btn-edit').addEventListener('click', function() {
         let xhrDone = (res) => {
             res = JSON.parse(res)
-            updateCacheProjects(project)            
+            updateCacheData(dataitem)
             showAlert(res.message, 1)
-            document.getElementById('project-header').innerHTML = `Edit ${project.name}`;
+            document.getElementById('project-header').innerHTML = `Edit ${dataitem.name}`;
         }
         //set the valid var
         let valid = 1;
         //get the details
-        let projectname = document.getElementById('inp-projectname');
-        if (projectname.value == "") {
+        let dataname = document.getElementById('inp-dataname');
+        if (dataname.value == "") {
             valid = 0;
-            showAlert("Project name cannot be blank", 2);
+            showAlert(dataMainMethod + " name cannot be blank", 2);
         }
         if (valid == 1) {
             let bodyobj = {
-                name: projectname.value,
-                id: project.id
+                name: dataname.value,
+                oldname: dataitem.name,
+                id: dataitem.id
             }
-            project.name = projectname.value
+            dataitem.name = dataname.value
             var bodyobjectjson = JSON.stringify(bodyobj);
-            xhrcall(4, `api/projects/`, bodyobjectjson, "json", "", xhrDone, token)
+            xhrcall(4, `api/${dataMainMethod}/`, bodyobjectjson, "json", "", xhrDone, token)
         }
     });
 })

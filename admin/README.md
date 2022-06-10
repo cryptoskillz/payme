@@ -30,6 +30,7 @@ Building
 	./build.sh prod
 		Build a prodction version of the site
 	./build.sh cypress
+		runs the tests
 
 	wrangler
 
@@ -63,6 +64,12 @@ Building
 	add a kv binding
 
 	KDATA = Your namespace you created earlier
+
+TODO
+
+sitemap
+profile page
+
 
 
 

@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 
 
@@ -12,5 +11,6 @@ module.exports = {
     ENVIRONMENT: process.env.ELEVENTY_ENV,
     SECRET: process.env.SECRET,
     DATAMAIN: "data",
-    DASHBOARDSTRAP:"Welcome to the content editor."
+    ITEMSDATAMAIN: "items",
+    DASHBOARDSTRAP: "Welcome to the content editor."
 }

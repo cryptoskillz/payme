@@ -68,7 +68,7 @@ START OF LOCAL CACHE FUNCTIONS
 let clearCache = (clearUser = 0) => {
     window.localStorage.projectAlldata = ""
     window.localStorage.projectdata = ""
-    window.localStorage.projects = ""
+    window.localStorage.data = ""
     window.localStorage.project = ""
     if (clearUser == 1) {
         window.localStorage.token = ""
@@ -80,8 +80,8 @@ let getUser = () => {
     return (JSON.parse(window.localStorage.user))
 }
 //project data
-let deleteProjectAlldata = () => {
-     window.localStorage.projectAlldata = ""
+let deleteAllDataItems = () => {
+    window.localStorage.dataItems = ""
 }
 
 
@@ -96,7 +96,7 @@ let addCachedProjectData = (theData, debug = 0) => {
     }
     projectdata.push(JSON.parse(theData.data));
     window.localStorage.projectAlldata = JSON.stringify(projectdata)
-    
+
 }
 
 let storeProjectAlldata = (theData, debug = 0) => {
@@ -207,7 +207,7 @@ let getProjectAlldata = (theId = "", debug = 0) => {
     }
 }
 
-let removeCachedProjectData = (theId, debug = 0) => {
+let removeDataItems = (theId, debug = 0) => {
 
     //note could not really get this working so just delete the whole thing
     //window.localStorage.projectAlldata = '';
@@ -246,8 +246,8 @@ let removeCachedProjectData = (theId, debug = 0) => {
 
 //projects
 
-let removeCachedProject = (theId, debug = 0) => {
-    let theItems = window.localStorage.projects
+let removeDataItem = (theId, debug = 0) => {
+    let theItems = window.localStorage.data
     theItems = JSON.parse(theItems);
     for (var i = 0; i < theItems.data.length; ++i) {
         if (theItems.data[i].id == theId) {
@@ -257,7 +257,7 @@ let removeCachedProject = (theId, debug = 0) => {
             //delete theItems.data[i];
             theItems.data.splice(i, 1);
             //update the data
-            window.localStorage.projects = JSON.stringify(theItems);
+            window.localStorage.data = JSON.stringify(theItems);
             return (true);
 
         }
@@ -266,10 +266,13 @@ let removeCachedProject = (theId, debug = 0) => {
 
 }
 
-let addCachedProject = (theData, debug = 0) => {
+/*
+this function added the newly created item to the local application cache
+*/
+let addCachedData = (theData, debug = 0) => {
     //parse the response
-    let projects = window.localStorage.projects
-    projects = JSON.parse(projects);
+    let theItems = window.localStorage.data
+    theItems = JSON.parse(theItems);
     //parse the data
     theData = JSON.parse(theData);
     if (debug == 1) {
@@ -279,22 +282,22 @@ let addCachedProject = (theData, debug = 0) => {
     }
     //add it to projects
     let tmp = JSON.parse(theData.data)
-    projects.data.push(tmp);
-    window.localStorage.projects = JSON.stringify(projects)
+    theItems.data.push(tmp);
+    window.localStorage.data = JSON.stringify(theItems)
     showAlert(theData.message, 1)
 }
 
-let storeCacheProjects = (theData, debug = 0) => {
+let storeCacheData = (theData, debug = 0) => {
     //show debug info
     if (debug == 1) {
         console.log(theData)
     }
-    window.localStorage.projects = theData;
+    window.localStorage.data = theData;
 
 }
 
-let updateCacheProjects = (theProject = "", debug = 0) => {
-    let theItems = window.localStorage.projects;
+let updateCacheData = (theData = "", debug = 0) => {
+    let theItems = window.localStorage.data;
     if (theItems == undefined) {
         if (debug == 1)
             consolel.log("no items");
@@ -306,27 +309,27 @@ let updateCacheProjects = (theProject = "", debug = 0) => {
         }
         for (var i = 0; i < theItems.data.length; ++i) {
             if (debug == 1) {
-                console.log("checking " + theItems.data[i].id + " : " + theProject.id)
+                console.log("checking " + theItems.data[i].id + " : " + theData.id)
                 console.log(theItems.data[i])
             }
-            if (theItems.data[i].id == theProject.id) {
+            if (theItems.data[i].id == theData.id) {
                 if (debug == 1) {
-                    console.log("Found the id " + theProject.id)
+                    console.log("Found the id " + theData.id)
                     console.log(theItems.data[i])
                 }
                 //update the project
-                theItems.data[i] = theProject;
+                theItems.data[i] = theData;
                 //update the data
-                window.localStorage.project = JSON.stringify(theProject);
-                window.localStorage.projects = JSON.stringify(theItems);
+                window.localStorage.currentdataitem = JSON.stringify(theData);
+                window.localStorage.data = JSON.stringify(theItems);
                 //return (theItems.data[i]);
             }
         }
     }
 }
 
-let getCacheProjects = (theId = "", debug = 0) => {
-    let theItems = window.localStorage.projects;
+let getCacheData = (theId = "", debug = 0) => {
+    let theItems = window.localStorage.data;
     if ((theItems == undefined) || (theItems == "") || (theItems == null)) {
         if (debug == 1)
             consolel.log("no items");
@@ -341,10 +344,11 @@ let getCacheProjects = (theId = "", debug = 0) => {
             for (var i = 0; i < theItems.data.length; ++i) {
                 if (theItems.data[i].id == theId) {
                     if (debug == 1) {
+                        console.log("foundit")
                         console.log(theItems.data[i])
                     }
                     //update the data
-                    window.localStorage.project = JSON.stringify(theItems.data[i]);
+                    window.localStorage.currentdataitem = JSON.stringify(theItems.data[i]);
                     return (theItems.data[i]);
                 }
             }
@@ -354,30 +358,27 @@ let getCacheProjects = (theId = "", debug = 0) => {
     }
 }
 
-let getCurrentProject = (debug = 0) => {
+let getCurrentDataItem = (debug = 0) => {
     if (debug == 1)
-        console.log(window.localStorage.project);
-    let project = JSON.parse(window.localStorage.project)
-    return (project)
+        console.log(window.localStorage.currentdataitem);
+    let currentdataitem = JSON.parse(window.localStorage.currentdataitem)
+    return (currentdataitem)
 
 }
 
-let getProjectId = (debug = 0) => {
+let getCurrentDataItemId = (debug = 0) => {
     if (debug == 1)
         console.log(window.localStorage.project);
-    let project = window.localStorage.project 
+    let project = window.localStorage.project
     if ((project == "") || (project == null)) {
         return ("")
-    } else
-    {
+    } else {
         project = JSON.parse(project)
         return (project.id)
     }
 
 }
-//getCacheProjects("1defd828-d637-44bd-9329-0d703de4b4a4")
-///getCacheProjects("fe9264c4-c20b-4498-b835-08784567f3f6")
-//getCacheProjects();
+
 /*
 END OF LOCAL CACHE FUNCTIONS
 */
@@ -397,32 +398,31 @@ if (typeof(checkElement) != 'undefined' && checkElement != null) {
     document.getElementById('confirmation-modal-delete-button').addEventListener('click', function() {
         $('#confirmation-modal').modal('toggle')
         let xhrDone = (res) => {
-           // console.log(deleteMethod)
+            // console.log(deleteMethod)
             //parse the response
-            console.log(res)
             showAlert('Item has been deleted', 1)
             table.row('#' + tableRowId).remove().draw()
-            if (deleteMethod == "api/projects") {
-                removeCachedProject(deleteId)
+            console.log(deleteMethod)
+            console.log('api/' + dataMainMethod + '/')
+
+            if (deleteMethod == 'api/' + dataMainMethod + '/') {
+                removeDataItem(deleteId)
 
             }
-            if (deleteMethod == "api/projectdata") {
-                console.log(deleteId)
-                removeCachedProjectData(deleteId, 0)
+            if (deleteMethod == 'api/' + dataItemsMainMethod + '/') {
+                removeDataItems(deleteId, 0)
 
             }
 
         }
-        //let project = window.localStorage.project
-        //project = JSON.parse(project)
-        let project = getCacheProjects(deleteId);
+        let theItem = getCacheData(deleteId);
         let bodyobj = {
-            dataid: deleteId,
-            projectid: project.id
+            deleteid: deleteId,
+            name: theItem.name
         }
         var bodyobjectjson = JSON.stringify(bodyobj);
         //call the create account endpoint
-        xhrcall(3, `${deleteMethod}/`, bodyobjectjson, "json", "", xhrDone, token)
+        xhrcall(3, `${deleteMethod}`, bodyobjectjson, "json", "", xhrDone, token)
 
     })
 }
