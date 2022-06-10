@@ -11,7 +11,7 @@ whenDocumentReady(isReady = () => {
     let dataitem = getCurrentDataItem();
     //console.log(project)
     document.getElementById('inp-dataname').value = dataitem.name;
-    document.getElementById('project-header').innerHTML = `Edit ${dataitem.name}`;
+    document.getElementById('data-header').innerHTML = `Edit ${dataitem.name}`;
     document.getElementById('showBody').classList.remove('d-none')
     document.getElementById('btn-edit').addEventListener('click', function() {
         let xhrDone = (res) => {

@@ -18,7 +18,7 @@ whenDocumentReady(isReady = () => {
             addCachedData(res,0);
             res = JSON.parse(res)
             showAlert(res.message, 1,0);
-            document.getElementById('project-header').innerHTML = "";
+            document.getElementById('data-header').innerHTML = "";
             document.getElementById('formdiv').classList.add("d-none");
             document.getElementById('btn-create').classList.add("d-none");
 
