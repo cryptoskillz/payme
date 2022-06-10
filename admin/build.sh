@@ -17,7 +17,7 @@ wipeOutOldBuild () {
 #delete the files in the site dir
 wipeOutOldBuild
 #run eleventy
-eleventy 
+npx @11ty/eleventy 
 
 echo "killing rouge wrangler"
 kill -9 `lsof -t -i:8788`

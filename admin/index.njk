@@ -1,274 +1,94 @@
+---
+layout: login-layout.njk
+---
+{% set theJs %}
+    {% include 'accounts.js' %}
+{% endset %}
+    <!-- Outer Row -->
+        <div class="row justify-content-center">
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Backpage generator</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="" />
-<meta name="keywords" content="" />
-<link rel="stylesheet" type="text/css" href="/assets/css/brochure/animate.css">
-<link rel="stylesheet" type="text/css" href="/assets/css/brochure/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/css/brochure/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/css/brochure/materialdesignicons.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/css/brochure/light-color.css">
-<link rel="stylesheet" type="text/css" href="/assets/css/brochure/style.css">
-<link rel="stylesheet" type="text/css" href="/assets/css/brochure/responsive.css">
-</head>
+            <div class="col-xl-10 col-lg-12 col-md-9">
 
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                        	<!--
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            -->
+                            <div class="col-lg-12">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                    </div>
 
-<body>
-
-
-
-	<div class="wrapper">
-
-		<div class="overlay"></div>
-		<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
-
-		<header>
-			<div class="custom-container">
-				<div class="header-data">
-					<div class="logo">
-						<!--<a href="#" title=""><img src="/assets/images/brochure/logo.png" alt=""></a>-->
-						BACKPAGE GENERATOR
-					</div>
-					<div class="mobile-menu-btn">
-						<a href="#" title=""><i class="fa fa-bars"></i></a>
-					</div><!-- mobile-menu-btn end-->
-					
-					<div class="up-social-links">
-						<ul>
-						<!--
-							<li><a href="#" title=""><i class="mdi mdi-facebook"></i></a></li>
-							
-							<li><a href="/create-account/" title=""><i class="mdi mdi-register"></i></a></li>
--->
-							<li><a href="/login/" title=""><i class="mdi mdi-login"></i></a></li>
-						</ul>
-					</div>
-					
-					<nav>
-
-						<ul>
-						<!--
-							<li><a href="#features" title="">Features</a></li>
-							<li><a href="#about" title="">About</a></li>
-							<li><a href="#services" title="">Services</a></li>
-							<li><a href="#pricing" title="">Pricing</a></li>
-							<li><a href="#testimonial" title="">Testimonials</a></li>
-							<li><a href="#news" title="">News</a></li>
-							-->
-						</ul>
-					</nav>
-				</div><!--header-data end-->
-			</div>
-		</header><!--header end-->
-
-		<div class="responsive-mobile-menu">
-			<span class="close-menu"><i class="mdi mdi-close"></i></span>
-			<div class="mobile-menu">
-				<ul>
-				<!--
-					<li><a href="#features" title="">Features</a></li>
-					<li><a href="#about" title="">About</a></li>
-					<li><a href="#services" title="">Services</a></li>
-					<li><a href="#pricing" title="">Pricing</a></li>
-					<li><a href="#testimonial" title="">Testimonials</a></li>
-					<li><a href="#news" title="">News</a></li>
-					-->
-				</ul>
-			</div><!--mobile-menu end-->
-			<ul class="mb-social-links">
-			<!--
-				<li><a href="#" title=""><i class="mdi mdi-facebook"></i></a></li>
-				<li><a href="#" title=""><i class="mdi mdi-twitter"></i></a></li>-->
-				<li><a href="/login/" title=""><i class="mdi mdi-login"></i></a></li>
-			
-			</ul><!--mb-social-links end-->
-			<div class="mb-copyright-text">
-				<p>© cryptoskillz</p>
-			</div><!--mb-copyright-text end-->
-		</div><!--responsive-mobile-menu end-->
+                                    <div class="alert alert-success  d-none" role="alert" id="accountsSuccess"></div>
+                                    <div class="alert alert-danger  d-none" role="alert" id="accountsDanger"></div>
+            
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user" id="inp-email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                                           	<span class="text-danger d-none" id="error-email">Invalid Email Address </span>
+						                    <span class="input-icon verify-icon">
+						                        <img class="d-none" id="valid-email-icon" src="{{env.CDN_URL}}images/check_circle.png" alt="">
+						                    </span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                id="inp-password1" placeholder="Password">
+                                            <span class="text-danger d-none" id="error-password1"></span>
 
 
-		
-		<section class="main-section">
-			<div class="custom-container">
-				<div class="main-section-data">
-					<div class="row">
-						<div class="col-lg-5">
-							<div class="banner-text">
-								<h3>Introducing</h3>
-								<h2>Backpage generator</h2>
-								<p>The easiest way to turn structured data<br />into single page websites. </p>
-								<a href="/create-account/" title="" id="cypress-gs">get started</a>
-							</div><!--banner-text end-->
-						</div>
-						<div class="col-lg-6">
-							<div class="banner-imgs">
-								<img src="/assets/images/brochure/banner-img.png" alt="">
-							</div><!--banner-imgs end-->
-						</div>
-					</div>
-				</div><!--main-section-data end-->
-			</div>
-		</section>
+                                            <!--
 
+                                            todo : fix the styling on this
 
+                                           
+                    						<a href="javascript:showPassword('inp-password1')" class="input-icon eye-icon" id="inp-password1-open"></a>
+                    						<a href="javascript:showPassword('inp-password1')" class="input-icon eye-icon close-eye d-none" id="inp-password1-close"></a> 
+											 
+											-->
+                                        </div>
+                                        <!--
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">Remember
+                                                    Me</label>
+                                            </div>
+                                        </div>
+                                        -->
+                                        <button class="btn btn-primary btn-user btn-block" id="btn-login">
+                                            Login
+                                        </button>
 
-	    <section class="about" id="about">
-	    	<div class="fixed-bg bg3"></div>
-	    	<div class="custom-container">
-	    		<div class="about-sec">
-	    			<div class="row">
-	    				<div class="col-lg-4">
-	    					<div class="about-img">
-	    						<img src="/assets/images/brochure/srv-img1.png" alt="">
-	    					</div><!--srvc-img end-->
-	    				</div>
-	    				<div class="col-lg-8">
-	    					<div class="about-list">
-	    						<div class="about-info">
-	    							<div class="about-num">
-	    								<span>01.</span>
-	    							</div><!--service-num end-->
-	    							<div class="abt-info">
-	    								<h3>Upload</h3>
-	    								<p>Simply upload a CSV file and your data is ready to be turned into static websites in seconds.  We have created a powerful super easy-to-use data import engine. </p>
-	    							</div><!--srvc-info end-->
-	    						</div><!--service-info end-->
-	    						<div class="about-info">
-	    							<div class="about-num st2">
-	    								<span>02.</span>
-	    							</div><!--service-num end-->
-	    							<div class="abt-info">
-	    								<h3>Create</h3>
-	    								<p>Create a template in plain HTML and add your fields using the industry-standard nunjucks templating engine. There is nothing new to learn, no reinventing of the wheel here. </p>
-	    							</div><!--srvc-info end-->
-	    						</div><!--service-info end-->
-	    						<div class="about-info">
-	    							<div class="about-num st3">
-	    								<span>03.</span>
-	    							</div><!--service-num end-->
-	    							<div class="abt-info">
-	    								<h3>Download</h3>
-	    								<p>Hit download and you will get a zip file containing all of your static websites that's it. 
-<br>
-If you are an advanced user, use our API to pull the sites into any JAM stack or let us push the sites to an S3 bucket. </p>
-	    							</div><!--srvc-info end-->
-	    						</div><!--service-info end-->
-	    						<a href="/create-account/" title="">get started</a>
-	    					</div><!--services-list end-->
-	    				</div>
-	    			</div>
-	    		</div><!--services-sec end-->
-	    	</div>
-	    </section>
-<!--
+                            <!--
+                                        <hr>
+                                        <a href="index.html" class="btn btn-google btn-user btn-block">
+                                            <i class="fab fa-google fa-fw"></i> Login with Google
+                                        </a>
+                                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                                            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+                                        </a>
+                                        -->
+                                   
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="/forgot-password/">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="/create-account/">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<section class="get-started">
-			<div class="custom-container">
-				<div class="wait-sec">
-					<h3>So What are You Waiting for?</h3>
-					<a href="#" title="">get started</a>
-				</div>
-			</div>
-		</section>			
-		-->
+            </div>
 
-
-		<footer>
-		<!--
-			<div class="top-footer">
-				<div class="fixed-bg footer-bg"></div>
-				<div class="custom-container">
-					<div class="top-footer-data">
-						<div class="row">
-							<div class="col-lg-3 col-md-6">
-								<div class="widget widget-about">
-									<h3 class="widget-title">About</h3>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.   Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
-								</div>
-							</div>
-							<div class="col-lg-3 col-md-6">
-								<div class="widget widget-contact">
-									<h3 class="widget-title">Contacts</h3>
-									<ul>
-										<li><span>Address: 4578 Marmora Road, Glasgow, D04 89GR</span></li>
-										<li><span>Phones: (800) 123-4567; (800) 123-4568</span></li>
-										<li><span>E-mail: office@appmicron.com</span></li>
-										<li><span>We are open: Mn-Fr: 10 am-8 pm</span></li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-lg-6 col-md-12">
-								<div class="contact-form">
-									<form class="js-ajax-form">
-										<div class="row">
-											<div class="col-lg-6">
-												<input type="text" name="name" placeholder="Name" required>
-											</div>
-											<div class="col-lg-6">
-												<input type="text" name="email" placeholder="Email" required>
-											</div>
-											<div class="col-lg-12">
-												<textarea placeholder="Message" name="message"></textarea>
-											</div>
-											<div class="col-lg-12">
-												<button type="submit" class="btn-sbmt">Submit</button>
-											</div>
-											<div class="col-lg-12">
-						                    	<div class="form-group">
-							                        <div class="success-message">
-							                        	<i class="fa fa-check text-primary"></i> Thank you!. Your message is successfully sent...
-							                        </div>
-							                        <div class="error-message">We're sorry, but something went wrong
-							                        </div>
-						                      	</div>
-						                    </div>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>-->
-			<div class="bottom-footer">
-				<div class="custom-container">
-					<div class="bottom-footer-data">
-						<p></p>
-						<ul class="social-links">
-						<!--
-							<li><a href="#" title=""><i class="fa fa-facebook"></i></a></li>
-							<li><a href="#" title=""><i class="fa fa-twitter"></i></a></li>
-							<li><a href="#" title=""><i class="fa fa-google-plus"></i></a></li>
-							<li><a href="#" title=""><i class="fa fa-vimeo"></i></a></li>
-							<li><a href="#" title=""><i class="fa fa-youtube"></i></a></li>
-							<li><a href="#" title=""><i class="fa fa-pinterest"></i></a></li>
-							-->
-						</ul>
-					</div><!-- bottom-footer-data end-->
-				</div>
-			</div><!--bottom-footer end-->
-		</footer>	
-
-
-	</div><!--wrapper end-->	
-
-
-
-
-
-<script type="text/javascript" src="/assets/js/brochure/jquery.min.js"></script>
-<script type="text/javascript" src="/assets/js/brochure/popper.js"></script>
-<script type="text/javascript" src="/assets/js/brochure/bootstrap.min.js"></script>
-<script type="text/javascript" src="/assets/js/brochure/html5lightbox.js"></script>
-<script type="text/javascript" src="/assets/js/brochure/jquery.validate.min.js"></script>
-<script type="text/javascript" src="/assets/js/brochure/validator.js"></script>
-<script type="text/javascript" src="/assets/js/brochure/script.js"></script>
-
-</body>
-
-</html>
+        </div>
+{% if env.ENVIRONMENT == 'local' %}
+    <script type="text/javascript">{{theJs | safe}}</script>
+{% else %}
+    <script type="text/javascript">{{theJs | jsmin | safe}}</script>
+{% endif %}
