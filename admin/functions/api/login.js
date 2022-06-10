@@ -30,7 +30,7 @@ export async function onRequest(context) {
         } else
             return new Response(JSON.stringify({ error: "invalid login" }), { status: 400 });
         //set up the KV
-        const KV = context.env.backpage;
+        const KV = context.env.kvdata;
         //see if the user exists
         const user = await KV.get("username" + credentials.identifier);
         //user does not exist

@@ -20,7 +20,7 @@ export async function onRequestPost(context) {
         //get the login credentials
         registerData = await request.json();
         //set up the KV
-        const KV = context.env.backpage;
+        const KV = context.env.kvdata;
         //see if the user exists
         let secretid = uuid.v4();
         let json = JSON.stringify({ "jwt": "", "user": {  "username": registerData.username, "email": registerData.username,"password":registerData.password,"secret":secretid } })
