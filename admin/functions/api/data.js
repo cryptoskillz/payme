@@ -1,24 +1,32 @@
 /*
     todo:
 
-    
+    add routing 
+    add middleware (if it does not increase the complexity)
 
     notes:
 
 
     naming convertion for KV stores.
-
-    projects<username>*<projectid>
+    <methoddame><username><payloadname>]<payloadid>
 */
 
-let projectId;
+//hold the payload
 let payLoad;
+//hold the contenttypes
 let contentType;
 //set data main to whatever is in env for consistency
 const datamain = "data";
-const jwt = require('@tsndr/cloudflare-worker-jwt')
-var uuid = require('uuid');
 
+//JWT model
+const jwt = require('@tsndr/cloudflare-worker-jwt');
+//unique uid module
+var uuid = require('uuid');
+//set up the data schema for the table.
+//note we could extend this to have field types and other such nonsense for dynamic  rendering but I don't want to do that and you cannot make me.
+let dataSchema = { id: "", name: "", amount: "", paid: "", createdAt: "" }
+
+//return the date
 let getDate = () => {
     let ts = Date.now();
     let date_ob = new Date(ts);
@@ -26,6 +34,7 @@ let getDate = () => {
     return (formattedDate)
 }
 
+//decode the jwt token
 let decodeJwt = async (req, secret) => {
     let bearer = req.get('authorization')
     bearer = bearer.replace("Bearer ", "");
@@ -56,7 +65,7 @@ export async function onRequestPut(context) {
         //set up the kv data
         const KV = context.env.kvdata;
         //get the item
-        let theItem = await KV.get(datamain + details.payload.username + payLoad.oldname + "]s" + payLoad.id);
+        let theItem = await KV.get(datamain + details.payload.username + payLoad.oldname + "]" + payLoad.id);
         //console.log(datamain + details.payload.username +  payLoad.oldname+"]" +payLoad.id)
         //parse it
         theItem = JSON.parse(theItem)
@@ -83,8 +92,6 @@ export async function onRequestDelete(context) {
 
     /*
     todo
-
-    remove the data for any project when you delete it
 
     */
     const {
@@ -125,6 +132,7 @@ export async function onRequestPost(context) {
     if (contentType != null) {
         //get the login credentials
         payLoad = await request.json();
+        console.log(payLoad)
     }
     //decode jwt
     let details = await decodeJwt(request.headers, env.SECRET)
@@ -159,7 +167,15 @@ export async function onRequestPost(context) {
             "originalfields": ""
         }
         let fDate = getDate()
-        let theData = { id: id, name: payLoad.name, templatename: "", template: "", schema: schemaJson, createdAt: fDate }
+        let theData = dataSchema;
+        //let dataSchema = { id: id, name: "", amount: "", paid: "", createdAt: fDate }
+        //let theData = { id: id, name: payLoad.name, templatename: "", template: "", schema: schemaJson, createdAt: fDate }
+        theData.id = id;
+        theData.name  = payLoad.name;
+        theData.amount = payLoad.amount;
+        theData.paid = payLoad.paid;
+        theData.createdAt = fDate;
+        console.log(theData)
         //console.log(datamain + details.payload.username + payLoad.name + "]" + id)
         await KV.put(datamain + details.payload.username + payLoad.name + "]" + id, JSON.stringify(theData));
         return new Response(JSON.stringify({ message: "Item added", data: JSON.stringify(theData) }), { status: 200 });
@@ -186,7 +202,7 @@ export async function onRequestGet(context) {
     let theData = await KV.list({ prefix: datamain + details.payload.username });
     let theDataArray = { data: [] }
     if ((dataid != null) && (dataid != "")) {
-        let pData = await KV.get(datamain + details.payload.username + "]" + projectid);
+        let pData = await KV.get(datamain + details.payload.username + "]" + dataid);
         theDataArray.data.push(JSON.parse(pData))
     } else {
         if (theData.keys.length > 0) {

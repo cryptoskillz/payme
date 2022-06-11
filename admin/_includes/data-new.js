@@ -11,36 +11,28 @@ let whenDocumentReady = (f) => {
 }
 
 whenDocumentReady(isReady = () => {
+    //build the elements
+    document.getElementById('formInputs').innerHTML = buildForm();
+    //show the form
     document.getElementById('showBody').classList.remove('d-none')
-
+    //create button click
     document.getElementById('btn-create').addEventListener('click', function() {
+        //api call done
         let xhrDone = (res) => {
-            addDataItem(res,0);
+            addDataItem(res, 0);
             res = JSON.parse(res)
-            showAlert(res.message, 1,0);
+            showAlert(res.message, 1, 0);
             document.getElementById('data-header').innerHTML = "";
             document.getElementById('formdiv').classList.add("d-none");
             document.getElementById('btn-create').classList.add("d-none");
 
         }
-        //set the valid var
-        let valid = 1;
-        //get the details
-        let projectname = document.getElementById('inp-dataname');
-        //reset errors
-        document.getElementById('error-dataname').classList.add('d-none')
-        if (projectname.value == "") {
-            valid = 0;
-            showAlert(dataMainMethod+" name cannot be blank", 2,0)
-        }
-        if (valid == 1) {
-            //call the create account endpoint
-            //todo : Pass in the user object, you would think Strapi would pick this up from the token but for reason the do not. 
-            let bodyobj = {
-                    name: projectname.value
-            }
-            var bodyobjectjson = JSON.stringify(bodyobj);
-            xhrcall(0, `api/${dataMainMethod}/`, bodyobjectjson, "json", "", xhrDone, token)
+        //get the form data
+        let bodyJson = getFormData()
+        //check there is data to submit
+        if (bodyJson != false) {
+            //call it
+            xhrcall(0, `api/${dataMainMethod}/`, bodyJson, "json", "", xhrDone, token)
         }
     })
 })

@@ -5,7 +5,8 @@ let checkElement
 var table // datatable
 
 //create your data schema here for table rendering.
-//let dataSchema = { id: "", name: "", createdAt: "" }
+let dataSchema = '{ "id": "", "name": "","amount":"0","paid":"0", "createdAt": "" }'
+dataSchema = JSON.parse(dataSchema);
 //TODO: replace this with plain js
 (function($) {
     "use strict"; // Start of use strictß
@@ -63,6 +64,74 @@ var table // datatable
     });
 
 })(jQuery); // End of use strict
+
+/*
+START OF TABLE PROCESSING FUCNTIONS
+*/
+
+let getFormData = () => {
+    let fields = Object.keys(dataSchema);
+    let theJson = "{";
+    let sumbmitIt = 1;
+    for (var i = 0; i < fields.length; ++i) {
+        if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
+            //console.log("inp-"+fields[i]);
+            let theValue = document.getElementById('inp-'+fields[i]).value;
+            if (theValue == "")
+            {
+                document.getElementById('error-'+fields[i]).classList.remove('d-none');
+                sumbmitIt = 0;
+            }
+            else
+            {
+                if (theJson == "{")
+                    theJson = theJson+`"${fields[i]}":"${theValue}"`
+                else
+                    theJson = theJson+`,"${fields[i]}":"${theValue}"`
+            }
+            
+        }
+    }
+    theJson = theJson+"}"
+    if (sumbmitIt == 1)
+        return(theJson)
+    else
+        return(false)
+
+}
+
+let buildForm = (dataitem="") => {
+    let theJson;
+    //check if a json object was passed and if not then use the default schema
+    if (dataitem == "")
+        theJson = dataSchema
+    else
+        theJson = dataitem
+    //get the objects
+    let tmpd = Object.values(theJson)
+    //get the keys
+    let fields = Object.keys(theJson)
+    //loop through  the keys
+    let inpHtml = "";
+    for (var i = 0; i < fields.length; ++i) {
+        //console.log(fields[i])
+        if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
+            inpHtml = inpHtml + `<div class="form-group" >
+                                <label>${fields[i]}</label>
+                                <input type="text" class="form-control form-control-user" id="inp-${fields[i]}" aria-describedby="emailHelp" placeholder="Enter ${fields[i]}" value="${tmpd[i]}">
+                                <span class="text-danger d-none" id="error-${fields[i]}">${fields[i]} cannot be blank</span>  
+                            </div>`
+        }
+
+    }
+    //console.log(inpHtml)
+    return (inpHtml)
+}
+
+
+/*
+END OF TABLE PROCESSING FUNCTIONS
+*/
 
 /*
 START OF LOCAL CACHE FUNCTIONS
