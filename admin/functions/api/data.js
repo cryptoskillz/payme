@@ -1,8 +1,5 @@
 /*
-    todo:
 
-    add routing 
-    add middleware (if it does not increase the complexity)
 
     notes:
 
