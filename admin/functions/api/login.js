@@ -1,6 +1,7 @@
 /*
     todo:
     trap the gets / puts etc
+    check the password is valid as well as the email 
 
 */
 export async function onRequest(context) {
@@ -38,7 +39,7 @@ export async function onRequest(context) {
             return new Response(JSON.stringify({ error: "invalid login" }), { status: 400 });
 
         let tUser = JSON.parse(user);
-        if ((tUser.user.email == credentials.identifier) || (tUser.user.password == credentials.password)) {
+        if ((tUser.user.email == credentials.identifier) && (tUser.user.password == credentials.password)) {
             //check if it is valid
             if (valid == 1) {
                 //make a JWT token

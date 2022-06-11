@@ -1,10 +1,6 @@
 /*
     this function creates a new user
 
-    todo:
-
-
-
 */
 var uuid = require('uuid');
 export async function onRequestPost(context) {
