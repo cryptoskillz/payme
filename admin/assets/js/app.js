@@ -7,6 +7,10 @@ var table // datatable
 //create your data schema here for table rendering.
 let dataSchema = '{ "id": "", "name": "","amount":"0","paid":"0", "createdAt": "" }'
 dataSchema = JSON.parse(dataSchema);
+//add this to the settings page
+let settingsSchema = '{"btcaddress":"","xpub":"","compnanyname":""}'
+settingsSchema = JSON.parse(settingsSchema);
+
 //TODO: replace this with plain js
 (function($) {
     "use strict"; // Start of use strictß
@@ -138,10 +142,8 @@ START OF LOCAL CACHE FUNCTIONS
 */
 
 let clearCache = (clearUser = 0) => {
-    window.localStorage.projectAlldata = ""
-    window.localStorage.projectdata = ""
+    window.localStorage.currentdataitem = ""
     window.localStorage.data = ""
-    window.localStorage.project = ""
     if (clearUser == 1) {
         window.localStorage.token = ""
         window.localStorage.user = ""
@@ -275,20 +277,26 @@ let getCurrentDataItem = (debug = 0) => {
 
 }
 
-/*
-let getCurrentDataItemId = (debug = 0) => {
-    if (debug == 1)
-        console.log(window.localStorage.project);
-    let project = window.localStorage.project
-    if ((project == "") || (project == null)) {
-        return ("")
-    } else {
-        project = JSON.parse(project)
-        return (project.id)
+let storeSettings = (theData, debug = 0) => {
+    //show debug info
+    if (debug == 1) {
+        console.log(theData)
     }
+    window.localStorage.settings = theData;
 
 }
-*/
+
+let getSettings = (debug = 0) => {
+    //show debug info
+    if (debug == 1) {
+        console.log(theData)
+    }
+    return(window.localStorage.settings)
+
+}
+
+
+
 
 /*
 END OF LOCAL CACHE FUNCTIONS

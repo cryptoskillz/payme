@@ -4,21 +4,44 @@ let whenDocumentReady = (f) => {
 }
 
 whenDocumentReady(isReady = () => {
-    let copySecret = (text) => {
-        var dummy = document.createElement("textarea");
-        document.body.appendChild(dummy);
-        dummy.value = text;
-        dummy.select();
-        document.execCommand("copy");
-        document.body.removeChild(dummy);
-        showAlert('Secret copied to clipboard', 1)
-    }
-    document.getElementById('secret').innerHTML = `${user.secret} <i class="fas fa-copy" id="copySecretIcon"></i>`;
-    //set an example  of how to use the secret, remove this if you are not going to have an API for your customers.
-    let secretexmp = `${apiUrl}api/export/?projectid=PROJECTID&secret=${user.secret}`;
-    document.getElementById('secretexample').innerHTML = '<br>'+secretexmp
     document.getElementById('showBody').classList.remove('d-none')
-    document.getElementById('copySecretIcon').addEventListener('click', function() {
-    copySecret(`${user.secret}`)
-    });
+
+    document.getElementById('btn-edit').addEventListener('click', function() { //api call done
+        let xhrDone = (res) => {
+            res = JSON.parse(res)
+            //store the settings
+            storeSettings(res.data)
+            //show the message
+            showAlert(res.message, 1)
+        }
+        //check there is data to submit
+        let bodyJson = {
+            btcaddress: document.getElementById('inp-btcaddress').value,
+            xpub: document.getElementById('inp-xpub').value,
+            companyname: document.getElementById('inp-companyname').value
+        }
+        bodyJson = JSON.stringify(bodyJson);
+        //call it
+        xhrcall(4, `api/settings/`, bodyJson, "json", "", xhrDone, token);
+    })
+
+
+    let settingsDone = (res) => {
+        //if (update == 1)
+        storeSettings(res)  
+        res = JSON.parse(res)
+        document.getElementById('inp-btcaddress').value = res.btcaddress
+        document.getElementById('inp-xpub').value = res.xpub
+        document.getElementById('inp-companyname').value = res.companyname
+    }
+    //get the settings
+    let settings = getSettings();
+    //check if we have it store locally
+    if ((settings != "") && (settings != undefined)) {
+        settingsDone(settings,0);
+    }
+    else
+    {
+        xhrcall(1, "api/settings/", "", "json", "", settingsDone, token)
+    }
 });

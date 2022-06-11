@@ -2,6 +2,8 @@
     this function creates a new user
 
 */
+//settings schema
+let settingsSchema = '{"btcaddress":"","xpub":"","companyname":""}'
 var uuid = require('uuid');
 export async function onRequestPost(context) {
     const {
@@ -32,6 +34,8 @@ export async function onRequestPost(context) {
             //not require this.
             await KV.put("username" + secretid,  JSON.stringify({username:registerData.username}));
             await KV.put("username" + registerData.username, json);
+            //create the settings file
+            await KV.put("settings" + registerData.username, JSON.stringify(settingsSchema));
             return new Response(JSON.stringify({ status: "ok" }), { status: 200 });
         }
         else
