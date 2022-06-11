@@ -3,6 +3,9 @@ let token;
 let user;
 let checkElement
 var table // datatable
+
+//create your data schema here for table rendering.
+//let dataSchema = { id: "", name: "", createdAt: "" }
 //TODO: replace this with plain js
 (function($) {
     "use strict"; // Start of use strictß
@@ -79,170 +82,7 @@ let clearCache = (clearUser = 0) => {
 let getUser = () => {
     return (JSON.parse(window.localStorage.user))
 }
-//project data
-let deleteAllDataItems = () => {
-    window.localStorage.dataItems = ""
-}
 
-
-let addCachedProjectData = (theData, debug = 0) => {
-    //parse the response
-    let projectdata = window.localStorage.projectAlldata
-    projectdata = JSON.parse(projectdata);
-    if (debug == 1) {
-        console.log(theData)
-        console.log(projectdata)
-
-    }
-    projectdata.push(JSON.parse(theData.data));
-    window.localStorage.projectAlldata = JSON.stringify(projectdata)
-
-}
-
-let storeProjectAlldata = (theData, debug = 0) => {
-    if (debug == 1) {
-        console.log("theData")
-        console.log(theData)
-    }
-    //check we have data to store
-    if ((theData != '{"data":[]}') && (theData != '')) {
-        //parse it
-        //note we are storing this dumb as it never renders once its is stored
-        theData = JSON.parse(theData.data);
-        //debug
-        if (debug == 1) {
-            console.log(theData)
-        }
-        //store it.
-        //let tmp = { data: [] };
-        //tmp.data.push(theData.data)
-        //console.log(tmp)
-        window.localStorage.projectAlldata = JSON.stringify(theData);
-    }
-
-}
-
-let getCurrentProjectData = (debug = 0) => {
-    if (debug == 1)
-        console.log(window.localStorage.projectdata);
-    let projectdata = window.localStorage.projectdata
-    let project;
-    if ((project != "") && (project != null))
-        project = JSON.parse(window.localStorage.projectdata)
-    else
-        project = false;
-    return (project)
-
-}
-
-let updateProjectAllData = (theProjectData = "", debug = 0) => {
-    let theItems = window.localStorage.projectAlldata;
-    let newData = []
-
-    theProjectData = JSON.parse(theProjectData)
-    if (debug == 1) {
-        //theProjectData = JSON.parse(theProjectData)
-        console.log("theProjectData")
-        console.log(theProjectData)
-
-    }
-    if (theItems == undefined) {
-        if (debug == 1)
-            consolel.log("no items");
-        return (false)
-    } else {
-        theItems = JSON.parse(theItems)
-        if (debug == 1) {
-            console.log(theItems)
-        }
-        for (var i = 0; i < theItems.length; ++i) {
-            if (theItems[i].id == theProjectData.id) {
-                if (debug == 1) {
-                    console.log("Found it" + theProjectData.id)
-                    console.log(theItems[i])
-                }
-                //update the project
-                theItems[i].data = theProjectData.data;
-                window.localStorage.projectdata = JSON.stringify(theProjectData);
-                window.localStorage.projectAlldata = JSON.stringify(theItems);
-            }
-
-        }
-    }
-}
-
-
-
-let getProjectAlldata = (theId = "", debug = 0) => {
-    let theItems = window.localStorage.projectAlldata;
-
-    if ((theItems == undefined) || (theItems == "")) {
-        if (debug == 1)
-            console.log("no items");
-        return (false)
-    } else {
-        theItems = JSON.parse(theItems)
-        //console.log(data)
-        if (theId != "") {
-            for (var i = 0; i < theItems.length; ++i) {
-                if (debug == 1) {
-                    console.log(theItems[i].id + " : " + theId)
-                }
-                if (theItems[i].id == theId) {
-                    if (debug == 1) {
-                        console.log('found it')
-                        console.log(theItems[i])
-                    }
-                    //update the data
-                    window.localStorage.projectdata = JSON.stringify(theItems[i]);
-                    return (theItems[i]);
-                }
-            }
-        } else {
-            if (debug == 1) {
-                console.log(theItems)
-            }
-            return (theItems)
-        }
-    }
-}
-
-let removeDataItems = (theId, debug = 0) => {
-
-    //note could not really get this working so just delete the whole thing
-    //window.localStorage.projectAlldata = '';
-
-
-    let theItems = window.localStorage.projectAlldata
-    theItems = JSON.parse(theItems);
-    let newItems = {};
-    if (debug == 1) {
-        console.log(theItems)
-        console.log(theId)
-
-    }
-    for (var i = 0; i < theItems.length; ++i) {
-        if (debug == 1) {
-            console.log("checking " + theItems[i].id + " : " + theId)
-            console.log(theItems[i])
-        }
-        if (theItems[i].id == theId) {
-
-            //delete theItems.data[i];
-            if (debug == 1) {
-                console.log("Found the id " + theId + " : " + i)
-                console.log(theItems[i].data)
-            }
-            //delete the item
-            delete theItems[i]
-            //remove the nul
-            theItems = theItems.filter(function(x) { return x !== null });
-            window.localStorage.projectAlldata = JSON.stringify(theItems);
-        }
-    }
-    //return (true)
-
-}
 
 //projects
 
@@ -269,7 +109,7 @@ let removeDataItem = (theId, debug = 0) => {
 /*
 this function added the newly created item to the local application cache
 */
-let addCachedData = (theData, debug = 0) => {
+let addDataItem = (theData, debug = 0) => {
     //parse the response
     let theItems = window.localStorage.data
     theItems = JSON.parse(theItems);
@@ -287,7 +127,7 @@ let addCachedData = (theData, debug = 0) => {
     showAlert(theData.message, 1)
 }
 
-let storeCacheData = (theData, debug = 0) => {
+let storeData = (theData, debug = 0) => {
     //show debug info
     if (debug == 1) {
         console.log(theData)
@@ -296,7 +136,7 @@ let storeCacheData = (theData, debug = 0) => {
 
 }
 
-let updateCacheData = (theData = "", debug = 0) => {
+let updateData = (theData = "", debug = 0) => {
     let theItems = window.localStorage.data;
     if (theItems == undefined) {
         if (debug == 1)
@@ -328,7 +168,7 @@ let updateCacheData = (theData = "", debug = 0) => {
     }
 }
 
-let getCacheData = (theId = "", debug = 0) => {
+let getData = (theId = "", debug = 0) => {
     let theItems = window.localStorage.data;
     if ((theItems == undefined) || (theItems == "") || (theItems == null)) {
         if (debug == 1)
@@ -366,6 +206,7 @@ let getCurrentDataItem = (debug = 0) => {
 
 }
 
+/*
 let getCurrentDataItemId = (debug = 0) => {
     if (debug == 1)
         console.log(window.localStorage.project);
@@ -378,6 +219,7 @@ let getCurrentDataItemId = (debug = 0) => {
     }
 
 }
+*/
 
 /*
 END OF LOCAL CACHE FUNCTIONS

@@ -10,10 +10,9 @@ let whenDocumentReady = (f) => {
 }
 
 let loadURL = (theUrl, theId, blank = 0) => {
-    //delete the items array
-    deleteAllDataItems()
+
     //store the current item so we can use it later.
-    let theData = getCacheData(theId)
+    let theData = getData(theId)
     if (blank == 1)
         window.open(theUrl, "_blank")
     else
@@ -25,7 +24,7 @@ whenDocumentReady(isReady = () => {
     let xhrDone = (res, local = 0) => {
         //store it in local storage
         if (local == 0) {
-            storeCacheData(res);
+            storeData(res);
             res = JSON.parse(res)
         }
         //get the datatable
@@ -49,7 +48,7 @@ whenDocumentReady(isReady = () => {
         }
         table.columns.adjust();
     }
-    theData = getCacheData();
+    theData = getData();
     if (theData != false) {
         xhrDone(theData, 1);
     } else {

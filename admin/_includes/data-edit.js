@@ -16,7 +16,8 @@ whenDocumentReady(isReady = () => {
     document.getElementById('btn-edit').addEventListener('click', function() {
         let xhrDone = (res) => {
             res = JSON.parse(res)
-            updateCacheData(dataitem)
+            updateData(dataitem)
+            console.log(res)
             showAlert(res.message, 1)
             document.getElementById('project-header').innerHTML = `Edit ${dataitem.name}`;
         }

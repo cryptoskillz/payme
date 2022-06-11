@@ -15,7 +15,7 @@ whenDocumentReady(isReady = () => {
 
     document.getElementById('btn-create').addEventListener('click', function() {
         let xhrDone = (res) => {
-            addCachedData(res,0);
+            addDataItem(res,0);
             res = JSON.parse(res)
             showAlert(res.message, 1,0);
             document.getElementById('data-header').innerHTML = "";

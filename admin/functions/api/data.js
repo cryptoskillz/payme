@@ -56,23 +56,26 @@ export async function onRequestPut(context) {
         //set up the kv data
         const KV = context.env.kvdata;
         //get the item
-        let theItem = await KV.get(datamain + details.payload.username +  payLoad.oldname+"]" +payLoad.id);
-        //console.log(datamain + details.payload.username + payLoad.oldname+"]"+payLoad.id)
+        let theItem = await KV.get(datamain + details.payload.username + payLoad.oldname + "]s" + payLoad.id);
+        //console.log(datamain + details.payload.username +  payLoad.oldname+"]" +payLoad.id)
         //parse it
         theItem = JSON.parse(theItem)
+        //console.log(theItem)
         //check that they sent up the data
         //note : we could make this simplier by just parsing the payload array.
-        if (payLoad.name != undefined)
-            theItem.name = payLoad.name;
-        //console.log(datamain + details.payload.username + payLoad.id)
-        //delete the old one
-        await KV.delete(datamain + details.payload.username + payLoad.oldname +"]" +payLoad.id);
-        //put the new one.
-        await KV.put(datamain + details.payload.username + payLoad.name+ "]" +payLoad.id, JSON.stringify(theItem));
-        return new Response(JSON.stringify({ message: "Item updated", data: JSON.stringify(theItem) }), { status: 200 });
-    }
+        if (theItem != null) {
+            if (payLoad.name != undefined)
+                theItem.name = payLoad.name;
+            //console.log(datamain + details.payload.username + payLoad.id)
+            //delete the old one
+            await KV.delete(datamain + details.payload.username + payLoad.oldname + "]" + payLoad.id);
+            //put the new one.
+            await KV.put(datamain + details.payload.username + payLoad.name + "]" + payLoad.id, JSON.stringify(theItem));
+            return new Response(JSON.stringify({ message: "Item updated", data: JSON.stringify(theItem) }), { status: 200 });
+        } else
+            return new Response(JSON.stringify({ error: "item not found" }), { status: 400 });
 
-    return new Response({ message: "put" }, { status: 200 });
+    }
 
 }
 
@@ -101,9 +104,9 @@ export async function onRequestDelete(context) {
         //console.log(payLoad)
         let details = await decodeJwt(request.headers, env.SECRET)
         const KV = context.env.kvdata;
-        console.log(payLoad)
-        console.log(datamain + details.payload.username +payLoad.name+ "]" +payLoad.deleteid)
-        await KV.delete(datamain + details.payload.username +payLoad.name+ "]" +payLoad.deleteid);
+        //console.log(payLoad)
+        //console.log(datamain + details.payload.username + payLoad.name + "]" + payLoad.deleteid)
+        await KV.delete(datamain + details.payload.username + payLoad.name + "]" + payLoad.deleteid);
         return new Response(JSON.stringify({ message: "item deleted" }), { status: 200 });
     }
 }
@@ -136,7 +139,7 @@ export async function onRequestPost(context) {
             let tmp = theCheck.keys[i].name.split(']')
             //console.log(datamain + details.payload.username +payLoad.name)
             //console.log(tmp[0])
-            if (tmp[0] == datamain + details.payload.username +payLoad.name)
+            if (tmp[0] == datamain + details.payload.username + payLoad.name)
                 exists = 1;
         }
     }
@@ -156,10 +159,10 @@ export async function onRequestPost(context) {
             "originalfields": ""
         }
         let fDate = getDate()
-        let projectData = { id: id, name: payLoad.name, templatename: "", template: "", schema: schemaJson, createdAt: fDate }
+        let theData = { id: id, name: payLoad.name, templatename: "", template: "", schema: schemaJson, createdAt: fDate }
         //console.log(datamain + details.payload.username + payLoad.name + "]" + id)
-        await KV.put(datamain + details.payload.username + payLoad.name + "]" + id, JSON.stringify(projectData));
-        return new Response(JSON.stringify({ message: "Item added", data: JSON.stringify(projectData) }), { status: 200 });
+        await KV.put(datamain + details.payload.username + payLoad.name + "]" + id, JSON.stringify(theData));
+        return new Response(JSON.stringify({ message: "Item added", data: JSON.stringify(theData) }), { status: 200 });
 
     }
 }
@@ -183,7 +186,7 @@ export async function onRequestGet(context) {
     let theData = await KV.list({ prefix: datamain + details.payload.username });
     let theDataArray = { data: [] }
     if ((dataid != null) && (dataid != "")) {
-        let pData = await KV.get(datamain + details.payload.username +   "]" +projectid);
+        let pData = await KV.get(datamain + details.payload.username + "]" + projectid);
         theDataArray.data.push(JSON.parse(pData))
     } else {
         if (theData.keys.length > 0) {
