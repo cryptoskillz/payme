@@ -1,5 +1,3 @@
-let projectid = 0;
-let projectname = "";
 
 //add a ready function
 

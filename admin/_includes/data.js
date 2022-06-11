@@ -1,7 +1,6 @@
 /*
 todo 
 
-update the field rendering in  render  table
 
 */
 //add a ready function
