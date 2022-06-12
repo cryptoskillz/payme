@@ -1,4 +1,3 @@
-
 let settingsSchema = '{"btcaddress":"","xpub":"","companyname":""}'
 //as this is used in workers and pages we should maybe make it an envvar
 const datamain = "data";
@@ -27,42 +26,78 @@ async function handleRequest(request) {
 
     let details = "";
     let _customerdetails = "";
+    let _errormessage = ""
     let _backupAddress = "";
     let _companyName = "";
+    let valid = 1;
     //console.log(tmp[1])
     //console.log(tmp2[1])
-  
-    
 
-    if (tmp[1] !=undefined) {
-        let id= tmp[1].split("&");
+
+
+    if ((tmp[1] != undefined) && (tmp[1] != null)) {
+        let id = tmp[1].split("&");
         paymentType = "s"
         paymentKVName = `settings${id[0]}`
         //console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
-        details =  JSON.parse(details)
         //console.log(details)
-        _backupAddress = details.btcaddress;
-        _companyName  = details.companyname;
+        if (details != null) {
+            details = JSON.parse(details)
+            _backupAddress = details.btcaddress;
+            _companyName = details.companyname;
+        } else {
+            _errormessage = "company id not found";
+            valid = 0;
+        }
 
     }
+    else
+    {
+         _errormessage = "company id not found";
+         valid = 0;
+    }
 
- if (tmp2[1] !=undefined) {        
+    if ((tmp2[1] != undefined) && (tmp2[1] != null) && (valid ==1)) {
         //naming convertion for KV stores <datamain><payloadname>]<payloadid>
-        paymentKVName = `${datamain}chris]${tmp2[1]}`
-        console.log("paymentKVName")
-        console.log(paymentKVName)
+        paymentKVName = `${datamain}]${tmp2[1]}`
+        //console.log("paymentKVName")
+        //console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
-        details =  JSON.parse(details)
-        console.log(details)
-        _backupAddress = details.paymentAddress;
-        _companyName  = details.companyname;
-        _customerdetails = `<div class="center">amount:${details.amount} customer:${details.name}</div>`
-        _companyName = "US";
+        if (details != null) {
+            details = JSON.parse(details)
+            console.log(details)
+            _backupAddress = details.paymentAddress;
+            _companyName = details.companyname;
+            _customerdetails = `<div class="center">amount:${details.amount} customer:${details.name}</div>`
+            _companyName = "US";
+        } else {
+            _errormessage = `Invoice id ${tmp2[1]} not found, showing generic payment address`
+        }
     }
+
+    //console.log(_backupAddress)
+    //console.log(_companyName)
+
+    let html = `<style>
+                .center {
+                  text-align: center;
+                }
+                .h2 {
+                  padding:0px
+                }
+                img {
+                  display: block;
+                  margin-left: auto;
+                  margin-right: auto;
+                  width: 30%;
+                }
+                </style>
+                <h1 class="center">${_errormessage}</h1>`
 
     //the html
-    let html = `<style>
+    if (valid == 1) {
+        html = `<style>
                 .center {
                   text-align: center;
                 }
@@ -80,7 +115,9 @@ async function handleRequest(request) {
                 <h1 class="center">PAY ${_companyName} IN BITCOIN</h1>
                 <h2 class="center">${_backupAddress}</h2>
                 ${_customerdetails}
-                <div class="center">Click here to <a href="${URL}">check</a> for payment</div>`;
+                <div class="center">Click here to <a href="${URL}">check</a> for payment</div>
+                <div class="center">${_errormessage}</div>`;
+    }
     //return it
     return new Response(html, {
         headers: {
@@ -88,38 +125,6 @@ async function handleRequest(request) {
         },
     });
 
-
-    /*
-    console.log(paymentType)
-    //set the id
-    let id = tmp[1]
-    console.log(tmp[0])
-
-    console.log(tmp[1])
-    console.log(ENV + tmp[1])
-
-    //create a detail JSON object
-    let details = { address: "", amountbtc: "", customer: "" };
-    //store the address
-    let _backupAddress = BTCADDRESS;
-    //set a customer details
-    let customerdetails = "";
-            customerdetails = `<div class="center">amount:${details.amountbtc} customer:${details.customer}</div>`
-
-    //check that there is an id passed in.
-    if (id != undefined) {
-        //get the details from the KV store
-
-        let details = await PAYME.get(ENV + id);
-        //parse the details
-        details = JSON.parse(details);
-        //update the address
-        _backupAddress = details.address;
-        //update the customer details
-        customerdetails = `<div class="center">amount:${details.amountbtc} customer:${details.customer}</div>`
-    }
-   
-    */
 }
 
 

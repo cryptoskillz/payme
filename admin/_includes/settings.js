@@ -25,7 +25,7 @@ whenDocumentReady(isReady = () => {
         xhrcall(4, `api/settings/`, bodyJson, "json", "", xhrDone, token);
     })
 
-
+    //note: we could move this to app as its used in dashboard as well
     let settingsDone = (res) => {
         //if (update == 1)
         storeSettings(res)  

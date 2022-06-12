@@ -60,7 +60,7 @@ export async function onRequestPut(context) {
         //set up the kv data
         const KV = context.env.kvdata;
         //get the item
-        let theItem = await KV.get(datamain + payLoad.oldname + "]" + payLoad.id);
+        let theItem = await KV.get(datamain  + "]" + payLoad.id);
         //console.log(datamain+  payLoad.oldname+"]" +payLoad.id)
         //parse it
         theItem = JSON.parse(theItem)
@@ -78,8 +78,9 @@ export async function onRequestPut(context) {
                 theItem.paid = payLoad.paid;
             //console.log(datamain + payLoad.id)
             //delete the old one
-            await KV.delete(datamain + payLoad.oldname + "]" + payLoad.id);
+            //await KV.delete(datamain + payLoad.oldname + "]" + payLoad.id);
             //put the new one.
+            console.log(datamain + "]" + payLoad.id)
             await KV.put(datamain + "]" + payLoad.id, JSON.stringify(theItem));
             return new Response(JSON.stringify({ message: "Item updated", data: JSON.stringify(theItem) }), { status: 200 });
         } else
