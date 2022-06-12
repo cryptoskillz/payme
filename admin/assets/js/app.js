@@ -80,37 +80,29 @@ let getFormData = () => {
     for (var i = 0; i < fields.length; ++i) {
         if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
             //console.log("inp-"+fields[i]);
-            let theValue = document.getElementById('inp-'+fields[i]).value;
-            if (theValue == "")
-            {
-                document.getElementById('error-'+fields[i]).classList.remove('d-none');
+            let theValue = document.getElementById('inp-' + fields[i]).value;
+            if (theValue == "") {
+                document.getElementById('error-' + fields[i]).classList.remove('d-none');
                 sumbmitIt = 0;
-            }
-            else
-            {
-                //check for a payment adresss
-                if ($fields[i] == "paymentAddress")
-                {
-                    let settings = getSettings()
-                    $fields[i] == settings.btcaddress;
-                }
+            } else {
+
                 if (theJson == "{")
-                    theJson = theJson+`"${fields[i]}":"${theValue}"`
+                    theJson = theJson + `"${fields[i]}":"${theValue}"`
                 else
-                    theJson = theJson+`,"${fields[i]}":"${theValue}"`
+                    theJson = theJson + `,"${fields[i]}":"${theValue}"`
             }
-            
+
         }
     }
-    theJson = theJson+"}"
+    theJson = theJson + "}"
     if (sumbmitIt == 1)
-        return(theJson)
+        return (theJson)
     else
-        return(false)
+        return (false)
 
 }
 
-let buildForm = (dataitem="") => {
+let buildForm = (dataitem = "") => {
     let theJson;
     //check if a json object was passed and if not then use the default schema
     if (dataitem == "")
@@ -126,6 +118,13 @@ let buildForm = (dataitem="") => {
     for (var i = 0; i < fields.length; ++i) {
         //console.log(fields[i])
         if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
+            //check for a payment adresss
+            if (fields[i] == "paymentAddress") {
+                let settings = getSettings()
+                settings = JSON.parse(settings)
+                tmpd[i]= settings.btcaddress;
+            }
+
             inpHtml = inpHtml + `<div class="form-group" >
                                 <label>${fields[i]}</label>
                                 <input type="text" class="form-control form-control-user" id="inp-${fields[i]}" aria-describedby="emailHelp" placeholder="Enter ${fields[i]}" value="${tmpd[i]}">
@@ -297,7 +296,7 @@ let getSettings = (debug = 0) => {
     if (debug == 1) {
         console.log(theData)
     }
-    return(window.localStorage.settings)
+    return (window.localStorage.settings)
 
 }
 

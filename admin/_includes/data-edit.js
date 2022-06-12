@@ -16,11 +16,11 @@ whenDocumentReady(isReady = () => {
     //create button click
     document.getElementById('btn-edit').addEventListener('click', function() {        //api call done
         let xhrDone = (res) => {
-            let tmp = JSON.parse(bodyJson);
-            dataitem.name = tmp.name;
             res = JSON.parse(res)
+            let data = JSON.parse(res.data)
+            updateData(data,1)
             showAlert(res.message, 1)
-            document.getElementById('data-header').innerHTML = `Edit ${dataitem.name}`;
+            document.getElementById('data-header').innerHTML = `Edit ${data.name}`;
 
         }
         //get the form data
@@ -31,7 +31,7 @@ whenDocumentReady(isReady = () => {
             bodyJson.oldname = dataitem.name;
             bodyJson.id = dataitem.id;
             bodyJson = JSON.stringify(bodyJson);
-            console.log(bodyJson)
+            //console.log(bodyJson)
             //call it
             xhrcall(4, `api/${dataMainMethod}/`, bodyJson, "json", "", xhrDone, token)
         }

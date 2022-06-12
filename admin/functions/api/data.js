@@ -5,7 +5,7 @@
 
 
     naming convertion for KV stores.
-    <methoddame><username><payloadname>]<payloadid>
+    <methoddame><payloadname>]<payloadid>
 */
 
 //hold the payload
@@ -14,6 +14,7 @@ let payLoad;
 let contentType;
 //set data main to whatever is in env for consistency
 const datamain = "data";
+let dataSchema = { id: "", paymentAddress:"",name: "", amount: "", paid: "", createdAt: "" }
 
 //JWT model
 const jwt = require('@tsndr/cloudflare-worker-jwt');
@@ -21,7 +22,6 @@ const jwt = require('@tsndr/cloudflare-worker-jwt');
 var uuid = require('uuid');
 //set up the data schema for the table.
 //note we could extend this to have field types and other such nonsense for dynamic  rendering but I don't want to do that and you cannot make me.
-let dataSchema = { id: "", name: "", amount: "", paid: "", createdAt: "" }
 
 //return the date
 let getDate = () => {
@@ -62,8 +62,8 @@ export async function onRequestPut(context) {
         //set up the kv data
         const KV = context.env.kvdata;
         //get the item
-        let theItem = await KV.get(datamain + details.payload.username + payLoad.oldname + "]" + payLoad.id);
-        //console.log(datamain + details.payload.username +  payLoad.oldname+"]" +payLoad.id)
+        let theItem = await KV.get(datamain + payLoad.oldname + "]" + payLoad.id);
+        //console.log(datamain+  payLoad.oldname+"]" +payLoad.id)
         //parse it
         theItem = JSON.parse(theItem)
         //console.log(theItem)
@@ -72,11 +72,17 @@ export async function onRequestPut(context) {
         if (theItem != null) {
             if (payLoad.name != undefined)
                 theItem.name = payLoad.name;
-            //console.log(datamain + details.payload.username + payLoad.id)
+            if (payLoad.paymentAddress != undefined)
+                theItem.paymentAddress = payLoad.paymentAddress;
+            if (payLoad.amount != undefined)
+                theItem.amount = payLoad.amount;
+            if (payLoad.paid != undefined)
+                theItem.paid = payLoad.paid;
+            //console.log(datamain + payLoad.id)
             //delete the old one
-            await KV.delete(datamain + details.payload.username + payLoad.oldname + "]" + payLoad.id);
+            await KV.delete(datamain + payLoad.oldname + "]" + payLoad.id);
             //put the new one.
-            await KV.put(datamain + details.payload.username + payLoad.name + "]" + payLoad.id, JSON.stringify(theItem));
+            await KV.put(datamain + payLoad.name + "]" + payLoad.id, JSON.stringify(theItem));
             return new Response(JSON.stringify({ message: "Item updated", data: JSON.stringify(theItem) }), { status: 200 });
         } else
             return new Response(JSON.stringify({ error: "item not found" }), { status: 400 });
@@ -109,8 +115,8 @@ export async function onRequestDelete(context) {
         let details = await decodeJwt(request.headers, env.SECRET)
         const KV = context.env.kvdata;
         //console.log(payLoad)
-        //console.log(datamain + details.payload.username + payLoad.name + "]" + payLoad.deleteid)
-        await KV.delete(datamain + details.payload.username + payLoad.name + "]" + payLoad.deleteid);
+        //console.log(datamain +  payLoad.name + "]" + payLoad.deleteid)
+        await KV.delete(datamain + payLoad.name + "]" + payLoad.deleteid);
         return new Response(JSON.stringify({ message: "item deleted" }), { status: 200 });
     }
 }
@@ -129,7 +135,7 @@ export async function onRequestPost(context) {
     if (contentType != null) {
         //get the login credentials
         payLoad = await request.json();
-        console.log(payLoad)
+        //console.log(payLoad)
     }
     //decode jwt
     let details = await decodeJwt(request.headers, env.SECRET)
@@ -137,14 +143,14 @@ export async function onRequestPost(context) {
     const KV = context.env.kvdata;
     //check if it exists
     //console.log(payLoad)
-    let theCheck = await KV.list({ prefix: datamain + details.payload.username });
+    let theCheck = await KV.list({ prefix: datamain  });
     let exists = 0;
     if (theCheck.keys.length > 0) {
         for (var i = 0; i < theCheck.keys.length; ++i) {
             let tmp = theCheck.keys[i].name.split(']')
-            //console.log(datamain + details.payload.username +payLoad.name)
+            //console.log(datamain + payLoad.name)
             //console.log(tmp[0])
-            if (tmp[0] == datamain + details.payload.username + payLoad.name)
+            if (tmp[0] == datamain + payLoad.name)
                 exists = 1;
         }
     }
@@ -165,16 +171,15 @@ export async function onRequestPost(context) {
         }
         let fDate = getDate()
         let theData = dataSchema;
-        //let dataSchema = { id: id, name: "", amount: "", paid: "", createdAt: fDate }
-        //let theData = { id: id, name: payLoad.name, templatename: "", template: "", schema: schemaJson, createdAt: fDate }
         theData.id = id;
         theData.name  = payLoad.name;
         theData.amount = payLoad.amount;
         theData.paid = payLoad.paid;
         theData.createdAt = fDate;
-        console.log(theData)
-        //console.log(datamain + details.payload.username + payLoad.name + "]" + id)
-        await KV.put(datamain + details.payload.username + payLoad.name + "]" + id, JSON.stringify(theData));
+        theData.paymentAddress = payLoad.paymentAddress
+        //console.log(theData)
+        //console.log(datamain + payLoad.name + "]" + id)
+        await KV.put(datamain + payLoad.name + "]" + id, JSON.stringify(theData));
         return new Response(JSON.stringify({ message: "Item added", data: JSON.stringify(theData) }), { status: 200 });
 
     }
@@ -196,10 +201,10 @@ export async function onRequestGet(context) {
     //set up the KV
     const KV = context.env.kvdata;
     //get the projects based on the name
-    let theData = await KV.list({ prefix: datamain + details.payload.username });
+    let theData = await KV.list({ prefix: datamain });
     let theDataArray = { data: [] }
     if ((dataid != null) && (dataid != "")) {
-        let pData = await KV.get(datamain + details.payload.username + "]" + dataid);
+        let pData = await KV.get(datamain + "]" + dataid);
         theDataArray.data.push(JSON.parse(pData))
     } else {
         if (theData.keys.length > 0) {
@@ -207,6 +212,7 @@ export async function onRequestGet(context) {
                 //get the item
                 let pData = await KV.get(theData.keys[i].name);
                 pData = JSON.parse(pData)
+                //console.log(pData)
                 //debug for easy clean up
                 //console.log(theData.keys[i].name);
                 //await KV.delete(theData.keys[i].name);

@@ -41,7 +41,7 @@ whenDocumentReady(isReady = () => {
     <i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>`
             //add the record
             var rowNode = table
-                .row.add([res.data[i].id, res.data[i].name, res.data[i].amount,res.data[i].paid,res.data[i].createdAt, `${editbutton} ${deletebutton} `])
+                .row.add([res.data[i].id, res.data[i].name, res.data[i].paymentAddress, res.data[i].amount,res.data[i].paid,res.data[i].createdAt, `${editbutton} ${deletebutton} `])
                 .draw()
                 .node().id = res.data[i].id;
         }
