@@ -2,28 +2,9 @@ I use sublime and plainstasks for my todo
 
 https://github.com/aziz/PlainTasks
 
+PAGES
 
-login.njk
 
- ☐ do not make the "you are logged out as a persistent alert"
- ☐ remove the error messages when there is a valid (may just remove them alogether and just use show alert)
-
-api data.js
-
- ☐ add routing 
- ☐ add middleware (if it does not increase the complexity)
- ☐ on the post make it render the values in the object dynamically
- ☐ remove the data on the JSON retun
- ☐ on the put make it render the object dynamically
- ✔ drop the name from the kv store as dont know what it is in the worker (payme) @done (22-06-12 21:32)
- ☐ add pay to in the data object
- ☐ check the item name does not exist and regenrate uid if it does
-
-api settings.js
-  
- ☐ check the item name does not exist and regenrate uid if it does
-
- 
 global
 
  ☐ fix the spinner with my wicked CSS skills :[
@@ -31,7 +12,18 @@ global
  ☐ rationalise the local cache engine to be generic
  ☐ add a parse  / stringy flag to the cache renders
 
-settings update
+check payment
+
+  ☐ check payment view 
+  ☐ create a subdmain that points to this
+  ☐ take a check payment secret and id and it checks the status every 30 seconds
+
+login.njk
+
+ ☐ do not make the "you are logged out as a persistent alert"
+ ☐ remove the error messages when there is a valid (may just remove them alogether and just use show alert)
+
+settings 
 
  ✔ store xpub @done (22-06-12 02:21)
  ✔ store store name @done (22-06-12 02:21)
@@ -41,13 +33,9 @@ settings update
  ☐ verify it is a valid BTC address
  ☐ verify it is an XPUB
 
-dashboard
+forgot password
 
- ✔ add the data count @done (22-06-12 22:03)
- ☐ have a settings check 
- ✔ show generic payment link @done (22-06-12 15:20)
- ☐ style the generic payment
-
+  ☐ add forgot password logic
 
 data
 
@@ -55,16 +43,42 @@ data
  ☐ render the table data dynamically
  ✔ add payment url button @done (22-06-12 22:03)
  ☐ when item had been added / deleted update the datacount
+ ☐ check payment button 
+ ☐ add a checker that polls the server to see if anything in the data table has been paid
 
-workers
-  ☐ code the checking worker
-  ☐ check if payment has been made in payment worker
+API
+
+
+api data.js
+
+ ☐ add routing 
+ ☐ add middleware (if it does not increase the complexity)
+ ☐ on the post make it render the values in the object dynamically
+ ☐ remove the data on the JSON retun
+ ☐ on the put make it render the object dynamically
+ ☐ drop the name from the kv store as dont know what it is in the worker (payme)
+ ☐ add pay to in the data object
+ ☐ check the item name does not exist and regenrate uid if it does
+
+api settings.js
+  
+ ☐ check the item name does not exist and regenrate uid if it does
+
+
+WORKERS
+
   ✔ in payme worker trap malformed urls @done (22-06-12 22:01)
   ✔ when we publish the KV binding  is being  dropped as for some reason it is not seeing it in the wrangler.toml file @done (22-06-12 15:20)
 
+check payment
 
-register 
-  ✔ change settings to use secret @done (22-06-12 13:43)
+ ☐ create a worker than runs on a schedule (every 60 seconds)
+ ☐ it reads the payment queue and looks for payment
+ ☐ it does one payment check at a time
+ ☐ when it finds a payment it updates the payment information 
+
+pay me
+ ☐ fix the kv bindings when you are deploying 
 
 
 
