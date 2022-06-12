@@ -34,11 +34,12 @@ async function handleRequest(request) {
     //console.log(tmp2[1])
 
 
-
+    let secret = "";
     if ((tmp[1] != undefined) && (tmp[1] != null)) {
-        let id = tmp[1].split("&");
+        let stmp = tmp[1].split("&");
+        secret = stmp[0];
         paymentType = "s"
-        paymentKVName = `settings${id[0]}`
+        paymentKVName = `settings${secret}`
         //console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
         //console.log(details)
@@ -61,7 +62,7 @@ async function handleRequest(request) {
     if ((tmp2[1] != undefined) && (tmp2[1] != null) && (valid ==1)) {
         //naming convertion for KV stores <datamain><payloadname>]<payloadid>
         //datamain  +"-"+user.user.secret + "]"+payLoad.id
-        paymentKVName = `${datamain}-${tmp[1]}]${tmp2[1]}`
+        paymentKVName = `${datamain}-${secret}]${tmp2[1]}`
         //console.log("paymentKVName")
         console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
