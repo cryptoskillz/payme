@@ -349,7 +349,7 @@ if (typeof(checkElement) != 'undefined' && checkElement != null) {
             }
 
         }
-        let theItem = getCacheData(deleteId);
+        let theItem = getData(deleteId);
         let bodyobj = {
             deleteid: deleteId,
             name: theItem.name
