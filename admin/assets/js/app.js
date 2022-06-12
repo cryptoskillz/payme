@@ -5,7 +5,7 @@ let checkElement
 var table // datatable
 
 //create your data schema here for table rendering.
-let dataSchema = '{ "id": "", "name": "","amount":"0","paid":"0", "createdAt": "" }'
+let dataSchema = '{ "id": "","paymentAddress":"", "name": "","amount":"0","paid":"0", "createdAt": "" }'
 dataSchema = JSON.parse(dataSchema);
 //add this to the settings page
 let settingsSchema = '{"btcaddress":"","xpub":"","compnanyname":""}'
@@ -88,6 +88,12 @@ let getFormData = () => {
             }
             else
             {
+                //check for a payment adresss
+                if ($fields[i] == "paymentAddress")
+                {
+                    let settings = getSettings()
+                    $fields[i] == settings.btcaddress;
+                }
                 if (theJson == "{")
                     theJson = theJson+`"${fields[i]}":"${theValue}"`
                 else

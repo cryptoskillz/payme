@@ -1,3 +1,5 @@
+let settingsSchema = '{"btcaddress":"","xpub":"","companyname":""}'
+
 async function handleRequest(request) {
 
     //get the parameter

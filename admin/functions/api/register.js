@@ -35,7 +35,7 @@ export async function onRequestPost(context) {
             await KV.put("username" + secretid,  JSON.stringify({username:registerData.username}));
             await KV.put("username" + registerData.username, json);
             //create the settings file
-            await KV.put("settings" + registerData.username, JSON.stringify(settingsSchema));
+            await KV.put("settings" + secretid, JSON.stringify(settingsSchema));
             return new Response(JSON.stringify({ status: "ok" }), { status: 200 });
         }
         else
