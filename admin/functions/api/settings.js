@@ -30,7 +30,11 @@ export async function onRequestGet(context) {
     //set up the KV
     const KV = context.env.kvdata;
     //get the settings based on the name
-   	let pData = await KV.get("settings" + details.payload.username);
+   	let user = await KV.get("username" + details.payload.username);
+    user = JSON.parse(user)
+    //console.log(user)
+    let pData = await KV.get("settings" + user.user.secret);
+    //console.log(pData)
    	if (pData != null)
     	return new Response(pData, { status: 200 });
     else
@@ -73,9 +77,12 @@ export async function onRequestPut(context) {
                 theItem.companyname = payLoad.companyname;                            
             //console.log(datamain + details.payload.username + payLoad.id)
             //delete the old one
-            await KV.delete("settings" + details.payload.username);
+            let user = await KV.get("username" + details.payload.username);
+            user = JSON.parse(user)
+            //delete it
+            await KV.delete("settings" + user.user.secret);
             //put the new one.
-            await KV.put("settings" + details.payload.username, JSON.stringify(theItem));
+            await KV.put("settings" + user.user.secret, JSON.stringify(theItem));
             return new Response(JSON.stringify({ message: "Settings updated", data: JSON.stringify(theItem) }), { status: 200 });
         } else
             return new Response(JSON.stringify({ error: "Settings not found" }), { status: 400 });

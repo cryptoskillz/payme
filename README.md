@@ -16,7 +16,8 @@ a port of the the cryptpoapi js
 
 payme
 
-serverless version of the standalone payme (this project)
+payme QR code generator
+
 
 xpub 
 
@@ -30,3 +31,13 @@ checkpayment
 
 A worker that looks for payments on the Bitcoin blockchain
 
+
+to run a worker use the following
+
+local 
+
+sudo wrangler dev --env local
+
+push to production 
+
+sudo wrangler publish --env production

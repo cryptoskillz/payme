@@ -12,5 +12,6 @@ module.exports = {
     SECRET: process.env.SECRET,
     DATAMAIN: "data",
     ITEMSDATAMAIN: "items",
-    DASHBOARDSTRAP: "Welcome to the content editor."
+    DASHBOARDSTRAP: "Welcome to the content editor.",
+    PAYWORKERURL:process.env.PAYWORKERURL
 }

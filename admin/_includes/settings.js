@@ -30,6 +30,7 @@ whenDocumentReady(isReady = () => {
         //if (update == 1)
         storeSettings(res)  
         res = JSON.parse(res)
+        console.log(res.btcaddress)
         document.getElementById('inp-btcaddress').value = res.btcaddress
         document.getElementById('inp-xpub').value = res.xpub
         document.getElementById('inp-companyname').value = res.companyname
@@ -42,6 +43,7 @@ whenDocumentReady(isReady = () => {
     }
     else
     {
+
         xhrcall(1, "api/settings/", "", "json", "", settingsDone, token)
     }
 });

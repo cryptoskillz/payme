@@ -5,13 +5,18 @@ layout: layout.njk
     {% include 'settings.js' %}
 {% endset %}
 <!-- Page Heading -->
-<h1 class="h3 mb-4 text-gray-800">Settings</h1>
-<p class="mb-4">
-</p>
+
 <div class="alert alert-success  d-none" role="alert" id="accountsSuccess">
 </div>
 <div class="alert alert-danger  d-none" role="alert" id="accountsAlert">
 </div>
+   <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800" id="data-header">Settings</h1>
+        <a href="/dashbard/" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-backward fa-sm text-white-50"></i> Back</a>
+    </div>
+<p class="mb-4">
+</p>
 <div class="form-group">
     <label>Add a BTC address</label>
     <input type="text" class="form-control form-control-user" id="inp-btcaddress" aria-describedby="btcaddressHelp" placeholder="Enter btc address...">

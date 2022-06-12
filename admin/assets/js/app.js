@@ -149,14 +149,12 @@ START OF LOCAL CACHE FUNCTIONS
 let clearCache = (clearUser = 0) => {
     window.localStorage.currentdataitem = ""
     window.localStorage.data = ""
+    window.localStorage.settings = ""
+
     if (clearUser == 1) {
         window.localStorage.token = ""
         window.localStorage.user = ""
     }
-}
-//project data
-let getUser = () => {
-    return (JSON.parse(window.localStorage.user))
 }
 
 
@@ -297,6 +295,18 @@ let getSettings = (debug = 0) => {
         console.log(theData)
     }
     return (window.localStorage.settings)
+
+}
+
+let getUser = (parseIt=0,debug = 0) => {
+    //show debug info
+    if (debug == 1) {
+        console.log(theData)
+    }
+    let tmp = window.localStorage.user;
+    if (parseIt ==  1)
+        tmp = JSON.parse(tmp)
+    return (tmp)
 
 }
 
