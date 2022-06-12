@@ -1,6 +1,4 @@
 /*
-
-
     notes:
 
 
@@ -82,7 +80,7 @@ export async function onRequestPut(context) {
             //delete the old one
             await KV.delete(datamain + payLoad.oldname + "]" + payLoad.id);
             //put the new one.
-            await KV.put(datamain + payLoad.name + "]" + payLoad.id, JSON.stringify(theItem));
+            await KV.put(datamain + "]" + payLoad.id, JSON.stringify(theItem));
             return new Response(JSON.stringify({ message: "Item updated", data: JSON.stringify(theItem) }), { status: 200 });
         } else
             return new Response(JSON.stringify({ error: "item not found" }), { status: 400 });
@@ -115,8 +113,8 @@ export async function onRequestDelete(context) {
         let details = await decodeJwt(request.headers, env.SECRET)
         const KV = context.env.kvdata;
         //console.log(payLoad)
-        //console.log(datamain +  payLoad.name + "]" + payLoad.deleteid)
-        await KV.delete(datamain + payLoad.name + "]" + payLoad.deleteid);
+        //console.log(datamain  "]" + payLoad.deleteid)
+        await KV.delete(datamain+ "]" + payLoad.deleteid);
         return new Response(JSON.stringify({ message: "item deleted" }), { status: 200 });
     }
 }
@@ -145,12 +143,13 @@ export async function onRequestPost(context) {
     //console.log(payLoad)
     let theCheck = await KV.list({ prefix: datamain  });
     let exists = 0;
+    let id = uuid.v4();
     if (theCheck.keys.length > 0) {
         for (var i = 0; i < theCheck.keys.length; ++i) {
             let tmp = theCheck.keys[i].name.split(']')
-            //console.log(datamain + payLoad.name)
+            //console.log(datamain + id)
             //console.log(tmp[0])
-            if (tmp[0] == datamain + payLoad.name)
+            if (tmp[0] == datamain + id)
                 exists = 1;
         }
     }
@@ -164,7 +163,7 @@ export async function onRequestPost(context) {
         //let projectsData = {data: []}
         //let id = projects.keys.length+1
 
-        let id = uuid.v4();
+        
         let schemaJson = {
             "fields": "",
             "originalfields": ""
@@ -179,7 +178,7 @@ export async function onRequestPost(context) {
         theData.paymentAddress = payLoad.paymentAddress
         //console.log(theData)
         //console.log(datamain + payLoad.name + "]" + id)
-        await KV.put(datamain + payLoad.name + "]" + id, JSON.stringify(theData));
+        await KV.put(datamain + "]" + id, JSON.stringify(theData));
         return new Response(JSON.stringify({ message: "Item added", data: JSON.stringify(theData) }), { status: 200 });
 
     }
