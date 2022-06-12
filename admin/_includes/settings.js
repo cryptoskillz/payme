@@ -43,7 +43,7 @@ whenDocumentReady(isReady = () => {
     }
     else
     {
-
+        
         xhrcall(1, "api/settings/", "", "json", "", settingsDone, token)
     }
 });

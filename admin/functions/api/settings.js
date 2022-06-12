@@ -27,10 +27,13 @@ export async function onRequestGet(context) {
         data, // arbitrary space for passing data between middlewares
     } = context;
     let details = await decodeJwt(request.headers, env.SECRET)
+    //console.log(details)
     //set up the KV
     const KV = context.env.kvdata;
     //get the settings based on the name
-   	let user = await KV.get("username" + details.payload.username);
+   	let user = await KV.get("user" + details.payload.username);
+    //console.log(user)
+
     user = JSON.parse(user)
     //console.log(user)
     let pData = await KV.get("settings" + user.user.secret);
@@ -77,7 +80,7 @@ export async function onRequestPut(context) {
                 theItem.companyname = payLoad.companyname;                            
             //console.log(datamain + details.payload.username + payLoad.id)
             //delete the old one
-            let user = await KV.get("username" + details.payload.username);
+            let user = await KV.get("user" + details.payload.username);
             user = JSON.parse(user)
             //delete it
             await KV.delete("settings" + user.user.secret);

@@ -27,13 +27,13 @@ export async function onRequestPost(context) {
         let secretid = uuid.v4();
         let json = JSON.stringify({ "jwt": "", "user": {  "username": registerData.username, "email": registerData.username,"password":registerData.password,"secret":secretid,datacount:"0" } })
         //check if user exist
-        const user = await KV.get("username" + registerData.username);
+        const user = await KV.get("user" + registerData.username);
         if (user == null)
         {
             //create a KV with the username and secret that we can use for any of the export functions.  If you are not going to have give you users API access then you will 
             //not require this.
-            await KV.put("username" + secretid,  JSON.stringify({username:registerData.username}));
-            await KV.put("username" + registerData.username, json);
+            //await KV.put("user" + registerData.username+"]"+secretid,  JSON.stringify({username:registerData.username}));
+            await KV.put("user" + registerData.username, json);
             //create the settings file
             await KV.put("settings" + secretid, settingsSchema);
             return new Response(JSON.stringify({ status: "ok" }), { status: 200 });

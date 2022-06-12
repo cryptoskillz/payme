@@ -60,9 +60,10 @@ async function handleRequest(request) {
 
     if ((tmp2[1] != undefined) && (tmp2[1] != null) && (valid ==1)) {
         //naming convertion for KV stores <datamain><payloadname>]<payloadid>
-        paymentKVName = `${datamain}]${tmp2[1]}`
+        //datamain  +"-"+user.user.secret + "]"+payLoad.id
+        paymentKVName = `${datamain}-${tmp[1]}]${tmp2[1]}`
         //console.log("paymentKVName")
-        //console.log(paymentKVName)
+        console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
         if (details != null) {
             details = JSON.parse(details)

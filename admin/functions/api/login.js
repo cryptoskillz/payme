@@ -33,7 +33,7 @@ export async function onRequest(context) {
         //set up the KV
         const KV = context.env.kvdata;
         //see if the user exists
-        const user = await KV.get("username" + credentials.identifier);
+        const user = await KV.get("user" + credentials.identifier);
         //user does not exist
         if (user == null)
             return new Response(JSON.stringify({ error: "invalid login" }), { status: 400 });

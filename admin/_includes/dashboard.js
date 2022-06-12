@@ -8,7 +8,6 @@ whenDocumentReady(isReady = () => {
 
 
     let updateDashboard = (theSettings) => {
-        console.log("ud")
         theSettings = JSON.parse(theSettings);
         console.log(theSettings)
         //if theSettings have not been added then show the prompt
@@ -24,7 +23,7 @@ whenDocumentReady(isReady = () => {
 
     }
     let SettingsDone = (res) => {
-        storeSettings(res,1)
+        storeSettings(res)
         //res = JSON.parse(res)
         //console.log(res.btcaddress);
         updateDashboard(res)

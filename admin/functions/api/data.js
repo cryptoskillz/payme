@@ -57,10 +57,14 @@ export async function onRequestPut(context) {
         //console.log(payLoad)
         //get the details
         let details = await decodeJwt(request.headers, env.SECRET)
+        //get user
+
         //set up the kv data
         const KV = context.env.kvdata;
+                let user = await KV.get("user" + details.payload.username);
+        user = JSON.parse(user)
         //get the item
-        let theItem = await KV.get(datamain  + "]" + payLoad.id);
+        let theItem = await KV.get(datamain  +"-"+user.user.secret+ "]" + payLoad.id);
         //console.log(datamain+  payLoad.oldname+"]" +payLoad.id)
         //parse it
         theItem = JSON.parse(theItem)
@@ -80,8 +84,8 @@ export async function onRequestPut(context) {
             //delete the old one
             //await KV.delete(datamain + payLoad.oldname + "]" + payLoad.id);
             //put the new one.
-            console.log(datamain + "]" + payLoad.id)
-            await KV.put(datamain + "]" + payLoad.id, JSON.stringify(theItem));
+            //console.log(datamain  +"-"+user.user.secret+  payLoad.id)
+            await KV.put(datamain  +"-"+user.user.secret + "]"+payLoad.id, JSON.stringify(theItem));
             return new Response(JSON.stringify({ message: "Item updated", data: JSON.stringify(theItem) }), { status: 200 });
         } else
             return new Response(JSON.stringify({ error: "item not found" }), { status: 400 });
@@ -113,9 +117,11 @@ export async function onRequestDelete(context) {
         //console.log(payLoad)
         let details = await decodeJwt(request.headers, env.SECRET)
         const KV = context.env.kvdata;
+        let user = await KV.get("user" + details.payload.username);
+        user = JSON.parse(user)
         //console.log(payLoad)
         //console.log(datamain  "]" + payLoad.deleteid)
-        await KV.delete(datamain+ "]" + payLoad.deleteid);
+        await KV.delete(datamain+"-"+user.user.secret+ "]" + payLoad.deleteid);
         return new Response(JSON.stringify({ message: "item deleted" }), { status: 200 });
     }
 }
@@ -138,11 +144,11 @@ export async function onRequestPost(context) {
     }
     //decode jwt
     let details = await decodeJwt(request.headers, env.SECRET)
-    //check for projects
-    const KV = context.env.kvdata;
-    //check if it exists
-    //console.log(payLoad)
-    let theCheck = await KV.list({ prefix: datamain  });
+        const KV = context.env.kvdata;
+        //get user
+    let user = await KV.get("user" + details.payload.username);
+    user = JSON.parse(user)
+    let theCheck = await KV.list({ prefix: datamain+"-"+user.user.secret  });
     let exists = 0;
     let id = uuid.v4();
     if (theCheck.keys.length > 0) {
@@ -179,7 +185,7 @@ export async function onRequestPost(context) {
         theData.paymentAddress = payLoad.paymentAddress
         //console.log(theData)
         //console.log(datamain + payLoad.name + "]" + id)
-        await KV.put(datamain + "]" + id, JSON.stringify(theData));
+        await KV.put(datamain+"-"+user.user.secret+ "]" + id, JSON.stringify(theData));
         return new Response(JSON.stringify({ message: "Item added", data: JSON.stringify(theData) }), { status: 200 });
 
     }
@@ -200,11 +206,14 @@ export async function onRequestGet(context) {
     let details = await decodeJwt(request.headers, env.SECRET)
     //set up the KV
     const KV = context.env.kvdata;
+    //get user
+    let user = await KV.get("user" + details.payload.username);
+    user = JSON.parse(user)
     //get the projects based on the name
-    let theData = await KV.list({ prefix: datamain });
+    let theData = await KV.list({ prefix: datamain+"-"+user.user.secret  });
     let theDataArray = { data: [] }
     if ((dataid != null) && (dataid != "")) {
-        let pData = await KV.get(datamain + "]" + dataid);
+        let pData = await KV.get(datamain+"-"+user.user.secret + dataid);
         theDataArray.data.push(JSON.parse(pData))
     } else {
         if (theData.keys.length > 0) {
