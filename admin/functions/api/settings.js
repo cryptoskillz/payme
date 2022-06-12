@@ -32,7 +32,6 @@ export async function onRequestGet(context) {
     //get the settings based on the name
     let user = await KV.get("user" + details.payload.username);
     //console.log(user)
-
     user = JSON.parse(user)
     //console.log(user)
     let pData = await KV.get("settings" + user.user.secret);
@@ -65,6 +64,9 @@ export async function onRequestPut(context) {
             let details = await decodeJwt(request.headers, env.SECRET)
             //set up the kv data
             const KV = context.env.kvdata;
+            let user = await KV.get("user" + details.payload.username);
+            //console.log(user)
+            user = JSON.parse(user)
             let theItem = settingsSchema;
             theItem = JSON.parse(theItem)
             //console.log(theItem)
