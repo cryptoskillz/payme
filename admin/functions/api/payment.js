@@ -81,7 +81,7 @@ export async function onRequestGet(context) {
             if ((queueData != undefined) && (queueData != "") && (queueData != null)) {
                 //parse the queue
                 queueData = JSON.parse(queueData);
-                //console.log(queueData)
+                ///console.log(queueData)
                 let counter = 1;
                 let addedIt = 0;
                 //loop  it
@@ -91,27 +91,27 @@ export async function onRequestGet(context) {
                         if (addedIt == 0) {
                             //check if the id matches and checks
                             //get the object
+                            console.log(datamain + "-" + secret + "]" + paymentid)
                             let pData = await KV.get(datamain + "-" + secret + "]" + paymentid);
-                            addToDataArray(pData)
+                           
+                            pData = JSON.parse(pData)
+                            //console.log(pData)
                             addedIt = 1;
                             //get the balance
                             //bc1qxphczudn8retcx0umz3pf2xuwpaxwmeslwugvm
                             let url = `https://blockchain.info/q/addressbalance/${pData.paymentAddress}`
+                           // console.log(url)
                             const response = await fetch(url);
                             const results = await gatherResponse(response);
-                            if (results > 0)
+                            //console.log(results)
+                            if (parseInt(results) > 0)
                             {
                                //todo add the other payment data
-                               theDataArray.paid = 1     
-
+                                pData.paid = 1  
+                                addToDataArray(JSON.stringify(pData))   
                                //update the payment ky object
                             }
-                            //else
-
-
-                            //let res = new Response(results);
-
-                            console.log(results)
+                            await KV.put(datamain + "-" + secret + "]" + paymentid,JSON.stringify(pData));
                         }
                     } else {
                         if (limit >= counter) {
@@ -132,7 +132,10 @@ export async function onRequestGet(context) {
             _errormessage = 'id not set'
         }
         if (valid == 1)
+        {
+            console.log(theDataArray)
             return new Response(JSON.stringify(theDataArray), { status: 200 });
+        }
         else
             return new Response(JSON.stringify({ error: _errormessage }), { status: 400 });
     } catch (error) {

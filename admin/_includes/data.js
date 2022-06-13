@@ -14,11 +14,28 @@ let checkPayment = (secret, id) => {
     //console.log(id)
     let checkDone = (res) => {
         res = JSON.parse(res)
-        // console.log(res)
+        //check for the  payment response
+        //we could just use the first element as the return is always going to be 1 item
         for (var i = 0; i < res.length; ++i) {
-            //console.log(res[i])
-            if (res[i].paid = "0") {
-                showAlert(`${res[i].id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 1,0)
+            //check if it is 0
+            if (res[i].paid == "0") {
+                //not paid
+                showAlert(`${res[i].id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 2,0)
+            }
+            else
+            {
+                //paid
+                let theItem = getData(res[i].id);
+                //update the paid object
+                theItem.paid = res[i].paid;
+                //update the data
+                updateData(theItem,0);
+                //show the payment has been made
+                //table.row( '#'+res[i].id ).data( theItem ).draw();
+                document.getElementById(`payid-${res[i].id}`).innerHTML = res[i].paid;
+                //table.row('#' + res[i].id).remove().draw()
+                showAlert(`${res[i].id} has been paid.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 1,0)
+
             }
         }
     }
@@ -67,7 +84,7 @@ whenDocumentReady(isReady = () => {
     <i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>`
             //add the record
             var rowNode = table
-                .row.add([res.data[i].id, res.data[i].name, res.data[i].paymentAddress, res.data[i].amount, res.data[i].paid, res.data[i].createdAt, `${editbutton} ${deletebutton} ${itemsbutton} ${checkbutton}`])
+                .row.add([res.data[i].id, res.data[i].name, res.data[i].paymentAddress, res.data[i].amount, `<span id="payid-${res.data[i].id}">${res.data[i].paid}</span>`, res.data[i].createdAt, `${editbutton} ${deletebutton} ${itemsbutton} ${checkbutton}`])
                 .draw()
                 .node().id = res.data[i].id;
         }
