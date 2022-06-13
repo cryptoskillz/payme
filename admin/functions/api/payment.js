@@ -75,7 +75,7 @@ export async function onRequestGet(context) {
         const KV = context.env.kvdata;
         //get the settings based on the name
         if ((secret != undefined) && (secret != "") && (secret != null)) {
-            let queueData = await KV.get("paymentqueue-" + secret);
+            let queueData = await KV.get("paymentqueue");
             //console.log(queueData)
             //check  we have a payment queue
             if ((queueData != undefined) && (queueData != "") && (queueData != null)) {

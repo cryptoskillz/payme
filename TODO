@@ -48,7 +48,7 @@ data
  ✔ add view on memspace when the invoice has been marked as paid @done (22-06-13 20:56)
 
 data edit
- ☐ add xpub get address to data edit view
+ ✔ add xpub get address to data edit view @done (22-06-14 01:30)
 
 
 dashboard
@@ -64,7 +64,7 @@ api data.js
  ☐ on the post make it render the values in the object dynamically
  ☐ remove the data on the JSON retun
  ☐ on the put make it render the object dynamically
- ☐ drop the name from the kv store as dont know what it is in the worker (payme)
+ ✔ drop the name from the kv store as dont know what it is in the worker (payme) @done (22-06-14 01:30)
  ☐ add pay to in the data object
  ☐ check the item name does not exist and regenrate uid if it does
 
@@ -76,7 +76,7 @@ payment
  ✔ build a json array for the response for a limit over 1 @done (22-06-13 15:23)
  ☐ add the other payment data when there is a valid payment
  ✔ use the address in the KV object @done (22-06-13 21:13)
- ☐ update the payment kv object when payment has been made
+ ✔ update the payment kv object when payment has been made @done (22-06-13 23:07)
  ☐ add price check function https://blockchain.info/tobtc?currency=" + currencyType + "&value=" + amount
  
 
@@ -91,7 +91,7 @@ check payment
  ☐ it reads the payment queue and looks for payment
  ☐ it does one payment check at a time
  ☐ when it finds a payment it updates the payment information 
- ☐ temp link it to memspace until the checker is ready
+ ✔ temp link it to memspace until the checker is ready @done (22-06-13 23:07)
 
 pay me
  ☐ fix the kv bindings when you are deploying 

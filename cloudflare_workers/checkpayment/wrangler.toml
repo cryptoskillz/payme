@@ -1,3 +1,9 @@
 name = "checkpayment"
 main = "src/index.js"
 compatibility_date = "2022-06-07"
+
+[vars]
+kv-namespaces = [{ binding = "PAYME", id = "2ab3b73fa2e2445bb0cf9aa54e593b4e", preview_id = "2ab3b73fa2e2445bb0cf9aa54e593b4e" }]
+
+[triggers]
+crons = ["*/1 * * * *"]

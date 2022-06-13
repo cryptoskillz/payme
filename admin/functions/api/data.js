@@ -187,7 +187,7 @@ export async function onRequestPost(context) {
         //console.log(datamain + payLoad.name + "]" + id)
         await KV.put(datamain+"-"+user.user.secret+ "]" + id, JSON.stringify(theData));
         //update the payment queue
-        let queueData = await KV.get("paymentqueue-"+user.user.secret);
+        let queueData = await KV.get("paymentqueue");
         let paymentQueueArray = [];
         //console.log(queueData)
         if (queueData == null)
@@ -196,7 +196,7 @@ export async function onRequestPost(context) {
             tmp.kv =`${datamain}-${user.user.secret}]${id}`
             paymentQueueArray.push(tmp)
             console.log(paymentQueueArray)
-            await KV.put("paymentqueue-"+user.user.secret, JSON.stringify(paymentQueueArray));
+            await KV.put("paymentqueue", JSON.stringify(paymentQueueArray));
         }
         else
         {
@@ -211,7 +211,7 @@ export async function onRequestPost(context) {
             }
             */
 
-            await KV.put("paymentqueue-"+user.user.secret,JSON.stringify(queueData));
+            await KV.put("paymentqueue",JSON.stringify(queueData));
         }
 
         return new Response(JSON.stringify({ message: "Item added", data: JSON.stringify(theData) }), { status: 200 });
