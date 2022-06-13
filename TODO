@@ -64,6 +64,9 @@ api settings.js
   
  ☐ check the item name does not exist and regenrate uid if it does
 
+payment
+ ✔ build a json array for the response for a limit over 1 @done (22-06-13 15:23)
+
 
 WORKERS
 
