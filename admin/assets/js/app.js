@@ -115,6 +115,8 @@ let buildForm = (dataitem = "") => {
     let fields = Object.keys(theJson)
     //loop through  the keys
     let inpHtml = "";
+
+    let xpubHtml = "";
     for (var i = 0; i < fields.length; ++i) {
         //console.log(fields[i])
         if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
@@ -122,12 +124,22 @@ let buildForm = (dataitem = "") => {
             if (fields[i] == "paymentAddress") {
                 let settings = getSettings()
                 settings = JSON.parse(settings)
-                tmpd[i]= settings.btcaddress;
+                tmpd[i] = settings.btcaddress;
+                if ((settings.xpub != undefined) && (settings.xpub != "") && (settings.xpub != null)) {
+                    xpubHtml = ` <label><a href="javascript:generateFromXpub('${settings.xpub}')">Generate a new address from your xPub</a></label>`
+                } else {
+                    xpubHtml = "";
+                }
+            }
+            else
+            {
+                xpubHtml = "";
             }
 
             inpHtml = inpHtml + `<div class="form-group" >
                                 <label>${fields[i]}</label>
                                 <input type="text" class="form-control form-control-user" id="inp-${fields[i]}" aria-describedby="emailHelp" placeholder="Enter ${fields[i]}" value="${tmpd[i]}">
+                                ${xpubHtml}
                                 <span class="text-danger d-none" id="error-${fields[i]}">${fields[i]} cannot be blank</span>  
                             </div>`
         }
@@ -141,6 +153,22 @@ let buildForm = (dataitem = "") => {
 /*
 END OF TABLE PROCESSING FUNCTIONS
 */
+
+let generateFromXpub = (xpub) => {
+    let xhrDone = (res) => {
+        //console.log(res)
+        if (res.indexOf('error.html') > -1) {
+            showAlert("Xpub generation error", 2)
+        } else {
+            res = JSON.parse(res)
+            if ((res.address != undefined) && (res.address != "") && (res.address != null)) {
+                document.getElementById('inp-paymentAddress').value = res.address
+            }
+        }
+    }
+    //call the xpub endpoint
+    xhrcall(1, `api/xpub/?x=${xpub}`, "", "json", "", xhrDone, token)
+}
 
 /*
 START OF LOCAL CACHE FUNCTIONS
@@ -298,13 +326,13 @@ let getSettings = (debug = 0) => {
 
 }
 
-let getUser = (parseIt=0,debug = 0) => {
+let getUser = (parseIt = 0, debug = 0) => {
     //show debug info
     if (debug == 1) {
         console.log(theData)
     }
     let tmp = window.localStorage.user;
-    if (parseIt ==  1)
+    if (parseIt == 1)
         tmp = JSON.parse(tmp)
     return (tmp)
 

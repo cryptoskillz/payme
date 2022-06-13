@@ -5,6 +5,9 @@ to do
 do not allow duplicate names
 
 */
+
+
+
 //add a ready function
 let whenDocumentReady = (f) => {
     /in/.test(document.readyState) ? setTimeout('whenDocumentReady(' + f + ')', 9) : f()
@@ -37,4 +40,8 @@ whenDocumentReady(isReady = () => {
             xhrcall(0, `api/${dataMainMethod}/`, bodyJson, "json", "", xhrDone, token)
         }
     })
+
+
+
+
 })
