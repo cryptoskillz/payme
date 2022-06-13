@@ -26,6 +26,20 @@ let  addToDataArray = (pData) => {
     theDataArray.push(paymentResponse)
 }
 
+async function gatherResponse(response) {
+    const { headers } = response;
+    const contentType = headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+        return JSON.stringify(await response.json());
+    } else if (contentType.includes('application/text')) {
+        return response.text();
+    } else if (contentType.includes('text/html')) {
+        return response.text();
+    } else {
+        return response.text();
+    }
+}
+
 export async function onRequestGet(context) {
     const {
         request, // same as existing Worker API
@@ -56,7 +70,7 @@ export async function onRequestGet(context) {
         //debug
         //console.log(secret);
         //console.log(paymentid);
-        console.log(limit)
+        //console.log(limit)
         //set up the KV
         const KV = context.env.kvdata;
         //get the settings based on the name
@@ -80,6 +94,24 @@ export async function onRequestGet(context) {
                             let pData = await KV.get(datamain + "-" + secret + "]" + paymentid);
                             addToDataArray(pData)
                             addedIt = 1;
+                            //get the balance
+                            //bc1qxphczudn8retcx0umz3pf2xuwpaxwmeslwugvm
+                            let url = `https://blockchain.info/q/addressbalance/${pData.paymentAddress}`
+                            const response = await fetch(url);
+                            const results = await gatherResponse(response);
+                            if (results > 0)
+                            {
+                               //todo add the other payment data
+                               theDataArray.paid = 1     
+
+                               //update the payment ky object
+                            }
+                            //else
+
+
+                            //let res = new Response(results);
+
+                            console.log(results)
                         }
                     } else {
                         if (limit >= counter) {

@@ -117,7 +117,7 @@ async function handleRequest(request) {
                 <h1 class="center">PAY ${_companyName} IN BITCOIN</h1>
                 <h2 class="center">${_backupAddress}</h2>
                 ${_customerdetails}
-                <div class="center">Click here to <a href="${URL}">check</a> for payment</div>
+                <div class="center">Click here to <a href="https://mempool.space/address/${_backupAddress}" target="_blank">check</a> for payment</div>
                 <div class="center">${_errormessage}</div>`;
     }
     //return it

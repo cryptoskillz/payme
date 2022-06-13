@@ -54,8 +54,10 @@ whenDocumentReady(isReady = () => {
             //disabled the code still has to  be written\`<a  href="${paymentWorkerUrl}?s=${theItem.secret}" target="_blank">${paymentWorkerUrl}?s=${theItem.secret}</a>`
             let checkbutton = "";
             if (res.data[i].paid == "0")
-                checkbutton = `<a href="javascript:checkPayment('${user.secret}','${res.data[i].id}')" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <i class="fas fa-globe fa-sm text-white-50"></i>check</a>`
-
+                checkbutton = `<a href="javascript:checkPayment('${user.secret}','${res.data[i].id}')" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <i class="fas fa-globe fa-sm text-white-50"></i> Check</a>`
+            else
+                checkbutton = `<a href="https://mempool.space/address/${res.data[i].paymentAddress}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank"> <i class="fas fa-globe fa-sm text-white-50"></i> View</a>`
+ 
 
             let itemsbutton = `<a href="${paymentWorkerUrl}?s=${user.secret}&i=${res.data[i].id}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">
     <i class="fas fa-globe fa-sm text-white-50"></i> Link</a>`

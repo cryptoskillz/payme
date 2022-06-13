@@ -43,8 +43,12 @@ data
  ☐ render the table data dynamically
  ✔ add payment url button @done (22-06-12 22:03)
  ☐ when item had been added / deleted update the datacount
- ☐ check payment button 
+ ✔ check payment button @done (22-06-13 16:08)
  ☐ add a checker that polls the server to see if anything in the data table has been paid
+ ✔ add view on memspace when the invoice has been marked as paid @done (22-06-13 20:56)
+
+data edit
+ ☐ add xpub get address to data edit view
 
 API
 
@@ -66,7 +70,11 @@ api settings.js
 
 payment
  ✔ build a json array for the response for a limit over 1 @done (22-06-13 15:23)
-
+ ☐ add the other payment data when there is a valid payment
+ ✔ use the address in the KV object @done (22-06-13 21:13)
+ ☐ update the payment kv object when payment has been made
+ ☐ add price check function https://blockchain.info/tobtc?currency=" + currencyType + "&value=" + amount
+ 
 
 WORKERS
 
@@ -79,6 +87,7 @@ check payment
  ☐ it reads the payment queue and looks for payment
  ☐ it does one payment check at a time
  ☐ when it finds a payment it updates the payment information 
+ ☐ temp link it to memspace until the checker is ready
 
 pay me
  ☐ fix the kv bindings when you are deploying 
