@@ -9,7 +9,7 @@ whenDocumentReady(isReady = () => {
 
     let updateDashboard = (theSettings) => {
         theSettings = JSON.parse(theSettings);
-        console.log(theSettings)
+        //console.log(theSettings)
         //if theSettings have not been added then show the prompt
         if (theSettings.btcaddress == "") {
             document.getElementById('paymentlinkcard').classList.add('d-none')
@@ -19,8 +19,12 @@ whenDocumentReady(isReady = () => {
         //show the page
         document.getElementById('showBody').classList.remove('d-none')
         //add the amount of data enteries they have added
-        document.getElementById("dashboardcounter").innerHTML = theUser.datacount;
-
+        let theData = getData();
+        if (theData != false)
+            document.getElementById("dashboardcounter").innerHTML = theData.data.length;
+        else
+            document.getElementById("dashboardcounter").innerHTML = 0;
+ 
     }
     let SettingsDone = (res) => {
         storeSettings(res)
