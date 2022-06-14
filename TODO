@@ -11,6 +11,13 @@ global
  ☐ check the sendemail works for forogot password
  ☐ rationalise the local cache engine to be generic
  ☐ add a parse  / stringy flag to the cache renders
+ ☐ have a schema to build the entruy types
+     https://www.w3schools.com/html/html_form_input_types.asp
+     https://www.w3schools.com/html/html_form_elements.asp
+     required
+     placeholder
+     related fields
+
 
 check payment
 
@@ -44,7 +51,7 @@ data
  ✔ add payment url button @done (22-06-12 22:03)
  ✔ when item had been added / deleted update the datacount @done (22-06-13 21:26) (not going to do this just going to count the data object)
  ✔ check payment button @done (22-06-13 16:08)
- ☐ add a checker that polls the server to see if anything in the data table has been paid
+ ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.
  ✔ add view on memspace when the invoice has been marked as paid @done (22-06-13 20:56)
 
 data edit
@@ -87,11 +94,19 @@ WORKERS
 
 check payment
 
- ☐ create a worker than runs on a schedule (every 60 seconds)
- ☐ it reads the payment queue and looks for payment
- ☐ it does one payment check at a time
- ☐ when it finds a payment it updates the payment information 
+ ✔ create a worker than runs on a schedule (every 60 seconds) @done (22-06-14 02:53)
+ ✔ it reads the payment queue and looks for payment @done (22-06-14 02:53)
+ ✔ it does one payment check at a time @done (22-06-14 02:53)
+ ✔ when it finds a payment it updates the payment information @done (22-06-14 02:53)
  ✔ temp link it to memspace until the checker is ready @done (22-06-13 23:07)
+ ☐ add a way to to notify the store / owner payer that the payment has been processed 
+ ☐ add the full payment info inot the payment KV object when a payment has been processed
+
+
+payme
+
+  ☐ style the hmtl so it looks super duper slick. 
+
 
 pay me
  ☐ fix the kv bindings when you are deploying 
