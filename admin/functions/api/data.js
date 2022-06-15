@@ -185,14 +185,10 @@ export async function onRequestPost(context) {
         theDataArray.createdAt = fDate;
         //set the kv id
         theDataArray.id = id;
-        let tmpArray =  []
         //build the form  objects
         for (var i = 0; i < keys.length; ++i) {
-            tmpArray.push({ "type": "input", "required": false, "placeholder": "Please enter "+keys[i]+" value", "value": ""+values[i]+"", "name": ""+keys[i]+"" })
-            //^works but is ugly.  Javascript why do you behave the way you do!!!
+            theDataArray.elementData.push({ "type": "input", "required": false, "placeholder": "Please enter "+keys[i]+" value", "value": ""+values[i]+"", "name": ""+keys[i]+"" })
         }
-        //add it to the data array
-        theDataArray.elementData = tmpArray
         //put the KV object
         await KV.put(datamain + "-" + user.user.secret + "]" + id, JSON.stringify(theDataArray));
         //get the payment queue
@@ -266,5 +262,5 @@ export async function onRequestGet(context) {
             }
         }
     }
-    return new Response(JSON.stringify(theDataArray), { status: 200 });
+    return new Response(theDataArray, { status: 200 });
 }
