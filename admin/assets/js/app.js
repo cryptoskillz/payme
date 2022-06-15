@@ -213,19 +213,21 @@ let removeDataItem = (theId, debug = 0) => {
 this function added the newly created item to the local application cache
 */
 let addDataItem = (theData, debug = 0) => {
+    debug = 1;
     //parse the response
     let theItems = window.localStorage.data
     theItems = JSON.parse(theItems);
     //parse the data
-    theData = JSON.parse(theData);
+    //theData = JSON.parse(theData);
     if (debug == 1) {
         console.log(theData)
-        console.log(theData.data)
+        console.log(theItems)
+        //console.log(theData.data)
 
     }
     //add it to projects
-    let tmp = JSON.parse(theData.data)
-    theItems.data.push(tmp);
+    let tmp = JSON.parse(theData)
+    theItems.push(tmp);
     window.localStorage.data = JSON.stringify(theItems)
     showAlert(theData.message, 1)
 }
@@ -233,6 +235,7 @@ let addDataItem = (theData, debug = 0) => {
 let storeData = (theData, debug = 0) => {
     //show debug info
     if (debug == 1) {
+        console.log("theData")
         console.log(theData)
     }
     window.localStorage.data = theData;
@@ -271,28 +274,31 @@ let updateData = (theData = "", debug = 0) => {
     }
 }
 
-let getData = (theId = "", debug = 0) => {
+let getData = ( debug = 0,theId = "") => {
     let theItems = window.localStorage.data;
     if ((theItems == undefined) || (theItems == "") || (theItems == null)) {
         if (debug == 1)
-            consolel.log("no items");
+            console.log("no items");
         return (false)
     } else {
-        theItems = JSON.parse(theItems)
+        //theItems = JSON.parse(theItems)
         if (debug == 1) {
+            //console.log(theItems.data.length)
             console.log(theItems)
         }
-        //console.log(data)
         if (theId != "") {
+            theItems = JSON.parse(theItems)
             for (var i = 0; i < theItems.data.length; ++i) {
-                if (theItems.data[i].id == theId) {
+                tmp = JSON.parse(theItems.data[i])
+ 
+                if (tmp.id == theId) {
                     if (debug == 1) {
                         console.log("foundit")
                         console.log(theItems.data[i])
                     }
                     //update the data
-                    window.localStorage.currentdataitem = JSON.stringify(theItems.data[i]);
-                    return (theItems.data[i]);
+                    window.localStorage.currentdataitem = JSON.stringify(tmp);
+                    return (tmp);
                 }
             }
         } else {
@@ -378,7 +384,7 @@ if (typeof(checkElement) != 'undefined' && checkElement != null) {
             }
 
         }
-        let theItem = getData(deleteId);
+        let theItem = getData(0,deleteId);
         let bodyobj = {
             deleteid: deleteId,
             name: theItem.name

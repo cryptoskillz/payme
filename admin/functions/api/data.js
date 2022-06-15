@@ -180,15 +180,26 @@ export async function onRequestPost(context) {
         let values = Object.values(payLoad);
         //set the data array schema
         //note : We don't really have to do this but it keeps things consistent.
-        let theDataArray = dataSchema; 
+        let theDataArray = []
+         theDataArray = dataSchema;
+                       theDataArray.elementData = []
+
+        //console.log("theDataArray") 
+        //console.log(theDataArray) 
+
+        //console.log("+++") 
+
         //set the created date
         theDataArray.createdAt = fDate;
         //set the kv id
         theDataArray.id = id;
         //build the form  objects
+       // console.log(keys)
         for (var i = 0; i < keys.length; ++i) {
+            //console.log(i)
             theDataArray.elementData.push({ "type": "input", "required": false, "placeholder": "Please enter "+keys[i]+" value", "value": ""+values[i]+"", "name": ""+keys[i]+"" })
         }
+        //console.log(theDataArray)
         //put the KV object
         await KV.put(datamain + "-" + user.user.secret + "]" + id, JSON.stringify(theDataArray));
         //get the payment queue
@@ -244,7 +255,8 @@ export async function onRequestGet(context) {
     user = JSON.parse(user)
     //get the projects based on the name
     let theData = await KV.list({ prefix: datamain + "-" + user.user.secret });
-    let theDataArray = []
+            let theDataArray = {"data":[]}
+
     if ((dataid != null) && (dataid != "")) {
         let pData = await KV.get(datamain + "-" + user.user.secret + dataid);
         theDataArray.data.push(JSON.parse(pData))
@@ -253,14 +265,10 @@ export async function onRequestGet(context) {
             for (var i = 0; i < theData.keys.length; ++i) {
                 //get the item
                 let pData = await KV.get(theData.keys[i].name);
-                //pData = JSON.parse(pData)
-                console.log(pData)
-                //debug for easy clean up
-                //console.log(theData.keys[i].name);
-                //await KV.delete(theData.keys[i].name);
-                theDataArray.push(pData)
+                theDataArray.data.push(pData)
             }
         }
     }
-    return new Response(theDataArray, { status: 200 });
+    console.log(theDataArray)
+    return new Response(JSON.stringify(theDataArray), { status: 200 });
 }

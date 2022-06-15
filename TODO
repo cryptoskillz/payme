@@ -9,7 +9,7 @@ global
 
  ☐ fix the spinner with my wicked CSS skills :[
  ☐ check the sendemail works for forogot password
- ☐ rationalise the local cache engine to be generic
+ ✔ rationalise the local cache engine to be generic @done (22-06-16 00:43)
  ☐ add a parse  / stringy flag to the cache renders
  ✔ have a schema to build the entruy types @done (22-06-15 00:12)
      https://www.w3schools.com/html/html_form_input_types.asp
@@ -56,10 +56,10 @@ data
  ✔ check payment button @done (22-06-13 16:08)
  ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.
  ✔ add view on memspace when the invoice has been marked as paid @done (22-06-13 20:56)
- ☐ fix the addDataItem bug due to new dynamic rendering
- ☐ refacrot the addItem call due to new dynamic rendering
+ ✔ fix the addDataItem bug due to new dynamic rendering @done (22-06-16 00:44)
+ ✔ refacrot the addItem call due to new dynamic rendering @done (22-06-16 00:44)
  ☐ update buildForm to use the new data types to have richtext edit etc
- ☐ make table render work with multipile data items in the array
+ ✔ make table render work with multipile data items in the array @done (22-06-16 00:44)
  ☐ update the edit data entry from to work with the new data schema
 
 data edit
