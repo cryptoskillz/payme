@@ -102,18 +102,57 @@ let getFormData = () => {
 
 }
 
+let buildEditForm = (dataitem = "") => {
+    let inpHtml = "";
+    let xpubHtml = "";
+    for (var i = 0; i < dataitem.elementData.length; ++i) {
+        console.log(dataitem.elementData[i])
+        let tmp = dataitem.elementData[i]
+        if (tmp.name == "paymentAddress") {
+
+           let settings = getSettings()
+                settings = JSON.parse(settings)
+                //tmp. = settings.btcaddress;
+                if ((settings.xpub != undefined) && (settings.xpub != "") && (settings.xpub != null)) {
+                    xpubHtml = ` <label><a href="javascript:generateFromXpub('${settings.xpub}')">Generate a new address from your xPub</a></label>`
+                } else {
+                    xpubHtml = "";
+                }
+            }
+            else
+            {
+                xpubHtml = "";
+            }
+         inpHtml = inpHtml + `<div class="form-group" >
+                                <label>${tmp.name}</label>
+                                <input type="text" class="form-control form-control-user" id="inp-${tmp.name}" aria-describedby="emailHelp" placeholder="Enter ${tmp.name}" value="${tmp.value}">
+                                ${xpubHtml}
+                                <span class="text-danger d-none" id="error-${tmp.name}">${tmp.name} cannot be blank</span>  
+                            </div>`
+    }
+    
+    return (inpHtml)
+}
+
 
 let buildForm = (dataitem = "") => {
     let theJson;
     //check if a json object was passed and if not then use the default schema
     if (dataitem == "")
         theJson = dataSchema
-    else
-        theJson = dataitem
+    //else
+    //   theJson = dataitem
     //get the objects
-    let tmpd = Object.values(theJson)
+    let tmpd;
+    if (dataitem == "")
+        tmpd = Object.values(theJson)
+    else
+        tmpd = Object.values(dataitem.elementData)
+    console.log(tmpd)
     //get the keys
     let fields = Object.keys(theJson)
+    //console.log(fields)
+
     //loop through  the keys
     let inpHtml = "";
 

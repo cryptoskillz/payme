@@ -35,7 +35,6 @@ whenDocumentReady(isReady = () => {
         }
         //get the form data
         let bodyJson = getFormData()
-        console.log(bodyJson)
         let user = getUser()
         bodyJson.secret = user.secret;
         //check there is data to submit

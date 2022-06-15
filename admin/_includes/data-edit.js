@@ -1,4 +1,3 @@
-
 //add a ready function
 
 let whenDocumentReady = (f) => {
@@ -8,30 +7,30 @@ let whenDocumentReady = (f) => {
 whenDocumentReady(isReady = () => {
     //get the schema
     let dataitem = getCurrentDataItem();
-     let bodyJson ;
+    let bodyJson;
     //build the elements
-    document.getElementById('formInputs').innerHTML = buildForm(dataitem);
+    document.getElementById('formInputs').innerHTML = buildEditForm(dataitem);
     //show the form
     document.getElementById('showBody').classList.remove('d-none')
     //create button click
-    document.getElementById('btn-edit').addEventListener('click', function() {        //api call done
+    document.getElementById('btn-edit').addEventListener('click', function() { //api call done
         let xhrDone = (res) => {
             res = JSON.parse(res)
             let data = JSON.parse(res.data)
-            updateData(data,1)
+            updateData(data, 1)
             showAlert(res.message, 1)
             document.getElementById('data-header').innerHTML = `Edit ${data.name}`;
 
         }
         //get the form data
-        bodyJson = getFormData()
+        bodyJson = getFormData();
         //check there is data to submit
         if (bodyJson != false) {
             bodyJson = JSON.parse(bodyJson);
             bodyJson.oldname = dataitem.name;
             bodyJson.id = dataitem.id;
             bodyJson = JSON.stringify(bodyJson);
-            //console.log(bodyJson)
+            console.log(bodyJson)
             //call it
             xhrcall(4, `api/${dataMainMethod}/`, bodyJson, "json", "", xhrDone, token)
         }
