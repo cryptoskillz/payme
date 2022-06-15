@@ -106,31 +106,29 @@ let buildEditForm = (dataitem = "") => {
     let inpHtml = "";
     let xpubHtml = "";
     for (var i = 0; i < dataitem.elementData.length; ++i) {
-        console.log(dataitem.elementData[i])
+        //console.log(dataitem.elementData[i])
         let tmp = dataitem.elementData[i]
         if (tmp.name == "paymentAddress") {
 
-           let settings = getSettings()
-                settings = JSON.parse(settings)
-                //tmp. = settings.btcaddress;
-                if ((settings.xpub != undefined) && (settings.xpub != "") && (settings.xpub != null)) {
-                    xpubHtml = ` <label><a href="javascript:generateFromXpub('${settings.xpub}')">Generate a new address from your xPub</a></label>`
-                } else {
-                    xpubHtml = "";
-                }
-            }
-            else
-            {
+            let settings = getSettings()
+            settings = JSON.parse(settings)
+            //tmp. = settings.btcaddress;
+            if ((settings.xpub != undefined) && (settings.xpub != "") && (settings.xpub != null)) {
+                xpubHtml = ` <label><a href="javascript:generateFromXpub('${settings.xpub}')">Generate a new address from your xPub</a></label>`
+            } else {
                 xpubHtml = "";
             }
-         inpHtml = inpHtml + `<div class="form-group" >
+        } else {
+            xpubHtml = "";
+        }
+        inpHtml = inpHtml + `<div class="form-group" >
                                 <label>${tmp.name}</label>
                                 <input type="text" class="form-control form-control-user" id="inp-${tmp.name}" aria-describedby="emailHelp" placeholder="Enter ${tmp.name}" value="${tmp.value}">
                                 ${xpubHtml}
                                 <span class="text-danger d-none" id="error-${tmp.name}">${tmp.name} cannot be blank</span>  
                             </div>`
     }
-    
+
     return (inpHtml)
 }
 
@@ -148,7 +146,7 @@ let buildForm = (dataitem = "") => {
         tmpd = Object.values(theJson)
     else
         tmpd = Object.values(dataitem.elementData)
-    console.log(tmpd)
+    //console.log(tmpd)
     //get the keys
     let fields = Object.keys(theJson)
     //console.log(fields)
@@ -170,9 +168,7 @@ let buildForm = (dataitem = "") => {
                 } else {
                     xpubHtml = "";
                 }
-            }
-            else
-            {
+            } else {
                 xpubHtml = "";
             }
 
@@ -230,11 +226,15 @@ let clearCache = (clearUser = 0) => {
 
 let removeDataItem = (theId, debug = 0) => {
     let theItems = window.localStorage.data
+    if (debug == 1) {
+        console.log(theItems)
+    }
     theItems = JSON.parse(theItems);
     for (var i = 0; i < theItems.data.length; ++i) {
-        if (theItems.data[i].id == theId) {
+        let tmp = JSON.parse(theItems.data[i])
+        if (tmp.id == theId) {
             if (debug == 1) {
-                console.log(theItems.data[i])
+                console.log(tmp)
             }
             //delete theItems.data[i];
             theItems.data.splice(i, 1);
@@ -266,7 +266,7 @@ let addDataItem = (theData, debug = 0) => {
     }
     //add it to projects
     let tmp = JSON.parse(theData)
-    theItems.push(tmp);
+    theItems.data.push(JSON.stringify(tmp));
     window.localStorage.data = JSON.stringify(theItems)
     showAlert(theData.message, 1)
 }
@@ -289,23 +289,27 @@ let updateData = (theData = "", debug = 0) => {
         return (false)
     } else {
         theItems = JSON.parse(theItems)
+        theData = JSON.parse(theData)
+
         if (debug == 1) {
             console.log(theItems)
+            console.log(theData)
         }
         for (var i = 0; i < theItems.data.length; ++i) {
+            let tmp = JSON.parse(theItems.data[i])
             if (debug == 1) {
-                console.log("checking " + theItems.data[i].id + " : " + theData.id)
-                console.log(theItems.data[i])
+                console.log("checking " + tmp.id + " : " + theData.id)
+                console.log(tmp)
             }
-            if (theItems.data[i].id == theData.id) {
+            if (tmp.id == theData.id) {
                 if (debug == 1) {
                     console.log("Found the id " + theData.id)
-                    console.log(theItems.data[i])
+                    console.log(tmp)
                 }
                 //update the project
-                theItems.data[i] = theData;
+                theItems.data[i] = JSON.stringify(theData);
                 //update the data
-                window.localStorage.currentdataitem = JSON.stringify(theData);
+                window.localStorage.currentdataitem = theData;
                 window.localStorage.data = JSON.stringify(theItems);
                 //return (theItems.data[i]);
             }
@@ -313,7 +317,7 @@ let updateData = (theData = "", debug = 0) => {
     }
 }
 
-let getData = ( debug = 0,theId = "") => {
+let getData = (debug = 0, theId = "") => {
     let theItems = window.localStorage.data;
     if ((theItems == undefined) || (theItems == "") || (theItems == null)) {
         if (debug == 1)
@@ -329,7 +333,7 @@ let getData = ( debug = 0,theId = "") => {
             theItems = JSON.parse(theItems)
             for (var i = 0; i < theItems.data.length; ++i) {
                 tmp = JSON.parse(theItems.data[i])
- 
+
                 if (tmp.id == theId) {
                     if (debug == 1) {
                         console.log("foundit")
@@ -411,19 +415,15 @@ if (typeof(checkElement) != 'undefined' && checkElement != null) {
             showAlert('Item has been deleted', 1)
             table.row('#' + tableRowId).remove().draw()
             console.log(deleteMethod)
-            console.log('api/' + dataMainMethod + '/')
 
-            if (deleteMethod == 'api/' + dataMainMethod + '/') {
-                removeDataItem(deleteId)
-
-            }
-            if (deleteMethod == 'api/' + dataItemsMainMethod + '/') {
-                removeDataItems(deleteId, 0)
+            if (deleteMethod == 'api/data/') {
+                removeDataItem(deleteId, 0)
 
             }
+
 
         }
-        let theItem = getData(0,deleteId);
+        let theItem = getData(0, deleteId);
         let bodyobj = {
             deleteid: deleteId,
             name: theItem.name

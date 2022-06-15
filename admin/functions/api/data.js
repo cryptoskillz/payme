@@ -265,6 +265,6 @@ export async function onRequestGet(context) {
             }
         }
     }
-    console.log(theDataArray)
+    //console.log(theDataArray)
     return new Response(JSON.stringify(theDataArray), { status: 200 });
 }
