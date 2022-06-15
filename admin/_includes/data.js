@@ -20,6 +20,7 @@ let checkPayment = (secret, id) => {
             //check if it is 0
             if (res[i].paid == "0") {
                 //not paid
+                console.log(res[i])
                 showAlert(`${res[i].id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 2, 0)
             } else {
                 //paid
@@ -56,7 +57,7 @@ whenDocumentReady(isReady = () => {
     let xhrDone = (res, local = 0) => {
         //store it in local storage
         if (local == 0) {
-            storeData(res, 1);
+            storeData(res, 0);
             
         }
         res = getData();

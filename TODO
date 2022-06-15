@@ -61,7 +61,9 @@ data
  ☐ update buildForm to use the new data types to have richtext edit etc
  ✔ make table render work with multipile data items in the array @done (22-06-16 00:44)
  ☐ update the edit data entry from to work with the new data schema
-
+ ☐ checkpayment function
+ ☐ delete function
+ 
 data edit
  ✔ add xpub get address to data edit view @done (22-06-14 01:30)
 
