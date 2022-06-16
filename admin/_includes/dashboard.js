@@ -4,42 +4,44 @@ let whenDocumentReady = (f) => {
 }
 
 whenDocumentReady(isReady = () => {
-
-
-
-    let updateDashboard = (theSettings) => {
-        theSettings = JSON.parse(theSettings);
-        //console.log(theSettings)
-        //if theSettings have not been added then show the prompt
-        if (theSettings.btcaddress == "") {
+    //get the user
+    let theUser = getUser(1, 0);
+    //get the values
+    let theValues = Object.values(theUser.settings)
+    //check if any of the array elements are false
+    let isEmpty = theValues.every(element => element == "")
+    //its empty
+    if (isEmpty == true) {
+        //show settings  CTA
+        document.getElementById('paymentlinkcard').classList.add('d-none')
+        document.getElementById('settingscard').classList.remove('d-none')
+    } else {
+        //check  if we have a  btc address
+        if (theValues[0] == "") {
+            //show settings CTA
             document.getElementById('paymentlinkcard').classList.add('d-none')
             document.getElementById('settingscard').classList.remove('d-none')
         }
-        document.getElementById('generic-payment-link').innerHTML = `<a  href="${paymentWorkerUrl}?s=${theUser.secret}" target="_blank">View</a>`
-        //show the page
-        document.getElementById('showBody').classList.remove('d-none')
-        //add the amount of data enteries they have added
-        let theData = getData();
-        if (theData != false)
-            document.getElementById("dashboardcounter").innerHTML = theData.data.length;
-        else
-            document.getElementById("dashboardcounter").innerHTML = 0;
- 
     }
-    let SettingsDone = (res) => {
-        storeSettings(res)
-        //res = JSON.parse(res)
-        //console.log(res.btcaddress);
-        updateDashboard(res)
-    }
-    //get the theSettings
-    let theSettings = getSettings();
-    //the the user
-    let theUser = getUser(1);
-    //check if we have it store locally
-    if ((theSettings != "") || (theSettings != undefined) || (theSettings == null)) {
-        xhrcall(1, "api/settings/", "", "json", "", SettingsDone, token)
+    //get the data
+    let theData = getData();
+    //turn it into an array
+    let tmp = JSON.parse(theData);
+    //set a vlaid falg
+    let validData = 1;
+    //check there is something there.
+    if (theData != false) {
+        //check we have some data
+        if (tmp.data.length != 0)
+            validData = 0;
     } else {
-        updateDashboard(theSettings);
+        validData = 0;
     }
+    //render it
+    if (validData == 1)
+        document.getElementById("dashboardcounter").innerHTML = tmp.data.length;
+    else
+        document.getElementById("dashboardcounter").innerHTML = 0;
+    document.getElementById('showBody').classList.remove('d-none')
+
 });

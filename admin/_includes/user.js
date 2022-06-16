@@ -291,7 +291,8 @@ whenDocumentReady(isReady = () => {
                     //get the JWT
                     let token = res.jwt
                     //set the user object
-                    let user = { "username": res.user.username, "email": res.user.email, "loggedin": 1, "secret": res.user.secret, "datacount": res.user.datacount }
+                    let user = { "username": res.user.username, "email": res.user.email, "loggedin": 1, "secret": res.user.secret, "datacount": res.user.datacount,"settings":res.settings }
+                    //let settings = res.settings;
                     //clear the caches 
                     clearCache();
                     //set the local storage

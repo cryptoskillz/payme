@@ -73,8 +73,12 @@ settingsSchema = JSON.parse(settingsSchema);
 START OF TABLE PROCESSING FUCNTIONS
 */
 
-let getFormData = () => {
-    let fields = Object.keys(dataSchema);
+let getFormData = (theSchema = "") => {
+    let fields;
+    if (theSchema == "")
+        fields = Object.keys(dataSchema);
+    else
+        fields = Object.keys(theSchema)
     let theJson = "{";
     let sumbmitIt = 1;
     for (var i = 0; i < fields.length; ++i) {
@@ -366,25 +370,29 @@ let storeSettings = (theData, debug = 0) => {
     window.localStorage.settings = theData;
 
 }
-
+/*
 let getSettings = (debug = 0) => {
     //show debug info
+    let user = JSON.parse(window.localStorage.user)
     if (debug == 1) {
-        console.log(theData)
+        console.log(user.settings)
     }
-    return (window.localStorage.settings)
+    return (user.settings)
 
 }
+*/
 
 let getUser = (parseIt = 0, debug = 0) => {
     //show debug info
-    if (debug == 1) {
-        console.log(theData)
-    }
-    let tmp = window.localStorage.user;
+    
+    let user = window.localStorage.user;
     if (parseIt == 1)
-        tmp = JSON.parse(tmp)
-    return (tmp)
+        user = JSON.parse(user)
+
+    if (debug == 1) {
+        console.log(user)
+    }
+    return (user)
 
 }
 

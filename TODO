@@ -38,8 +38,12 @@ settings
  ✔ store xpub @done (22-06-12 02:21)
  ✔ store store name @done (22-06-12 02:21)
  ✔ Store BTC address @done (22-06-12 02:22)
- ☐ use the dynamic schema rendering to make settings work more efficently 
+ ✔ use the dynamic schema rendeing to make settings work more efficently @done (22-06-16 16:05)
  ✔ store the settings in local cache @done (22-06-12 03:02)
+ ☐ remove the settings enpoint from  api
+ ☐ move the xhr call to user put and update the settings from there (we could have a settings route here but porbably will not)
+ ☐ remove calls to getSettings in the cache
+ ☐ update the update settings to update the settings cache
  ☐ verify it is a valid BTC address
  ☐ verify it is an XPUB
 

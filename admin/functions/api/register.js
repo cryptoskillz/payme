@@ -3,7 +3,7 @@
 
 */
 //settings schema
-let settingsSchema = '{"btcaddress":"","xpub":"","companyname":""}'
+let settingsSchema = { id: "", createdAt: "", elementData: [] }
 var uuid = require('uuid');
 export async function onRequestPost(context) {
     const {
@@ -25,7 +25,7 @@ export async function onRequestPost(context) {
         const KV = context.env.kvdata;
         //see if the user exists
         let secretid = uuid.v4();
-        let json = JSON.stringify({ "jwt": "", "user": {  "username": registerData.username, "email": registerData.username,"password":registerData.password,"secret":secretid,datacount:"0" } })
+        let json = JSON.stringify({ "jwt": "", "user": {  "username": registerData.username, "email": registerData.username,"password":registerData.password,"secret":secretid,datacount:"0" },"settings":settingsSchema })
         //check if user exist
         const user = await KV.get("user" + registerData.username);
         if (user == null)
@@ -35,7 +35,7 @@ export async function onRequestPost(context) {
             //await KV.put("user" + registerData.username+"]"+secretid,  JSON.stringify({username:registerData.username}));
             await KV.put("user" + registerData.username, json);
             //create the settings file
-            await KV.put("settings" + secretid, settingsSchema);
+            //await KV.put("settings" + secretid, JSON.stringify(settingsSchema));
             return new Response(JSON.stringify({ status: "ok" }), { status: 200 });
         }
         else

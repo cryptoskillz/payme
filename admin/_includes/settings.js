@@ -14,12 +14,16 @@ whenDocumentReady(isReady = () => {
             //show the message
             showAlert(res.message, 1)
         }
+        let bodyJson =  getFormData(settingsSchema);
+        console.log(bodyJson)
+        /*
         //check there is data to submit
         let bodyJson = {
             btcaddress: document.getElementById('inp-btcaddress').value,
             xpub: document.getElementById('inp-xpub').value,
             companyname: document.getElementById('inp-companyname').value
         }
+        */
         bodyJson = JSON.stringify(bodyJson);
         //call it
         xhrcall(4, `api/settings/`, bodyJson, "json", "", xhrDone, token);
@@ -28,22 +32,28 @@ whenDocumentReady(isReady = () => {
     //note: we could move this to app as its used in dashboard as well
     let settingsDone = (res) => {
         //if (update == 1)
-        storeSettings(res)  
+        storeSettings(res)
         res = JSON.parse(res)
         console.log(res.btcaddress)
         document.getElementById('inp-btcaddress').value = res.btcaddress
         document.getElementById('inp-xpub').value = res.xpub
         document.getElementById('inp-companyname').value = res.companyname
     }
-    //get the settings
-    let settings = getSettings();
-    //check if we have it store locally
-    if ((settings != "") && (settings != undefined)) {
-        settingsDone(settings,0);
+
+    let theUser = getUser(1, 0);
+    let theValues = Object.values(theUser.settings)
+    //let theSettings = theUser.settings;
+    //console.log(theSettings[0])
+    let keys = Object.keys(settingsSchema);
+    let inpHtml = "";
+    for (var i = 0; i < keys.length; ++i) {
+        console.log(keys[i])
+        inpHtml = inpHtml + `<div class="form-group" >
+                                <label>${keys[i]}</label>
+                                <input type="text" class="form-control form-control-user" id="inp-${keys[i]}" aria-describedby="emailHelp" placeholder="Enter ${keys[i]}" value="${theValues[i]}">
+                              
+                                <span class="text-danger d-none" id="error-${keys[i]}">${keys[i]} cannot be blank</span>  
+                            </div>`
     }
-    else
-    {
-        
-        xhrcall(1, "api/settings/", "", "json", "", settingsDone, token)
-    }
+    document.getElementById('formInputs').innerHTML = inpHtml;
 });

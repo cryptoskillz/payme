@@ -3,7 +3,9 @@ let payLoad;
 //hold the contenttypes
 let contentType;
 //settings schema
-let settingsSchema = '{"btcaddress":"","xpub":"","companyname":""}'
+let settingsSchema = { id: "", createdAt: "", elementData: [] }
+
+//let settingsSchema = '{"btcaddress":"","xpub":"","companyname":""}'
 //JWT model
 const jwt = require('@tsndr/cloudflare-worker-jwt');
 
@@ -69,10 +71,27 @@ export async function onRequestPut(context) {
             user = JSON.parse(user)
             let theItem = settingsSchema;
             theItem = JSON.parse(theItem)
+
             //console.log(theItem)
             //check that they sent up the data
             //note : we could make this simplier by just parsing the payload array.
             if (theItem != null) {
+                //get the keys
+                let keys = Object.keys(payLoad);
+                //get the values
+                let values = Object.values(payLoad);
+                let theDataArray = []
+                //copy in the current item
+                theDataArray = theItem;
+                //console.log(theDataArray)
+                for (var i = 0; i < keys.length; ++i) {
+                    //get the new value
+                    if (theDataArray.elementData[i] != undefined)
+                    {
+                        theDataArray.elementData[i].value = values[i]
+                    }
+                }
+                /*
                 if (payLoad.btcaddress != undefined)
                     theItem.btcaddress = payLoad.btcaddress;
                 if (payLoad.xpub != undefined)
@@ -86,8 +105,9 @@ export async function onRequestPut(context) {
                 //delete it
                 await KV.delete("settings" + user.user.secret);
                 //put the new one.
-                await KV.put("settings" + user.user.secret, JSON.stringify(theItem));
-                return new Response(JSON.stringify({ message: "Settings updated", data: JSON.stringify(theItem) }), { status: 200 });
+                */
+                await KV.put("settings" + user.user.secret, JSON.stringify(theDataArray));
+                return new Response(JSON.stringify({ message: "Settings updated", data: JSON.stringify(theDataArray) }), { status: 200 });
             } else
                 return new Response(JSON.stringify({ error: "Settings not found" }), { status: 400 });
 
