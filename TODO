@@ -41,7 +41,7 @@ settings
  ✔ use the dynamic schema rendeing to make settings work more efficently @done (22-06-16 16:05)
  ✔ store the settings in local cache @done (22-06-12 03:02)
  ☐ remove the settings enpoint from  api
- ☐ move the xhr call to user put and update the settings from there (we could have a settings route here but porbably will not)
+ ☐ move the xhr call to user put and update the settings from there (we could have a settings route here but porbably will notas )
  ☐ remove calls to getSettings in the cache
  ☐ update the update settings to update the settings cache
  ☐ verify it is a valid BTC address
@@ -75,8 +75,14 @@ data edit
 
 dashboard
   ☐ id the local storage data object is empty then pull down the data so the counter works.  
+  ☐ add the payment link
 
 API
+
+user,js
+
+ ☐ put the jwt token into the object  when they login so we can verify it later if required.
+ ☐ move login.hs post to here when  we add routing
 
 
 api data.js

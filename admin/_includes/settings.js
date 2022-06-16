@@ -9,51 +9,46 @@ whenDocumentReady(isReady = () => {
     document.getElementById('btn-edit').addEventListener('click', function() { //api call done
         let xhrDone = (res) => {
             res = JSON.parse(res)
-            //store the settings
-            storeSettings(res.data)
-            //show the message
-            showAlert(res.message, 1)
+            //get the user
+            let user = getUser(1);
+            //set the  settings
+            //note : if we have to update username / email then we will have to expand this
+            user.settings = res.settings;
+            //tore the user
+            storeUser(user, "", 1)
+            //note we are not user a server message as it is coming from the user endpoint and we are in settings, you don't like come at me!
+            showAlert("settings updated", 1);
         }
-        let bodyJson =  getFormData(settingsSchema);
-        console.log(bodyJson)
-        /*
-        //check there is data to submit
-        let bodyJson = {
-            btcaddress: document.getElementById('inp-btcaddress').value,
-            xpub: document.getElementById('inp-xpub').value,
-            companyname: document.getElementById('inp-companyname').value
-        }
-        */
+        //get the form data
+        let bodyJson = getFormData(settingsSchema);
+        //string  it
         bodyJson = JSON.stringify(bodyJson);
         //call it
-        xhrcall(4, `api/settings/`, bodyJson, "json", "", xhrDone, token);
+        xhrcall(4, `api/user/`, bodyJson, "json", "", xhrDone, token);
     })
-
-    //note: we could move this to app as its used in dashboard as well
-    let settingsDone = (res) => {
-        //if (update == 1)
-        storeSettings(res)
-        res = JSON.parse(res)
-        console.log(res.btcaddress)
-        document.getElementById('inp-btcaddress').value = res.btcaddress
-        document.getElementById('inp-xpub').value = res.xpub
-        document.getElementById('inp-companyname').value = res.companyname
-    }
-
+    //get the user
     let theUser = getUser(1, 0);
-    let theValues = Object.values(theUser.settings)
-    //let theSettings = theUser.settings;
-    //console.log(theSettings[0])
+    //get the values
+    let theValues = Object.values(theUser.settings.elementData)
+    //get the keys
     let keys = Object.keys(settingsSchema);
+    //set a html  input
     let inpHtml = "";
+    //loop the  keys
     for (var i = 0; i < keys.length; ++i) {
-        console.log(keys[i])
+        //hold the value
+        let theValue = ""
+        //check we have a value (if it is the first time them it will be blank)
+        if (theValues[i] != undefined)
+            theValue = theValues[i].value
+        //create the element
         inpHtml = inpHtml + `<div class="form-group" >
                                 <label>${keys[i]}</label>
-                                <input type="text" class="form-control form-control-user" id="inp-${keys[i]}" aria-describedby="emailHelp" placeholder="Enter ${keys[i]}" value="${theValues[i]}">
+                                <input type="text" class="form-control form-control-user" id="inp-${keys[i]}" aria-describedby="emailHelp" placeholder="Enter ${keys[i]}" value="${theValue}">
                               
                                 <span class="text-danger d-none" id="error-${keys[i]}">${keys[i]} cannot be blank</span>  
                             </div>`
     }
+    //render it
     document.getElementById('formInputs').innerHTML = inpHtml;
 });

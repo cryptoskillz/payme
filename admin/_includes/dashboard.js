@@ -8,7 +8,7 @@ whenDocumentReady(isReady = () => {
     let theUser = getUser(1, 0);
     //get the values
     let theValues = Object.values(theUser.settings)
-    //check if any of the array elements are false
+    //check if all of the array elements are empty
     let isEmpty = theValues.every(element => element == "")
     //its empty
     if (isEmpty == true) {

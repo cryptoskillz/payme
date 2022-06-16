@@ -382,9 +382,27 @@ let getSettings = (debug = 0) => {
 }
 */
 
+let storeUser = (user="", token="", debug = 0) => {
+    //set the local storage
+    if (debug == 1) {
+        console.log(token)
+        console.log(user)
+
+    }
+    if (token != "")
+        window.localStorage.token = token;
+    if (user != "")
+    window.localStorage.user = JSON.stringify(user);
+    if (debug == 1) {
+        console.log(window.localStorage.token)
+        console.log(window.localStorage.user)
+
+    }
+}
+
 let getUser = (parseIt = 0, debug = 0) => {
     //show debug info
-    
+
     let user = window.localStorage.user;
     if (parseIt == 1)
         user = JSON.parse(user)

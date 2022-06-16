@@ -22,7 +22,7 @@ whenDocumentReady(isReady = () => {
     let urlParam = getUrlParamater('logout')
     if (urlParam != "") {
         clearCache(1);
-        showAlert('You are now logged out', 1, 0)
+        showAlert('You are now logged out', 1)
     }
     //this function checks if an element exists
     let checkElement = (element) => {
@@ -246,7 +246,7 @@ whenDocumentReady(isReady = () => {
                     window.location = "/login/"
                 }
                 //call the create account endpoint
-                xhrcall(0, "api/register", bodyobjectjson, "json", "", registerDone)
+                xhrcall(0, "api/user", bodyobjectjson, "json", "", registerDone)
             }
         });
     }
@@ -295,9 +295,7 @@ whenDocumentReady(isReady = () => {
                     //let settings = res.settings;
                     //clear the caches 
                     clearCache();
-                    //set the local storage
-                    window.localStorage.token = token;
-                    window.localStorage.user = JSON.stringify(user);
+                    storeUser(user,token,1)
                     //direct the redirect URL
                     window.location.href = "/dashboard/"
                 }

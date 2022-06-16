@@ -14,7 +14,7 @@ let contentType;
 const datamain = "data";
 let dataSchema = { id: "", createdAt: "", elementData: [], paidData: [] }
 let paidDataSchema = { paidAddress: "", confirmations: 0, amount: 0 }
-//JWT model
+//JWT 
 const jwt = require('@tsndr/cloudflare-worker-jwt');
 //unique uid module
 var uuid = require('uuid');
