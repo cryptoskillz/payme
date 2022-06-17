@@ -114,11 +114,10 @@ let buildEditForm = (dataitem = "") => {
         let tmp = dataitem.elementData[i]
         if (tmp.name == "paymentAddress") {
 
-            let settings = getSettings()
-            settings = JSON.parse(settings)
+            let user = getUser(1);
             //tmp. = settings.btcaddress;
-            if ((settings.xpub != undefined) && (settings.xpub != "") && (settings.xpub != null)) {
-                xpubHtml = ` <label><a href="javascript:generateFromXpub('${settings.xpub}')">Generate a new address from your xPub</a></label>`
+            if ((user.settings.xpub != undefined) && (user.settings.xpub != "") && (user.settings.xpub != null)) {
+                xpubHtml = ` <label><a href="javascript:generateFromXpub('${user.settings.xpub}')">Generate a new address from your xPub</a></label>`
             } else {
                 xpubHtml = "";
             }
@@ -159,16 +158,19 @@ let buildForm = (dataitem = "") => {
     let inpHtml = "";
 
     let xpubHtml = "";
+    let user = getUser(1);
+    console.log(user.settings)
     for (var i = 0; i < fields.length; ++i) {
         //console.log(fields[i])
         if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
             //check for a payment adresss
-            if (fields[i] == "paymentAddress") {
-                let settings = getSettings()
-                settings = JSON.parse(settings)
-                tmpd[i] = settings.btcaddress;
-                if ((settings.xpub != undefined) && (settings.xpub != "") && (settings.xpub != null)) {
-                    xpubHtml = ` <label><a href="javascript:generateFromXpub('${settings.xpub}')">Generate a new address from your xPub</a></label>`
+            if (fields[i] == "btcaddress") {
+                
+                //tmpd[i] = user.settings.btcaddress;
+
+                //loop
+                if ((user.settings.xpub != undefined) && (user.settings.xpub != "") && (user.settings.xpub != null)) {
+                    xpubHtml = ` <label><a href="javascript:generateFromXpub('${user.settings.xpub}')">Generate a new address from your xPub</a></label>`
                 } else {
                     xpubHtml = "";
                 }
@@ -370,17 +372,7 @@ let storeSettings = (theData, debug = 0) => {
     window.localStorage.settings = theData;
 
 }
-/*
-let getSettings = (debug = 0) => {
-    //show debug info
-    let user = JSON.parse(window.localStorage.user)
-    if (debug == 1) {
-        console.log(user.settings)
-    }
-    return (user.settings)
 
-}
-*/
 
 let storeUser = (user="", token="", debug = 0) => {
     //set the local storage
