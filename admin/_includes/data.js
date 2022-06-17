@@ -20,21 +20,20 @@ let checkPayment = (secret, id) => {
             //check if it is 0
             if (res[i].paid == "0") {
                 //not paid
-                showAlert(`${res[i].id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 2,0)
-            }
-            else
-            {
+                console.log(res[i])
+                showAlert(`${res[i].id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 2, 0)
+            } else {
                 //paid
                 let theItem = getData(res[i].id);
                 //update the paid object
                 theItem.paid = res[i].paid;
                 //update the data
-                updateData(theItem,0);
+                updateData(theItem, 0);
                 //show the payment has been made
                 //table.row( '#'+res[i].id ).data( theItem ).draw();
                 document.getElementById(`payid-${res[i].id}`).innerHTML = res[i].paid;
                 //table.row('#' + res[i].id).remove().draw()
-                showAlert(`${res[i].id} has been paid.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 1,0)
+                showAlert(`${res[i].id} has been paid.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 1, 0)
 
             }
         }
@@ -46,7 +45,7 @@ let checkPayment = (secret, id) => {
 let loadURL = (theUrl, theId, blank = 0) => {
 
     //store the current item so we can use it later.
-    let theData = getData(theId)
+    let theData = getData(0,theId)
     if (blank == 1)
         window.open(theUrl, "_blank")
     else
@@ -58,38 +57,90 @@ whenDocumentReady(isReady = () => {
     let xhrDone = (res, local = 0) => {
         //store it in local storage
         if (local == 0) {
-            storeData(res);
-            res = JSON.parse(res)
+            storeData(res, 0);
+            
         }
-        //get the datatable
-        table = $('#dataTable').DataTable();
-        //loop through the data
-        let user = getUser(1);
-        for (var i = 0; i < res.data.length; ++i) {
-            let tmpName = res.data[i].name.replace(" ", "-");
-            //note you may only want one level of items, if so delete this method
-            //disabled the code still has to  be written\`<a  href="${paymentWorkerUrl}?s=${theItem.secret}" target="_blank">${paymentWorkerUrl}?s=${theItem.secret}</a>`
-            let checkbutton = "";
-            if (res.data[i].paid == "0")
-                checkbutton = `<a href="javascript:checkPayment('${user.secret}','${res.data[i].id}')" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <i class="fas fa-globe fa-sm text-white-50"></i> Check</a>`
-            else
-                checkbutton = `<a href="https://mempool.space/address/${res.data[i].paymentAddress}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank"> <i class="fas fa-globe fa-sm text-white-50"></i> View</a>`
- 
+        res = getData();
+        res = JSON.parse(res)
+        let columns = []
+        let dataresult = []
+        let tableRowCount;
+        let foundIt = 0;
+        let checkbutton = "";
+        let paymentlink = "";
+        let editbutton = "";
+        let deletebutton = "";
+        let paid = 0;
 
-            let itemsbutton = `<a href="${paymentWorkerUrl}?s=${user.secret}&i=${res.data[i].id}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">
+        for (var i = 0; i < res.data.length; ++i) {
+            tmp = res.data[i]
+            tmp = JSON.parse(tmp)
+            if (i == 0) {
+                //loop through the keys and build the columns
+                columns.push({ title: "id" })
+                for (var j = 0; j < tmp.elementData.length; ++j) {
+                    colJson = { title: tmp.elementData[j].name }
+                    columns.push(colJson)
+                }
+                columns.push({ title: "actions" })
+                //console.log(columns)
+                let values = Object.values(tmp.elementData[0]);
+                //set the key for deleting etc
+                for (var j = 0; j < values.length; ++j) {
+                    if ((!isNaN(values[j]) && foundIt == 0)) {
+                        foundIt = 1;
+                        tableRowCount = i
+                    }
+                }
+
+            }
+            let theData = []
+            theData.push(tmp.id);
+            for (var j = 0; j < tmp.elementData.length; ++j) {
+
+                //build a check button to see if we been paid or not
+                if (tmp.elementData[j].name == "paid") {
+                    if (tmp.elementData[j].value != "0")
+                        paid = 1
+                }
+                //get the payment address
+                if (tmp.elementData[j].name == "paymentAddress")
+                    paymentAddress = tmp.elementData[j].name;
+                //add the elements
+                theData.push(tmp.elementData[j].value)
+
+            }
+
+            if (paid == 0)
+                checkbutton = `<a href="javascript:checkPayment('${user.secret}','${tmp.id}')" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <i class="fas fa-globe fa-sm text-white-50"></i> Check</a>`
+            else
+                checkbutton = `<a href="https://mempool.space/address/${paymentAddress}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank"> <i class="fas fa-globe fa-sm text-white-50"></i> View</a>`
+
+            //build the other buttons
+            paymentlink = `<a href="${paymentWorkerUrl}?s=${user.secret}&i=${tmp.id}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">
     <i class="fas fa-globe fa-sm text-white-50"></i> Link</a>`
-            let editbutton = `<a href="javascript:loadURL('/${dataMainMethod}/edit/','${res.data[i].id}')" id="ep-${tmpName}-${i}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+
+            editbutton = `<a href="javascript:loadURL('/${dataMainMethod}/edit/','${tmp.id}')" id="ep-${tmp.id}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
     <i class="fas fa-file fa-sm text-white-50"></i> Edit</a>`
-            let deletebutton = `<a href="javascript:deleteTableItem('${res.data[i].id}','${res.data[i].id}','api/${dataMainMethod}/')" id="dp-${tmpName}-${i}" class=" d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+
+
+            deletebutton = `<a href="javascript:deleteTableItem('${tmp.id}','${tmp.id}','api/${dataMainMethod}/')" id="dp-${res.id}" class=" d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
     <i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>`
-            //add the record
-            var rowNode = table
-                .row.add([res.data[i].id, res.data[i].name, res.data[i].paymentAddress, res.data[i].amount, `<span id="payid-${res.data[i].id}">${res.data[i].paid}</span>`, res.data[i].createdAt, `${editbutton} ${deletebutton} ${itemsbutton} ${checkbutton}`])
-                .draw()
-                .node().id = res.data[i].id;
+
+            //add the buttons
+            theData.push(`${checkbutton} ${paymentlink} ${editbutton} ${deletebutton}`);
+            dataresult.push(theData)
         }
-        table.columns.adjust();
+
+        table = $('#dataTable').DataTable({
+            data: dataresult,
+            rowId: tableRowCount,
+            columns: columns,
+
+        });
+
     }
+
     theData = getData();
     if (theData != false) {
         xhrDone(theData, 1);
@@ -102,5 +153,6 @@ whenDocumentReady(isReady = () => {
         xhrcall(1, "api/" + dataMainMethod + "/", bodyobjectjson, "json", "", xhrDone, token)
 
     }
+
 
 })

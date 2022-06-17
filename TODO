@@ -9,8 +9,18 @@ global
 
  ☐ fix the spinner with my wicked CSS skills :[
  ☐ check the sendemail works for forogot password
- ☐ rationalise the local cache engine to be generic
+ ✔ rationalise the local cache engine to be generic @done (22-06-16 00:43)
  ☐ add a parse  / stringy flag to the cache renders
+ ✔ have a schema to build the entruy types @done (22-06-15 00:12)
+     https://www.w3schools.com/html/html_form_input_types.asp
+     https://www.w3schools.com/html/html_form_elements.asp
+     required
+     placeholder
+     related fields
+
+create / edit data
+  ☐ render the form dynamically from the json object
+
 
 check payment
 
@@ -28,8 +38,12 @@ settings
  ✔ store xpub @done (22-06-12 02:21)
  ✔ store store name @done (22-06-12 02:21)
  ✔ Store BTC address @done (22-06-12 02:22)
- ☐ use the dynamic schema rendering to make settings work more efficently 
+ ✔ use the dynamic schema rendeing to make settings work more efficently @done (22-06-16 16:05)
  ✔ store the settings in local cache @done (22-06-12 03:02)
+ ☐ remove the settings enpoint from  api
+ ☐ move the xhr call to user put and update the settings from there (we could have a settings route here but porbably will notas )
+ ☐ remove calls to getSettings in the cache
+ ☐ update the update settings to update the settings cache
  ☐ verify it is a valid BTC address
  ☐ verify it is an XPUB
 
@@ -39,13 +53,21 @@ forgot password
 
 data
 
- ☐ render the table columns dynamically 
- ☐ render the table data dynamically
+ ✔ render the table columns dynamically @done (22-06-15 15:48)
+ ✔ render the table data dynamically @done (22-06-15 15:48)
  ✔ add payment url button @done (22-06-12 22:03)
  ✔ when item had been added / deleted update the datacount @done (22-06-13 21:26) (not going to do this just going to count the data object)
  ✔ check payment button @done (22-06-13 16:08)
- ☐ add a checker that polls the server to see if anything in the data table has been paid
+ ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.
  ✔ add view on memspace when the invoice has been marked as paid @done (22-06-13 20:56)
+ ✔ fix the addDataItem bug due to new dynamic rendering @done (22-06-16 00:44)
+ ✔ refacrot the addItem call due to new dynamic rendering @done (22-06-16 00:44)
+ ☐ update buildForm to use the new data types to have richtext edit etc
+ ✔ make table render work with multipile data items in the array @done (22-06-16 00:44)
+ ✔ update the edit data entry from to work with the new data schema @done (22-06-16 02:42)
+ ✔ checkpayment function @done (22-06-16 01:26)
+ ✔ update cache add / edit data forms @done (22-06-16 02:54)
+ ✔ delete function @done (22-06-16 03:14)
 
 data edit
  ✔ add xpub get address to data edit view @done (22-06-14 01:30)
@@ -53,20 +75,26 @@ data edit
 
 dashboard
   ☐ id the local storage data object is empty then pull down the data so the counter works.  
+  ☐ add the payment link
 
 API
+
+user,js
+
+ ☐ put the jwt token into the object  when they login so we can verify it later if required.
+ ☐ move login.hs post to here when  we add routing
 
 
 api data.js
 
  ☐ add routing 
- ☐ add middleware (if it does not increase the complexity)
- ☐ on the post make it render the values in the object dynamically
- ☐ remove the data on the JSON retun
+ ✔ add middleware (if it does not increase the complexity) @done (22-06-15 00:10)
+ ✔ on the post make it render the values in the object dynamically @done (22-06-15 00:10)
+ ✔ remove the data on the JSON retun @done (22-06-15 00:11)
  ☐ on the put make it render the object dynamically
  ✔ drop the name from the kv store as dont know what it is in the worker (payme) @done (22-06-14 01:30)
- ☐ add pay to in the data object
- ☐ check the item name does not exist and regenrate uid if it does
+ ✔ add pay to in the data object @done (22-06-15 00:11)
+ ✔ check the item name does not exist and regenrate uid if it does @done (22-06-15 00:11)
 
 api settings.js
   
@@ -87,11 +115,19 @@ WORKERS
 
 check payment
 
- ☐ create a worker than runs on a schedule (every 60 seconds)
- ☐ it reads the payment queue and looks for payment
- ☐ it does one payment check at a time
- ☐ when it finds a payment it updates the payment information 
+ ✔ create a worker than runs on a schedule (every 60 seconds) @done (22-06-14 02:53)
+ ✔ it reads the payment queue and looks for payment @done (22-06-14 02:53)
+ ✔ it does one payment check at a time @done (22-06-14 02:53)
+ ✔ when it finds a payment it updates the payment information @done (22-06-14 02:53)
  ✔ temp link it to memspace until the checker is ready @done (22-06-13 23:07)
+ ☐ add a way to to notify the store / owner payer that the payment has been processed 
+ ☐ add the full payment info inot the payment KV object when a payment has been processed
+
+
+payme
+
+  ☐ style the hmtl so it looks super duper slick. 
+
 
 pay me
  ☐ fix the kv bindings when you are deploying 

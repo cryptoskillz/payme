@@ -73,8 +73,12 @@ settingsSchema = JSON.parse(settingsSchema);
 START OF TABLE PROCESSING FUCNTIONS
 */
 
-let getFormData = () => {
-    let fields = Object.keys(dataSchema);
+let getFormData = (theSchema = "") => {
+    let fields;
+    if (theSchema == "")
+        fields = Object.keys(dataSchema);
+    else
+        fields = Object.keys(theSchema)
     let theJson = "{";
     let sumbmitIt = 1;
     for (var i = 0; i < fields.length; ++i) {
@@ -102,17 +106,55 @@ let getFormData = () => {
 
 }
 
+let buildEditForm = (dataitem = "") => {
+    let inpHtml = "";
+    let xpubHtml = "";
+    for (var i = 0; i < dataitem.elementData.length; ++i) {
+        //console.log(dataitem.elementData[i])
+        let tmp = dataitem.elementData[i]
+        if (tmp.name == "paymentAddress") {
+
+            let settings = getSettings()
+            settings = JSON.parse(settings)
+            //tmp. = settings.btcaddress;
+            if ((settings.xpub != undefined) && (settings.xpub != "") && (settings.xpub != null)) {
+                xpubHtml = ` <label><a href="javascript:generateFromXpub('${settings.xpub}')">Generate a new address from your xPub</a></label>`
+            } else {
+                xpubHtml = "";
+            }
+        } else {
+            xpubHtml = "";
+        }
+        inpHtml = inpHtml + `<div class="form-group" >
+                                <label>${tmp.name}</label>
+                                <input type="text" class="form-control form-control-user" id="inp-${tmp.name}" aria-describedby="emailHelp" placeholder="Enter ${tmp.name}" value="${tmp.value}">
+                                ${xpubHtml}
+                                <span class="text-danger d-none" id="error-${tmp.name}">${tmp.name} cannot be blank</span>  
+                            </div>`
+    }
+
+    return (inpHtml)
+}
+
+
 let buildForm = (dataitem = "") => {
     let theJson;
     //check if a json object was passed and if not then use the default schema
     if (dataitem == "")
         theJson = dataSchema
-    else
-        theJson = dataitem
+    //else
+    //   theJson = dataitem
     //get the objects
-    let tmpd = Object.values(theJson)
+    let tmpd;
+    if (dataitem == "")
+        tmpd = Object.values(theJson)
+    else
+        tmpd = Object.values(dataitem.elementData)
+    //console.log(tmpd)
     //get the keys
     let fields = Object.keys(theJson)
+    //console.log(fields)
+
     //loop through  the keys
     let inpHtml = "";
 
@@ -130,9 +172,7 @@ let buildForm = (dataitem = "") => {
                 } else {
                     xpubHtml = "";
                 }
-            }
-            else
-            {
+            } else {
                 xpubHtml = "";
             }
 
@@ -190,11 +230,15 @@ let clearCache = (clearUser = 0) => {
 
 let removeDataItem = (theId, debug = 0) => {
     let theItems = window.localStorage.data
+    if (debug == 1) {
+        console.log(theItems)
+    }
     theItems = JSON.parse(theItems);
     for (var i = 0; i < theItems.data.length; ++i) {
-        if (theItems.data[i].id == theId) {
+        let tmp = JSON.parse(theItems.data[i])
+        if (tmp.id == theId) {
             if (debug == 1) {
-                console.log(theItems.data[i])
+                console.log(tmp)
             }
             //delete theItems.data[i];
             theItems.data.splice(i, 1);
@@ -212,19 +256,21 @@ let removeDataItem = (theId, debug = 0) => {
 this function added the newly created item to the local application cache
 */
 let addDataItem = (theData, debug = 0) => {
+    debug = 1;
     //parse the response
     let theItems = window.localStorage.data
     theItems = JSON.parse(theItems);
     //parse the data
-    theData = JSON.parse(theData);
+    //theData = JSON.parse(theData);
     if (debug == 1) {
         console.log(theData)
-        console.log(theData.data)
+        console.log(theItems)
+        //console.log(theData.data)
 
     }
     //add it to projects
-    let tmp = JSON.parse(theData.data)
-    theItems.data.push(tmp);
+    let tmp = JSON.parse(theData)
+    theItems.data.push(JSON.stringify(tmp));
     window.localStorage.data = JSON.stringify(theItems)
     showAlert(theData.message, 1)
 }
@@ -232,6 +278,7 @@ let addDataItem = (theData, debug = 0) => {
 let storeData = (theData, debug = 0) => {
     //show debug info
     if (debug == 1) {
+        console.log("theData")
         console.log(theData)
     }
     window.localStorage.data = theData;
@@ -246,23 +293,27 @@ let updateData = (theData = "", debug = 0) => {
         return (false)
     } else {
         theItems = JSON.parse(theItems)
+        theData = JSON.parse(theData)
+
         if (debug == 1) {
             console.log(theItems)
+            console.log(theData)
         }
         for (var i = 0; i < theItems.data.length; ++i) {
+            let tmp = JSON.parse(theItems.data[i])
             if (debug == 1) {
-                console.log("checking " + theItems.data[i].id + " : " + theData.id)
-                console.log(theItems.data[i])
+                console.log("checking " + tmp.id + " : " + theData.id)
+                console.log(tmp)
             }
-            if (theItems.data[i].id == theData.id) {
+            if (tmp.id == theData.id) {
                 if (debug == 1) {
                     console.log("Found the id " + theData.id)
-                    console.log(theItems.data[i])
+                    console.log(tmp)
                 }
                 //update the project
-                theItems.data[i] = theData;
+                theItems.data[i] = JSON.stringify(theData);
                 //update the data
-                window.localStorage.currentdataitem = JSON.stringify(theData);
+                window.localStorage.currentdataitem = theData;
                 window.localStorage.data = JSON.stringify(theItems);
                 //return (theItems.data[i]);
             }
@@ -270,28 +321,31 @@ let updateData = (theData = "", debug = 0) => {
     }
 }
 
-let getData = (theId = "", debug = 0) => {
+let getData = (debug = 0, theId = "") => {
     let theItems = window.localStorage.data;
     if ((theItems == undefined) || (theItems == "") || (theItems == null)) {
         if (debug == 1)
-            consolel.log("no items");
+            console.log("no items");
         return (false)
     } else {
-        theItems = JSON.parse(theItems)
+        //theItems = JSON.parse(theItems)
         if (debug == 1) {
+            //console.log(theItems.data.length)
             console.log(theItems)
         }
-        //console.log(data)
         if (theId != "") {
+            theItems = JSON.parse(theItems)
             for (var i = 0; i < theItems.data.length; ++i) {
-                if (theItems.data[i].id == theId) {
+                tmp = JSON.parse(theItems.data[i])
+
+                if (tmp.id == theId) {
                     if (debug == 1) {
                         console.log("foundit")
                         console.log(theItems.data[i])
                     }
                     //update the data
-                    window.localStorage.currentdataitem = JSON.stringify(theItems.data[i]);
-                    return (theItems.data[i]);
+                    window.localStorage.currentdataitem = JSON.stringify(tmp);
+                    return (tmp);
                 }
             }
         } else {
@@ -316,25 +370,47 @@ let storeSettings = (theData, debug = 0) => {
     window.localStorage.settings = theData;
 
 }
-
+/*
 let getSettings = (debug = 0) => {
     //show debug info
+    let user = JSON.parse(window.localStorage.user)
     if (debug == 1) {
-        console.log(theData)
+        console.log(user.settings)
     }
-    return (window.localStorage.settings)
+    return (user.settings)
 
+}
+*/
+
+let storeUser = (user="", token="", debug = 0) => {
+    //set the local storage
+    if (debug == 1) {
+        console.log(token)
+        console.log(user)
+
+    }
+    if (token != "")
+        window.localStorage.token = token;
+    if (user != "")
+    window.localStorage.user = JSON.stringify(user);
+    if (debug == 1) {
+        console.log(window.localStorage.token)
+        console.log(window.localStorage.user)
+
+    }
 }
 
 let getUser = (parseIt = 0, debug = 0) => {
     //show debug info
-    if (debug == 1) {
-        console.log(theData)
-    }
-    let tmp = window.localStorage.user;
+
+    let user = window.localStorage.user;
     if (parseIt == 1)
-        tmp = JSON.parse(tmp)
-    return (tmp)
+        user = JSON.parse(user)
+
+    if (debug == 1) {
+        console.log(user)
+    }
+    return (user)
 
 }
 
@@ -365,19 +441,15 @@ if (typeof(checkElement) != 'undefined' && checkElement != null) {
             showAlert('Item has been deleted', 1)
             table.row('#' + tableRowId).remove().draw()
             console.log(deleteMethod)
-            console.log('api/' + dataMainMethod + '/')
 
-            if (deleteMethod == 'api/' + dataMainMethod + '/') {
-                removeDataItem(deleteId)
-
-            }
-            if (deleteMethod == 'api/' + dataItemsMainMethod + '/') {
-                removeDataItems(deleteId, 0)
+            if (deleteMethod == 'api/data/') {
+                removeDataItem(deleteId, 0)
 
             }
+
 
         }
-        let theItem = getData(deleteId);
+        let theItem = getData(0, deleteId);
         let bodyobj = {
             deleteid: deleteId,
             name: theItem.name

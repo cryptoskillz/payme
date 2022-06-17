@@ -22,8 +22,11 @@ whenDocumentReady(isReady = () => {
     document.getElementById('btn-create').addEventListener('click', function() {
         //api call done
         let xhrDone = (res) => {
-            addDataItem(res, 0);
             res = JSON.parse(res)
+            addDataItem(res.data, 0);
+            //console.log("res")
+            //console.log(res)
+            //addDataItem(res.data, 0);
             showAlert(res.message, 1, 0);
             document.getElementById('data-header').innerHTML = "";
             document.getElementById('formdiv').classList.add("d-none");

@@ -37,7 +37,6 @@ export async function onRequest(context) {
         //user does not exist
         if (user == null)
             return new Response(JSON.stringify({ error: "invalid login" }), { status: 400 });
-
         let tUser = JSON.parse(user);
         if ((tUser.user.email == credentials.identifier) && (tUser.user.password == credentials.password)) {
             //check if it is valid
@@ -47,12 +46,7 @@ export async function onRequest(context) {
                 // Verifing token
                 const isValid = await jwt.verify(token, env.SECRET)
                 if (isValid == true) {
-                    ///let json = JSON.stringify({ "jwt": token, "user": { "username": credentials.identifier, "email": credentials.identifier, "secret": tUser.user.secret } })
-                    //temp to deal with old accounts will not need going forward
-                    //await KV.put("username" + tUser.user.secret , JSON.stringify({username:credentials.identifier}));
-                    //await KV.put("username" + credentials.identifier, json);
-
-                    return new Response(JSON.stringify({ "jwt": token, "user": { "username": credentials.identifier, "email": credentials.identifier, "secret": tUser.user.secret,datacount:tUser.user.datacount } }), { status: 200 });
+                    return new Response(JSON.stringify({ "jwt": token, "user": { "username": credentials.identifier, "email": credentials.identifier, "secret": tUser.user.secret,datacount:tUser.user.datacount },"settings":tUser.settings }), { status: 200 });
                 } else {
                     return new Response(JSON.stringify({ error: "invalid login" }), { status: 400 });
 
@@ -61,7 +55,6 @@ export async function onRequest(context) {
 
         } else {
             return new Response(JSON.stringify({ error: "invalid login: username or password incorrect" }), { status: 400 });
-
         }
 
 

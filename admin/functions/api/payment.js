@@ -18,9 +18,9 @@ let  addToDataArray = (pData) => {
     pData = JSON.parse(pData);
     //build the   object
     paymentResponse.id = pData.id;
-    paymentResponse.paid = pData.paid;
+    paymentResponse.paid = pData.elementData[3].value;
     paymentResponse.confirmations = "0";
-    paymentResponse.paymentAddress = pData.paymentAddress;
+    paymentResponse.paymentAddress = pData.elementData[0].value;
     paymentResponse.paymentUrl = "";
     //add to the array
     theDataArray.push(paymentResponse)
@@ -95,28 +95,32 @@ export async function onRequestGet(context) {
                             let pData = await KV.get(datamain + "-" + secret + "]" + paymentid);
                            
                             pData = JSON.parse(pData)
-                            //console.log(pData)
+                            console.log(pData)
                             addedIt = 1;
                             //get the balance
                             //bc1qxphczudn8retcx0umz3pf2xuwpaxwmeslwugvm
-                            let url = `https://blockchain.info/q/addressbalance/${pData.paymentAddress}`
-                           // console.log(url)
+                            //console.log(pData.elementData[0])
+                            //console.log(pData.elementData[0].value)
+
+                            let url = `https://blockchain.info/q/addressbalance/${pData.elementData[0].value}`
+                            console.log(url)
                             const response = await fetch(url);
                             const results = await gatherResponse(response);
-                            //console.log(results)
+                            console.log(results)
                             if (parseInt(results) > 0)
                             {
                                //todo add the other payment data
-                                pData.paid = 1  
-                                addToDataArray(JSON.stringify(pData))   
+                                pData.elementData[3].value = 1  
+                                //addToDataArray(JSON.stringify(pData))   
                                //update the payment ky object
                             }
+                            addToDataArray(JSON.stringify(pData)) 
                             await KV.put(datamain + "-" + secret + "]" + paymentid,JSON.stringify(pData));
                         }
                     } else {
                         if (limit >= counter) {
                             console.log(counter)
-                                //get the object
+                            //get the object
                             let pData = await KV.get(queueData[i].kv);
                             addToDataArray(pData)
                             counter++;
@@ -133,7 +137,7 @@ export async function onRequestGet(context) {
         }
         if (valid == 1)
         {
-            console.log(theDataArray)
+            //console.log(theDataArray)
             return new Response(JSON.stringify(theDataArray), { status: 200 });
         }
         else
