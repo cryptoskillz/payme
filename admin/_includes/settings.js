@@ -16,7 +16,7 @@ whenDocumentReady(isReady = () => {
             user.settings = res.settings;
             //tore the user
             storeUser(user, "", 1)
-            //note we are not user a server message as it is coming from the user endpoint and we are in settings, you don't like come at me!
+            //note we are not using a server message as it is coming from the user endpoint and we are in settings, you don't like come at me!
             showAlert("settings updated", 1);
         }
         //get the form data
