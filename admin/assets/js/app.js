@@ -149,6 +149,8 @@ let buildForm = (dataitem = "") => {
         tmpd = Object.values(theJson)
     else
         tmpd = Object.values(dataitem.elementData)
+
+
     //console.log(tmpd)
     //get the keys
     let fields = Object.keys(theJson)
@@ -159,18 +161,37 @@ let buildForm = (dataitem = "") => {
 
     let xpubHtml = "";
     let user = getUser(1);
-    console.log(user.settings)
+    //console.log(user.settings)
+
+    //get the settings
+    settingsValues = Object.values(user.settings);
+    let paymentAddress = "";
+    let xpub = "";
+    for (var i = 0; i < settingsValues.length; ++i) {
+        console.log(settingsValues[i])
+        if (settingsValues.name == "btcaddress")
+            paymentAddress = settingsValues[i].value
+        if (settingsValues.name == "xpub")
+            xpub = settingsValues[i].value
+
+    }
+
+
+    //console.log(settingsValues)
+    //  console.log(settingsKeys)
+
+
     for (var i = 0; i < fields.length; ++i) {
         //console.log(fields[i])
         if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
             //check for a payment adresss
             if (fields[i] == "btcaddress") {
-                
+
                 //tmpd[i] = user.settings.btcaddress;
 
                 //loop
-                if ((user.settings.xpub != undefined) && (user.settings.xpub != "") && (user.settings.xpub != null)) {
-                    xpubHtml = ` <label><a href="javascript:generateFromXpub('${user.settings.xpub}')">Generate a new address from your xPub</a></label>`
+                if (xpub != "") {
+                    xpubHtml = ` <label><a href="javascript:generateFromXpub('${xpub}')">Generate a new address from your xPub</a></label>`
                 } else {
                     xpubHtml = "";
                 }
@@ -178,6 +199,8 @@ let buildForm = (dataitem = "") => {
                 xpubHtml = "";
             }
 
+            if (fields[i] == paymentAddress)
+                tmpd[i] = paymentAddress;
             inpHtml = inpHtml + `<div class="form-group" >
                                 <label>${fields[i]}</label>
                                 <input type="text" class="form-control form-control-user" id="inp-${fields[i]}" aria-describedby="emailHelp" placeholder="Enter ${fields[i]}" value="${tmpd[i]}">
@@ -374,7 +397,7 @@ let storeSettings = (theData, debug = 0) => {
 }
 
 
-let storeUser = (user="", token="", debug = 0) => {
+let storeUser = (user = "", token = "", debug = 0) => {
     //set the local storage
     if (debug == 1) {
         console.log(token)
@@ -384,7 +407,7 @@ let storeUser = (user="", token="", debug = 0) => {
     if (token != "")
         window.localStorage.token = token;
     if (user != "")
-    window.localStorage.user = JSON.stringify(user);
+        window.localStorage.user = JSON.stringify(user);
     if (debug == 1) {
         console.log(window.localStorage.token)
         console.log(window.localStorage.user)
