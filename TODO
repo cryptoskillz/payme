@@ -25,7 +25,7 @@ check payment
 
 login.njk
 
- ☐ do not make the "you are logged out as a persistent alert"
+ ✔ do not make the "you are logged out as a persistent alert" @done (22-06-18 01:05)
  ☐ remove the error messages when there is a valid (may just remove them alogether and just use show alert)
 
 settings 
@@ -41,13 +41,14 @@ data
 
  ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.
  ☐ update buildForm to use the new data types to have richtext edit etc
- ☐ Uncaught TypeError: Cannot read properties of null (reading 'classList')
+ ✔ Uncaught TypeError: Cannot read properties of null (reading 'classList') @done (22-06-18 01:03)
     at xhrDone (<anonymous>:17:47)
     at xhr.onload (app.js:674:22)
- ☐ add xpub
- ☐ add default btc adress
+ ✔ add xpub @done (22-06-19 23:12)
+ ✔ add default btc adress @done (22-06-19 23:12)
  
 data edit
+ ✔ current data item on save stores as an object @done (22-06-19 23:11)
 
 
 dashboard
@@ -70,7 +71,7 @@ api settings.js
  ☐ check the item name does not exist and regenrate uid if it does
 
 payment
- ☐ add the other payment data when there is a valid payment
+ ✔ add the other payment data when there is a valid payment @done (22-06-19 23:11)
  ☐ add price check function https://blockchain.info/tobtc?currency=" + currencyType + "&value=" + amount
  
 

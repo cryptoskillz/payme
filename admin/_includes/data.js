@@ -20,7 +20,7 @@ let checkPayment = (secret, id) => {
             //check if it is 0
             if (res[i].paid == "0") {
                 //not paid
-                console.log(res[i])
+                //console.log(res[i])
                 showAlert(`${res[i].id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 2, 0)
             } else {
                 //paid
@@ -105,7 +105,7 @@ whenDocumentReady(isReady = () => {
                 }
                 //get the payment address
                 if (tmp.elementData[j].name == "paymentAddress")
-                    paymentAddress = tmp.elementData[j].name;
+                    paymentAddress = tmp.elementData[j].value;
                 //add the elements
                 theData.push(tmp.elementData[j].value)
 

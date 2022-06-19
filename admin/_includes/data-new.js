@@ -6,12 +6,11 @@ do not allow duplicate names
 
 */
 
-
-
 //add a ready function
 let whenDocumentReady = (f) => {
     /in/.test(document.readyState) ? setTimeout('whenDocumentReady(' + f + ')', 9) : f()
 }
+
 
 whenDocumentReady(isReady = () => {
     //build the elements
@@ -24,14 +23,9 @@ whenDocumentReady(isReady = () => {
         let xhrDone = (res) => {
             res = JSON.parse(res)
             addDataItem(res.data, 0);
-            //console.log("res")
-            //console.log(res)
-            //addDataItem(res.data, 0);
             showAlert(res.message, 1, 0);
-            document.getElementById('data-header').innerHTML = "";
-            document.getElementById('formdiv').classList.add("d-none");
-            document.getElementById('btn-create').classList.add("d-none");
-
+            //clear the form
+            clearForm(res.data)
         }
         //get the form data
         let bodyJson = getFormData()
@@ -43,8 +37,4 @@ whenDocumentReady(isReady = () => {
             xhrcall(0, `api/${dataMainMethod}/`, bodyJson, "json", "", xhrDone, token)
         }
     })
-
-
-
-
 })

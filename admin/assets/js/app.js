@@ -135,6 +135,14 @@ let buildEditForm = (dataitem = "") => {
     return (inpHtml)
 }
 
+let clearForm = (dataitem = "") => {
+   let elD = JSON.parse(dataitem)
+     for (var i = 0; i < elD.elementData.length; ++i) {
+        //let tmp = JSON.parse(elD.elementData[i])
+        //console.log(elD.elementData[i])
+        document.getElementById(`inp-${elD.elementData[i].name}`).value = ""
+    }
+} 
 
 let buildForm = (dataitem = "") => {
     let theJson;
@@ -164,31 +172,22 @@ let buildForm = (dataitem = "") => {
     //console.log(user.settings)
 
     //get the settings
-    settingsValues = Object.values(user.settings);
+    settingsValues = Object.values(user.settings.elementData);
     let paymentAddress = "";
     let xpub = "";
-    for (var i = 0; i < settingsValues.length; ++i) {
-        console.log(settingsValues[i])
-        if (settingsValues.name == "btcaddress")
+   for (var i = 0; i < settingsValues.length; ++i) {
+        if (settingsValues[i].name == "btcaddress")
             paymentAddress = settingsValues[i].value
-        if (settingsValues.name == "xpub")
+        if (settingsValues[i].name == "xpub")
             xpub = settingsValues[i].value
-
     }
-
-
-    //console.log(settingsValues)
-    //  console.log(settingsKeys)
-
 
     for (var i = 0; i < fields.length; ++i) {
         //console.log(fields[i])
         if ((fields[i] != 'id') && (fields[i] != "createdAt")) {
             //check for a payment adresss
-            if (fields[i] == "btcaddress") {
-
+            if (fields[i] == "paymentAddress") {
                 //tmpd[i] = user.settings.btcaddress;
-
                 //loop
                 if (xpub != "") {
                     xpubHtml = ` <label><a href="javascript:generateFromXpub('${xpub}')">Generate a new address from your xPub</a></label>`
@@ -199,7 +198,7 @@ let buildForm = (dataitem = "") => {
                 xpubHtml = "";
             }
 
-            if (fields[i] == paymentAddress)
+            if (fields[i] == "paymentAddress")
                 tmpd[i] = paymentAddress;
             inpHtml = inpHtml + `<div class="form-group" >
                                 <label>${fields[i]}</label>
@@ -281,7 +280,6 @@ let removeDataItem = (theId, debug = 0) => {
 this function added the newly created item to the local application cache
 */
 let addDataItem = (theData, debug = 0) => {
-    debug = 1;
     //parse the response
     let theItems = window.localStorage.data
     theItems = JSON.parse(theItems);
@@ -290,7 +288,6 @@ let addDataItem = (theData, debug = 0) => {
     if (debug == 1) {
         console.log(theData)
         console.log(theItems)
-        //console.log(theData.data)
 
     }
     //add it to projects
@@ -338,7 +335,7 @@ let updateData = (theData = "", debug = 0) => {
                 //update the project
                 theItems.data[i] = JSON.stringify(theData);
                 //update the data
-                window.localStorage.currentdataitem = theData;
+                window.localStorage.currentdataitem = JSON.stringify(theData);
                 window.localStorage.data = JSON.stringify(theItems);
                 //return (theItems.data[i]);
             }
