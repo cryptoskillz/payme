@@ -73,6 +73,7 @@ api settings.js
  ☐ check the item name does not exist and regenrate uid if it does
 
 payment
+
  ✔ add the other payment data when there is a valid payment @done (22-06-19 23:11)
  ☐ add price check function https://blockchain.info/tobtc?currency=" + currencyType + "&value=" + amount
  
