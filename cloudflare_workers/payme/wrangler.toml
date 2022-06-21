@@ -8,6 +8,7 @@ name = "payme"
 [env.local.vars]
 ENV="LOCAL"
 BTCADDRESS = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
+COMPANYNAME = "CRYPTOSKILLZ"
 URL = "http://localhost:8787/"
 kv-namespaces = [{ binding = "PAYME", id = "2ab3b73fa2e2445bb0cf9aa54e593b4e", preview_id = "2ab3b73fa2e2445bb0cf9aa54e593b4e" }]
 
@@ -18,5 +19,6 @@ name = "payme"
 ENV="PROD"
 URL = "https://checkpayment.cryptoskillz.com/"
 BTCADDRESS = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
+COMPANYNAME = "CRYPTOSKILLZ"
 kv-namespaces = [{ binding = "PAYME", id = "6bf68fe0b0ea4a2baa91f38d7d8e2d57", preview_id = "6bf68fe0b0ea4a2baa91f38d7d8e2d57" }]
 

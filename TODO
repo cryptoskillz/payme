@@ -86,12 +86,14 @@ check payment
  ☐ add a way to to notify the store / owner payer that the payment has been processed 
  ☐ add the full payment info inot the payment KV object when a payment has been processed
  ✔ add the settings secret back @done (22-06-21 13:31)
- ☐ have an env for when the company id has not been found
 
 
 payme
 
-  ☐ style the hmtl so it looks super duper slick. 
+  ☐ style the hmtl so it looks super duper slick.
+  ☐ company id check from new json structure
+  ☐ have an env for when the company id has not been found
+
 
 
 pay me

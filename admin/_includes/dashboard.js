@@ -7,9 +7,11 @@ whenDocumentReady(isReady = () => {
     //get the user
     let theUser = getUser(1, 0);
     //get the values
-    let theValues = Object.values(theUser.settings)
+    let theValues = Object.values(theUser.settings);
+    document.getElementById('generic-payment-link').innerHTML = `<a href="${paymentWorkerUrl}?s=${theUser.secret}" target="_blank">view</a>`
+
     //check if all of the array elements are empty
-    let isEmpty = theValues.every(element => element == "")
+    let isEmpty = theValues.every(element => element == "");
     //its empty
     if (isEmpty == true) {
         //show settings  CTA

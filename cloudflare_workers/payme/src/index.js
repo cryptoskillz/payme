@@ -1,6 +1,36 @@
 let settingsSchema = '{"btcaddress":"","xpub":"","companyname":""}'
+let _backupAddress = BTCADDRESS
+let _companyName = COMPANYNAME;
+let _customerName = "";
+let _amount = 0;
+
+
 //as this is used in workers and pages we should maybe make it an envvar
 const datamain = "data";
+
+let processElementData = (elementData) => {
+    for (var i = 0; i < elementData.length; ++i) {
+        let tmp = elementData[i]
+        //console.log(tmp)
+        //build a check button to see if we been paid or not
+        if ((tmp.name == "btcaddress") || (tmp.name == "paymentAddress")) {
+            _backupAddress = tmp.value;
+
+        }
+        if (tmp.name == "compnanyname") {
+            _companyName = tmp.value;
+
+        }
+        if (tmp.name == "name") {
+            _customerName = tmp.value;
+
+        }
+        if (elementData[i].name == "amount") {
+            _amount = tmp.value;
+
+        }
+    }
+}
 
 async function handleRequest(request) {
 
@@ -27,71 +57,46 @@ async function handleRequest(request) {
     let details = "";
     let _customerdetails = "";
     let _errormessage = ""
-    let _backupAddress = "";
-    let _companyName = "";
     let valid = 1;
-    //console.log(tmp[1])
-    //console.log(tmp2[1])
     let secret = "";
+    console.log(tmp[1] )
     if ((tmp[1] != undefined) && (tmp[1] != null)) {
+
         let stmp = tmp[1].split("&");
         secret = stmp[0];
-        //console.log(secret)
         paymentType = "s"
         paymentKVName = `settings${secret}`
-        //console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
-        //console.log(details)
         if (details != null) {
             details = JSON.parse(details)
-            settings = details.settings   
-            console.log(settings)         
-            for (var i = 0; i < settings.elementData.length; ++i) {
+            processElementData(details.settings.elementData)
 
-                //build a check button to see if we been paid or not
-                if (settings.elementData[i].name == "btcaddress") {
-                    _backupAddress = settings.elementData[i].value;
-
-                }
-                if (settings.elementData[i].name == "compnanyname") {
-                    _companyName = settings.elementData[i].value;
-                    console.log(_companyName)
-
-                }
-
-            }
-            
         } else {
             _errormessage = "company id not found";
             valid = 0;
         }
 
-    } else {
-        _errormessage = "company id not found";
-        valid = 0;
+    } 
+    else {
+        _errormessage = `Please note you did not add a company ID so it has defaulted to ${COMPANYNAME} if you do not want to pay us please do not send any Bitcoin`;
+        //valid = 0;
     }
+
+    
 
     if ((tmp2[1] != undefined) && (tmp2[1] != null) && (valid == 1)) {
         //naming convertion for KV stores <datamain><payloadname>]<payloadid>
         //datamain  +"-"+user.user.secret + "]"+payLoad.id
         paymentKVName = `${datamain}-${secret}]${tmp2[1]}`
-        //console.log("paymentKVName")
-        //console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
         if (details != null) {
-            details = JSON.parse(details)
-            console.log(details)
-            _backupAddress = details.paymentAddress;
-            _companyName = details.companyname;
-            _customerdetails = `<div class="center">amount:${details.amount} customer:${details.name}</div>`
-            _companyName = "US";
+            details = JSON.parse(details);
+            processElementData(details.elementData)
+            _customerdetails = `<div class="center">amount:${_amount} customer:${_customerName}</div>`
         } else {
             _errormessage = `Invoice id ${tmp2[1]} not found, showing generic payment address`
         }
     }
-
-    //console.log(_backupAddress)
-    //console.log(_companyName)
 
     let html = `<style>
                 .center {
