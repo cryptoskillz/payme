@@ -49,7 +49,7 @@ export async function onRequestPost(context) {
             await KV.put("user" + payLoad.username, json);
             //add this as the secret id so the payme worker knows about it we dont want to pass the email address around. 
             //note: We are sending the whole object but we could easily strip this down if we wanted to. 
-            await KV.put("secret" + secretid, json);
+            await KV.put("settings" + secretid, json);
             //create the settings file
             //await KV.put("settings" + secretid, JSON.stringify(settingsSchema));
             return new Response(JSON.stringify({ status: "ok" }), { status: 200 });
@@ -117,7 +117,7 @@ export async function onRequestPut(context) {
             KV.put("user" + details.payload.username,JSON.stringify(user));
              //add this as the secret id so the payme worker knows about it we dont want to pass the email address around. 
             //note: We are sending the whole object but we could easily strip this down if we wanted to. 
-            await KV.put("secret" +  user.user.secret, JSON.stringify(user));
+            await KV.put("settings" +  user.user.secret, JSON.stringify(user));
 
             //return the response
             //note we are not returning  the  token here as they still have a valid one but we could for added security
