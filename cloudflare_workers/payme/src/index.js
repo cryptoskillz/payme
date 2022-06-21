@@ -32,12 +32,11 @@ async function handleRequest(request) {
     let valid = 1;
     //console.log(tmp[1])
     //console.log(tmp2[1])
-
-
     let secret = "";
     if ((tmp[1] != undefined) && (tmp[1] != null)) {
         let stmp = tmp[1].split("&");
         secret = stmp[0];
+        //console.log(secret)
         paymentType = "s"
         paymentKVName = `settings${secret}`
         //console.log(paymentKVName)
@@ -45,26 +44,39 @@ async function handleRequest(request) {
         //console.log(details)
         if (details != null) {
             details = JSON.parse(details)
-            _backupAddress = details.btcaddress;
-            _companyName = details.companyname;
+            settings = details.settings   
+            console.log(settings)         
+            for (var i = 0; i < settings.elementData.length; ++i) {
+
+                //build a check button to see if we been paid or not
+                if (settings.elementData[i].name == "btcaddress") {
+                    _backupAddress = settings.elementData[i].value;
+
+                }
+                if (settings.elementData[i].name == "compnanyname") {
+                    _companyName = settings.elementData[i].value;
+                    console.log(_companyName)
+
+                }
+
+            }
+            
         } else {
             _errormessage = "company id not found";
             valid = 0;
         }
 
-    }
-    else
-    {
-         _errormessage = "company id not found";
-         valid = 0;
+    } else {
+        _errormessage = "company id not found";
+        valid = 0;
     }
 
-    if ((tmp2[1] != undefined) && (tmp2[1] != null) && (valid ==1)) {
+    if ((tmp2[1] != undefined) && (tmp2[1] != null) && (valid == 1)) {
         //naming convertion for KV stores <datamain><payloadname>]<payloadid>
         //datamain  +"-"+user.user.secret + "]"+payLoad.id
         paymentKVName = `${datamain}-${secret}]${tmp2[1]}`
         //console.log("paymentKVName")
-        console.log(paymentKVName)
+        //console.log(paymentKVName)
         details = await PAYME.get(paymentKVName);
         if (details != null) {
             details = JSON.parse(details)

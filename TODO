@@ -12,6 +12,7 @@ global
  ✔ rationalise the local cache engine to be generic @done (22-06-16 00:43)
  ☐ add a parse  / stringy flag to the cache renders
  ☐ add required field to elementdata
+ ☐ add a create new to the menu on the left
 
 
 create / edit data
@@ -46,6 +47,7 @@ data
     at xhr.onload (app.js:674:22)
  ✔ add xpub @done (22-06-19 23:12)
  ✔ add default btc adress @done (22-06-19 23:12)
+ ☐ check the item name does not exist and regenrate uid if it does
  
 data edit
  ✔ current data item on save stores as an object @done (22-06-19 23:11)
@@ -53,6 +55,7 @@ data edit
 
 dashboard
   ☐ id the local storage data object is empty then pull down the data so the counter works.  
+  ☐ fix payment link
 
 API
 
@@ -82,6 +85,8 @@ check payment
 
  ☐ add a way to to notify the store / owner payer that the payment has been processed 
  ☐ add the full payment info inot the payment KV object when a payment has been processed
+ ☐ add the settings secret back
+ ☐ have an env for when the company id has not been found
 
 
 payme

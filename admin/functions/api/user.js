@@ -46,9 +46,10 @@ export async function onRequestPost(context) {
         if (user == null)
         {
             //create a KV with the username and secret that we can use for any of the export functions.  If you are not going to have give you users API access then you will 
-            //not require this.
-            //await KV.put("user" + registerData.username+"]"+secretid,  JSON.stringify({username:registerData.username}));
             await KV.put("user" + payLoad.username, json);
+            //add this as the secret id so the payme worker knows about it we dont want to pass the email address around. 
+            //note: We are sending the whole object but we could easily strip this down if we wanted to. 
+            await KV.put("secret" + secretid, json);
             //create the settings file
             //await KV.put("settings" + secretid, JSON.stringify(settingsSchema));
             return new Response(JSON.stringify({ status: "ok" }), { status: 200 });
@@ -114,6 +115,10 @@ export async function onRequestPut(context) {
             user.settings =  theDataArray
             //write the kv object
             KV.put("user" + details.payload.username,JSON.stringify(user));
+             //add this as the secret id so the payme worker knows about it we dont want to pass the email address around. 
+            //note: We are sending the whole object but we could easily strip this down if we wanted to. 
+            await KV.put("secret" +  user.user.secret, JSON.stringify(user));
+
             //return the response
             //note we are not returning  the  token here as they still have a valid one but we could for added security
             return new Response(JSON.stringify({ "jwt": "", "user": { "username": details.identifier, "email": details.identifier, "secret": user.secret,datacount:user.datacount },"settings":user.settings }), { status: 200 });
