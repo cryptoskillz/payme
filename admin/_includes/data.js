@@ -75,6 +75,8 @@ whenDocumentReady(isReady = () => {
         for (var i = 0; i < res.data.length; ++i) {
             tmp = res.data[i]
             tmp = JSON.parse(tmp)
+            paid = 0;
+            //console.log(tmp)
             if (i == 0) {
                 //loop through the keys and build the columns
                 columns.push({ title: "id" })
@@ -100,6 +102,7 @@ whenDocumentReady(isReady = () => {
 
                 //build a check button to see if we been paid or not
                 if (tmp.elementData[j].name == "paid") {
+                    //console.log(tmp.elementData[j])
                     if (tmp.elementData[j].value != "0")
                         paid = 1
                 }

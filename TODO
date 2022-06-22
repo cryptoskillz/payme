@@ -41,6 +41,7 @@ forgot password
 data
 
  ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.*
+ ☐ check button should appear on second row
  ☐ update buildForm to use the new data types to have richtext edit etc
  ✔ Uncaught TypeError: Cannot read properties of null (reading 'classList') @done (22-06-18 01:03)
     at xhrDone (<anonymous>:17:47)
