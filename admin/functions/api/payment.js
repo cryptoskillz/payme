@@ -2,16 +2,39 @@
 let payLoad;
 //hold the contenttypes
 let contentType;
-const datamain = "data";
+//hold a payment addres
+let _paymentAddress
+//get the data
+let processElementData = (elementData) => {
+    for (var k = 0; k < elementData.length; ++k) {
+        let tmp = elementData[k]
+        //build a check button to see if we been paid or not
+        if (tmp.name == "paymentAddress") {
+            _paymentAddress = tmp.value;
 
-//array for the data
-let theDataArray = []
-//payment response object
-let paymentResponse = { "id": "", "paid": "", "confirmations": "", "paymentAddress": "", "paymentUrl": "" }
+        }
+
+    }
+}
+
+//update the data
+let updateElementData = (elementData, theValue) => {
+    for (var j = 0; j < elementData.length; ++j) {
+        let tmp = elementData[j]
+        //build a check button to see if we been paid or not
+        if (tmp.name == "paid") {
+            tmp.value = "1"
+            elementData[j] = tmp
+        }
+
+    }
+    return (elementData)
+}
+
+
 
 //add to the data array
-let  addToDataArray = (pData) => {
-
+let addToDataArray = (pData) => {
     //console.log(queueData[i].kv)
     ///console.log(pData)
     //parse it
@@ -50,14 +73,16 @@ export async function onRequestGet(context) {
         data, // arbitrary space for passing data between middlewares
     } = context;
     try {
-        theDataArray = []
-        //set a valid flag
-        let valid = 1;
-        //set an error message
+        //get the url paramaters
+        const { searchParams } = new URL(request.url);
+        //set a data var
+        let pData;
+        //set an error object
         let _errormessage = "";
-        //get the paramates
-        const { searchParams } = new URL(request.url)
+        //set a is it paid boolean
+        let itsPaid = 0;
         //set a limit
+        //note : depericate this
         let limit = 1;
         //get the secret
         let secret = searchParams.get('s');
@@ -67,83 +92,51 @@ export async function onRequestGet(context) {
         let tmp = searchParams.get('l');
         if ((tmp != undefined) && (tmp != "") && (tmp != null))
             limit = tmp;
-        //debug
-        //console.log(secret);
-        //console.log(paymentid);
-        //console.log(limit)
-        //set up the KV
+        //get the kvname
+        let kvname = `data-${secret}]${paymentid}`;
+        //console.log(kvname)
         const KV = context.env.kvdata;
         //get the settings based on the name
         if ((secret != undefined) && (secret != "") && (secret != null)) {
-            let queueData = await KV.get("paymentqueue");
-            //console.log(queueData)
-            //check  we have a payment queue
-            if ((queueData != undefined) && (queueData != "") && (queueData != null)) {
-                //parse the queue
-                queueData = JSON.parse(queueData);
-                ///console.log(queueData)
-                let counter = 1;
-                let addedIt = 0;
-                //loop  it
-                for (var i = 0; i < queueData.length; ++i) {
-                    //check for an id 
-                    if ((paymentid != undefined) && (paymentid != "") && (paymentid != null)) {
-                        if (addedIt == 0) {
-                            //check if the id matches and checks
-                            //get the object
-                            console.log(datamain + "-" + secret + "]" + paymentid)
-                            let pData = await KV.get(datamain + "-" + secret + "]" + paymentid);
-                           
-                            pData = JSON.parse(pData)
-                            console.log(pData)
-                            addedIt = 1;
-                            //get the balance
-                            //bc1qxphczudn8retcx0umz3pf2xuwpaxwmeslwugvm
-                            //console.log(pData.elementData[0])
-                            //console.log(pData.elementData[0].value)
-
-                            let url = `https://blockchain.info/q/addressbalance/${pData.elementData[0].value}`
-                            console.log(url)
-                            const response = await fetch(url);
-                            const results = await gatherResponse(response);
-                            console.log(results)
-                            if (parseInt(results) > 0)
-                            {
-                               //todo add the other payment data
-                                pData.elementData[3].value = 1  
-                                //addToDataArray(JSON.stringify(pData))   
-                               //update the payment ky object
-                            }
-                            addToDataArray(JSON.stringify(pData)) 
-                            await KV.put(datamain + "-" + secret + "]" + paymentid,JSON.stringify(pData));
-                        }
-                    } else {
-                        if (limit >= counter) {
-                            console.log(counter)
-                            //get the object
-                            let pData = await KV.get(queueData[i].kv);
-                            addToDataArray(pData)
-                            counter++;
-                        }
-                    }
+            //get the data object
+            pData = await KV.get(kvname);
+            //parse it
+            pData = JSON.parse(pData)
+            //get the address
+            processElementData(pData.elementData);
+            //debug
+            //console.log(_paymentAddress)
+            let url = `https://blockchain.info/q/addressbalance/${_paymentAddress}`
+            //console.log(url)
+            //fetch the url
+            const response = await fetch(url);
+            const results = await gatherResponse(response);
+            //console.log(results)
+            //check if there is BTC there
+            if (parseInt(results) > 0) {
+                //it is update the boomean
+                itsPaid = 1;
+                //update the payment data
+                let elementData = updateElementData(pData.elementData, "1")
+                //update the object
+                pData.elementData = elementData
+                //debug
+                /*
+                for (var j = 0; j < pData.elementData.length; ++j) {
+                    let tmp = pData.elementData[j]
+                    //console.log(tmp)
                 }
-            } else {
-                valid = 0;
-                _errormessage = 'id not found'
+                */
+                //update the payment object
+                //note: we may not want to do this and just wait for the payment queue to process it naturally.
+                await KV.put(kvname, JSON.stringify(pData))
             }
-        } else {
-            valid = 0;
-            _errormessage = 'id not set'
         }
-        if (valid == 1)
-        {
-            //console.log(theDataArray)
-            return new Response(JSON.stringify(theDataArray), { status: 200 });
-        }
-        else
-            return new Response(JSON.stringify({ error: _errormessage }), { status: 400 });
+        //return it
+        return new Response(JSON.stringify(pData), { status: 200 });
     } catch (error) {
         console.log(error)
         return new Response(error, { status: 200 });
     }
 }
+

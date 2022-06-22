@@ -1,43 +1,39 @@
-/*
-todo 
-
-
-*/
 //add a ready function
 let whenDocumentReady = (f) => {
     /in/.test(document.readyState) ? setTimeout('whenDocumentReady(' + f + ')', 9) : f()
 }
 
 let checkPayment = (secret, id) => {
-    //debug
-    //console.log(secret);
-    //console.log(id)
-    let checkDone = (res) => {
-        res = JSON.parse(res)
-        //check for the  payment response
-        //we could just use the first element as the return is always going to be 1 item
-        for (var i = 0; i < res.length; ++i) {
-            //check if it is 0
-            if (res[i].paid == "0") {
-                //not paid
-                //console.log(res[i])
-                showAlert(`${res[i].id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 2, 0)
-            } else {
-                //paid
-                let theItem = getData(res[i].id);
-                //update the paid object
-                theItem.paid = res[i].paid;
-                //update the data
-                updateData(theItem, 0);
-                //show the payment has been made
-                //table.row( '#'+res[i].id ).data( theItem ).draw();
-                document.getElementById(`payid-${res[i].id}`).innerHTML = res[i].paid;
-                //table.row('#' + res[i].id).remove().draw()
-                showAlert(`${res[i].id} has been paid.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res[i].paymentAddress}" target="_blank">here</a>`, 1, 0)
 
-            }
+    let checkDone = (res) => {
+        //parse the repsonse
+        res = JSON.parse(res)
+        //set some vars
+        let alertMessage = "";
+        let alertType = 1
+        //get the paid status
+        //note: I am being lazy here we should loop through the array and find it
+        if (res.elementData[3].value == 0) {
+            //not paid
+            alertType = 2;
+            alertMessage = `${res.id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res.elementData[0].value }" target="_blank">here</a>`;
+
+        } else {
+            //get the item
+            let theItem = getData(0,res.id);
+            //update it
+            theItem.elementData[3].value = 1
+            //update the data
+            updateData(JSON.stringify(theItem), 0);
+            //udpate the table
+            document.getElementById(`payid-${res.id}`).innerHTML = 1;
+            //set the alert message
+            alertMessage = `${res.id} has been paid, yay.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res.elementData[0].value }" target="_blank">here</a>`;
         }
+        //show the alert
+        showAlert(alertMessage, alertType, 0)
     }
+    //call the server
     xhrcall(1, `api/payment?s=${secret}&l=1&i=${id}`, "", "json", "", checkDone, token);
 
 }
@@ -45,7 +41,7 @@ let checkPayment = (secret, id) => {
 let loadURL = (theUrl, theId, blank = 0) => {
 
     //store the current item so we can use it later.
-    let theData = getData(0,theId)
+    let theData = getData(0, theId)
     if (blank == 1)
         window.open(theUrl, "_blank")
     else
@@ -58,7 +54,7 @@ whenDocumentReady(isReady = () => {
         //store it in local storage
         if (local == 0) {
             storeData(res, 0);
-            
+
         }
         res = getData();
         res = JSON.parse(res)
@@ -99,9 +95,10 @@ whenDocumentReady(isReady = () => {
             let theData = []
             theData.push(tmp.id);
             for (var j = 0; j < tmp.elementData.length; ++j) {
-
+                let theValue = tmp.elementData[j].value
                 //build a check button to see if we been paid or not
                 if (tmp.elementData[j].name == "paid") {
+                    theValue = `<span id="payid-${tmp.id}">${theValue}</span>`
                     //console.log(tmp.elementData[j])
                     if (tmp.elementData[j].value != "0")
                         paid = 1
@@ -110,7 +107,7 @@ whenDocumentReady(isReady = () => {
                 if (tmp.elementData[j].name == "paymentAddress")
                     paymentAddress = tmp.elementData[j].value;
                 //add the elements
-                theData.push(tmp.elementData[j].value)
+                theData.push(theValue)
 
             }
 
