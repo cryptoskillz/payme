@@ -48,13 +48,14 @@ data
  ✔ add xpub @done (22-06-19 23:12)
  ✔ add default btc adress @done (22-06-19 23:12)
  ☐ check the item name does not exist and regenrate uid if it does
+ ☐ check payments
  
 data edit
  ✔ current data item on save stores as an object @done (22-06-19 23:11)
 
 dashboard
   ☐ id the local storage data object is empty then pull down the data so the counter works.  
-  ☐ fix payment link
+  ✔ fix payment link @done (22-06-21 22:52)
 
 API
 
@@ -86,13 +87,14 @@ check payment
  ☐ add a way to to notify the store / owner payer that the payment has been processed 
  ☐ add the full payment info inot the payment KV object when a payment has been processed
  ✔ add the settings secret back @done (22-06-21 13:31)
-
+ ✔ if you delete the last item from the payment queue it will levae a null fix this. @done (22-06-22 16:10)
+ ☐ you only want to check the payment if it has a secret and an id otherwise it is the fallback address and this coult have random payments come into to it all the time.  We could also make the checker more sophisctaed and have it figure out mutiliple payments, look into how wallets do this later.
 
 payme
 
   ☐ style the hmtl so it looks super duper slick.
-  ☐ company id check from new json structure
-  ☐ have an env for when the company id has not been found
+  ✔ company id check from new json structure @done (22-06-21 22:52)
+  ✔ have an env for when the company id has not been found @done (22-06-21 22:52)
 
 
 
