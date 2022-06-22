@@ -18,7 +18,7 @@ global
 create / edit data
 
 
-check payment
+check payment (we only want to do this when we have bitcoin js running in the serverless)
 
   ☐ check payment view 
   ☐ create a subdmain that points to this
@@ -40,7 +40,7 @@ forgot password
 
 data
 
- ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.
+ ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.*
  ☐ update buildForm to use the new data types to have richtext edit etc
  ✔ Uncaught TypeError: Cannot read properties of null (reading 'classList') @done (22-06-18 01:03)
     at xhrDone (<anonymous>:17:47)
@@ -48,13 +48,13 @@ data
  ✔ add xpub @done (22-06-19 23:12)
  ✔ add default btc adress @done (22-06-19 23:12)
  ☐ check the item name does not exist and regenrate uid if it does
- ☐ check payments
+ ☐ check payment button is not working, we could also show both the check payment and memspace button as they both could be used (debatble)
  
 data edit
  ✔ current data item on save stores as an object @done (22-06-19 23:11)
 
 dashboard
-  ☐ id the local storage data object is empty then pull down the data so the counter works.  
+  ☐ id the local storage data object is empty then pull down the data so the counter works.  *
   ✔ fix payment link @done (22-06-21 22:52)
 
 API
@@ -85,7 +85,7 @@ WORKERS
 check payment
 
  ☐ add a way to to notify the store / owner payer that the payment has been processed 
- ☐ add the full payment info inot the payment KV object when a payment has been processed
+ ☐ add the full payment info into the payment KV object when a payment has been processed
  ✔ add the settings secret back @done (22-06-21 13:31)
  ✔ if you delete the last item from the payment queue it will levae a null fix this. @done (22-06-22 16:10)
  ☐ you only want to check the payment if it has a secret and an id otherwise it is the fallback address and this coult have random payments come into to it all the time.  We could also make the checker more sophisctaed and have it figure out mutiliple payments, look into how wallets do this later.
