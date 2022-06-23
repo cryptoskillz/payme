@@ -30,22 +30,24 @@ whenDocumentReady(isReady = () => {
     //turn it into an array
     let tmp = JSON.parse(theData);
     //console.log(theData)
-    //set a vlaid falg
-    //let validData = 1;
     //check there is something there.
     if (theData != false) {
         //check we have some data
-        console.log(tmp.data.length)
+        //console.log(tmp.data.length)
+
+        //see if there is any data
         if (tmp.data.length == 0) {
-            //validData = 0;
+            //set it to 0, this should never happen but it costs us nothing !
             document.getElementById("dashboardcounter").innerHTML = 0;
         } else {
+            //set the length of the data
             document.getElementById("dashboardcounter").innerHTML = tmp.data.length;
         }
+        //show it
         document.getElementById('showBody').classList.remove('d-none')
 
     } else {
-
+        //process the repsonse from the API
         let xhrDone = (res) => {
             //store it in local storage
             storeData(res, 0);
@@ -59,20 +61,14 @@ whenDocumentReady(isReady = () => {
             document.getElementById('showBody').classList.remove('d-none')
 
         }
-        //validData = 0;
+        //build json object
         let bodyobj = {
             email: theUser.email,
         }
+        //stringify it
         var bodyobjectjson = JSON.stringify(bodyobj);
+        //call the data endpoint
         xhrcall(1, "api/" + dataMainMethod + "/", bodyobjectjson, "json", "", xhrDone, token)
     }
-
-    //console.log(validData)
-    //render it
-    //if (validData == 1)
-    //    document.getElementById("dashboardcounter").innerHTML = tmp.data.length;
-    //else
-    //    document.getElementById("dashboardcounter").innerHTML = 0;
-    //document.getElementById('showBody').classList.remove('d-none')
 
 });

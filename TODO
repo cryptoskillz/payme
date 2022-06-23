@@ -12,6 +12,8 @@ global
  ☐ add a parse  / stringy flag to the cache renders
  ☐ add required field to elementdata
  ☐ add a create new to the menu on the left
+ ☐ remove the datacount from the user object as we are doing it live!
+
 
 
 create / edit data
