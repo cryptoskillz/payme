@@ -2,6 +2,90 @@
 todo: debug all this we moved this from payment.js as we only required that to
       process a single paymnet.
 */
+
+let processElementData = (elementData,theElement="") => {
+
+    for (var k = 0; k < elementData.length; ++k) {
+        let tmp = elementData[k]
+        //build a check button to see if we been paid or not
+        if (tmp.name == theElement) {
+            return(tmp.value)
+        }
+    }
+    return("")
+}
+
+
+
+let getPaymentStatus = (elementData) => {
+
+    for (var k = 0; k < elementData.length; ++k) {
+        let tmp = elementData[k]
+        //build a check button to see if we been paid or not
+        if (tmp.name == "paid") {
+            if (tmp.value == "1")
+                return(1)
+            else
+                return(0)
+
+        }
+    }
+}
+
+export async function onRequestPost(context) {
+    const {
+        request, // same as existing Worker API
+        env, // same as existing Worker API
+        params, // if filename includes [id] or [[path]]
+        waitUntil, // same as ctx.waitUntil in existing Worker API
+        next, // used for middleware or to fetch assets
+        data, // arbitrary space for passing data between middlewares
+    } = context;
+    try {
+        let paidArray=[]
+        //set a payload var
+        let payLoad;
+        //set up the kv store
+        const KV = context.env.kvdata;
+        //get the content type
+        const contentType = request.headers.get('content-type')
+        //check it is something
+        if (contentType != null) {
+            //get the payload
+            payLoad = await request.json();
+            //console.log(payLoad)
+        }
+        //loop through the payment data
+        for (var i = 0; i < payLoad.paymentData.length; ++i) {
+            //get the payment data
+            let tmp = payLoad.paymentData[i]
+            console.log(tmp)
+            //get the data store
+            let pData = await KV.get(tmp);
+            //parse it
+            pData = JSON.parse(pData);
+            //console.log(pData);
+            //check if its paid
+            let isPaid = getPaymentStatus(pData.elementData);
+            let paymentId = tmp.split(']');
+            paymentId = paymentId[1];
+            console.log(paymentId) 
+            //note: We could easily check for payment here but I think its better to leave to the the check payment worker for 
+            //        simplification stakes
+            //console.log(isPaid)
+            //add  it  to  the paid array
+            let btcAddress =  processElementData(pData.elementData,"paymentAddress")
+            console.log(btcAddress)
+            paidArray.push({"paid":isPaid,"paymentId":paymentId,"btcAddress":btcAddress})
+        }
+        //console.log(paidArray)
+        //return it
+        return new Response(JSON.stringify(paidArray), { status: 200 });
+    } catch (error) {
+        console.log(error)
+        return new Response(error, { status: 200 });
+    }
+}
 export async function onRequestGet(context) {
     const {
         request, // same as existing Worker API

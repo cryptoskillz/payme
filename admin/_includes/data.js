@@ -3,8 +3,75 @@ let whenDocumentReady = (f) => {
     /in/.test(document.readyState) ? setTimeout('whenDocumentReady(' + f + ')', 9) : f()
 }
 
-let checkPayment = (secret, id) => {
+//poll server function
+let pollServer = () => {
+    //hold the unpaid data
+    let paymentArray = [];
+    //get the data
+    let theItems = getData();
+    //let get the user
+    let theUser = getUser(1);
+    //parse the items
+    theItems = JSON.parse(theItems);
+    //loop through the items
+    for (var i = 0; i < theItems.data.length; ++i) {
+        //get the data
+        let tmp = theItems.data[i];
+        //parse it
+        tmp = JSON.parse(tmp)
+        //console.log(tmp);
+        //loop through the element data
+        for (var j = 0; j < tmp.elementData.length; ++j) {
+            //get the element
+            let theElement = tmp.elementData[j];
+            //check if it is the paid element
+            if (theElement.name == "paid") {
+                //check if it has not been paid
+                if (theElement.value == "0") {
+                    //console.log('add  to payment array')
+                    //console.log(theElement)
+                    paymentArray.push(`data-${theUser.secret}]${tmp.id}`)
+                }
+            }
+        }
+    }
+    //console.log("paymentArray");
+    //console.log(paymentArray);
+    let pollDone = (res) => {
+        res = JSON.parse(res)
+        //console.log(res)
+        for (var i = 0; i < res.length; ++i) {
+            let tmp = res[i];
+            //console.log(tmp)
+            if (tmp.paid == 1) {
+                let theItem = getData(0, tmp.paymentId);
+                //console.log(theItem)
+                //update it
+                theItem.elementData[3].value = 1;
+                //update the data
+                updateData(JSON.stringify(theItem), 0);
+                //udpate the table
+                document.getElementById(`payid-${tmp.paymentId}`).innerHTML = 1;
+                let alertMessage = `${tmp.paymentId} has been paid, yay.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${tmp.btcAddress }" target="_blank">here</a>`;
+                //let paymentId = tmp.DatasetControll
+                showAlert(alertMessage, 1);
+            }
+        }
+    }
 
+    //check if there is anything to send
+    if (paymentArray.length > 0) {
+        let bodyobj = {
+            paymentData: paymentArray,
+        }
+        var bodyobjectjson = JSON.stringify(bodyobj);
+        xhrcall(0, "api/pollpayment/", bodyobjectjson, "json", "", pollDone, token);
+    } else {
+        //console.log('no payments to check')
+    }
+}
+
+let checkPayment = (secret, id) => {
     let checkDone = (res) => {
         //parse the repsonse
         res = JSON.parse(res)
@@ -17,10 +84,9 @@ let checkPayment = (secret, id) => {
             //not paid
             alertType = 2;
             alertMessage = `${res.id} has not been yet.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${res.elementData[0].value }" target="_blank">here</a>`;
-
         } else {
             //get the item
-            let theItem = getData(0,res.id);
+            let theItem = getData(0, res.id);
             //update it
             theItem.elementData[3].value = 1
             //update the data
@@ -138,6 +204,11 @@ whenDocumentReady(isReady = () => {
             columns: columns,
 
         });
+
+        ///start the timer to check every minute
+        setInterval(pollServer, 60000);
+        //do a initial check
+        pollServer()
 
     }
 

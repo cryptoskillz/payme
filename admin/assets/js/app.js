@@ -343,6 +343,8 @@ let updateData = (theData = "", debug = 0) => {
     }
 }
 
+
+
 let getData = (debug = 0, theId = "") => {
     let theItems = window.localStorage.data;
     if ((theItems == undefined) || (theItems == "") || (theItems == null)) {

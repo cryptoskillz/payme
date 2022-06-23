@@ -9,7 +9,6 @@ global
 
  ☐ fix the spinner with my wicked CSS skills :[
  ☐ check the sendemail works for forogot password
- ✔ rationalise the local cache engine to be generic @done (22-06-16 00:43)
  ☐ add a parse  / stringy flag to the cache renders
  ☐ add required field to elementdata
  ☐ add a create new to the menu on the left
@@ -20,13 +19,12 @@ create / edit data
 
 check payment (we only want to do this when we have bitcoin js running in the serverless)
 
-  ☐ check payment view 
+  ☐ check payment view
   ☐ create a subdmain that points to this
   ☐ take a check payment secret and id and it checks the status every 30 seconds
 
 login.njk
 
- ✔ do not make the "you are logged out as a persistent alert" @done (22-06-18 01:05)
  ☐ remove the error messages when there is a valid (may just remove them alogether and just use show alert)
 
 settings 
@@ -40,26 +38,20 @@ forgot password
 
 data
 
- ☐ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.*
- ☐ check button should appear on second row
+ ✔ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.* @done (22-06-23 20:42)
+     ✔ build an array of unpaid payments and send it to the server @done (22-06-23 20:42)
+     ✔ use this to check the payments and send it back if it has been paid or not @done (22-06-23 20:42)
+     ✔ if on the data update the paid in the  table @done (22-06-23 20:42)
+     ✔ if not on the  data show and alert to show you have recieved a payment @done (22-06-23 20:42) (NOT DONE)
+ ☐ show both buttons and hide the one that is not used*
+ ☐ when a payment checks is true hide check payment and show view payment button*
  ☐ update buildForm to use the new data types to have richtext edit etc
- ✔ Uncaught TypeError: Cannot read properties of null (reading 'classList') @done (22-06-18 01:03)
-    at xhrDone (<anonymous>:17:47)
-    at xhr.onload (app.js:674:22)
- ✔ add xpub @done (22-06-19 23:12)
- ✔ add default btc adress @done (22-06-19 23:12)
- ☐ check the item name does not exist and regenrate uid if it does
- ✔ check payment button is not working, we could also show both the check payment and memspace button as they both could be used (debatble) @done (22-06-22 23:48)
- ☐ show both buttons and hide the one that is not used 
- ☐ when a payment checks is true hide check payment and show view payment button
- ☐ loop through the array and find it on checkpayment
+ ☐ check the item name does not exist and regenrate uid if it does (do we have to do this, it would seem having the same name is not an issue )
  
 data edit
- ✔ current data item on save stores as an object @done (22-06-19 23:11)
 
 dashboard
-  ☐ id the local storage data object is empty then pull down the data so the counter works.  *
-  ✔ fix payment link @done (22-06-21 22:52)
+  ☐ id the local storage data object is empty then pull down the data so the counter works.*
 
 API
 
@@ -79,8 +71,7 @@ api settings.js
 
 payment
 
- ✔ add the other payment data when there is a valid payment @done (22-06-19 23:11)
- ☐ add price check function https://blockchain.info/tobtc?currency=" + currencyType + "&value=" + amount
+ ☐ add price check function https://blockchain.info/tobtc?currency=" + currencyType + "&value=" + amount*
  
 
 WORKERS
@@ -90,17 +81,11 @@ check payment
 
  ☐ add a way to to notify the store / owner payer that the payment has been processed 
  ☐ add the full payment info into the payment KV object when a payment has been processed
- ✔ add the settings secret back @done (22-06-21 13:31)
- ✔ if you delete the last item from the payment queue it will levae a null fix this. @done (22-06-22 16:10)
  ☐ you only want to check the payment if it has a secret and an id otherwise it is the fallback address and this coult have random payments come into to it all the time.  We could also make the checker more sophisctaed and have it figure out mutiliple payments, look into how wallets do this later.
 
 payme
 
   ☐ style the hmtl so it looks super duper slick.
-  ✔ company id check from new json structure @done (22-06-21 22:52)
-  ✔ have an env for when the company id has not been found @done (22-06-21 22:52)
-
-
 
 pay me
  ☐ fix the kv bindings when you are deploying 
