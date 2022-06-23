@@ -38,39 +38,29 @@ forgot password
 
 data
 
- ✔ add a checker that polls the server to see if anything in the data table has been paid, this is important as if a payment is made then the local cache will not reflect it.* @done (22-06-23 20:42)
-     ✔ build an array of unpaid payments and send it to the server @done (22-06-23 20:42)
-     ✔ use this to check the payments and send it back if it has been paid or not @done (22-06-23 20:42)
-     ✔ if on the data update the paid in the  table @done (22-06-23 20:42)
-     ✔ if not on the  data show and alert to show you have recieved a payment @done (22-06-23 20:42) (NOT DONE)
  ☐ show both buttons and hide the one that is not used*
  ☐ when a payment checks is true hide check payment and show view payment button*
  ☐ update buildForm to use the new data types to have richtext edit etc
- ☐ check the item name does not exist and regenrate uid if it does (do we have to do this, it would seem having the same name is not an issue )
+
  
 data edit
 
 dashboard
-  ☐ id the local storage data object is empty then pull down the data so the counter works.*
+  ✔ id the local storage data object is empty then pull down the data so the counter works.* @done (22-06-23 23:08)
 
 API
 
-user,js
-
+user.js
  ☐ put the jwt token into the object  when they login so we can verify it later if required.
  ☐ move login.js post to here when  we add routing
 
 
 api data.js
-
  ☐ add routing 
  
 api settings.js
-  
- ☐ check the item name does not exist and regenrate uid if it does
 
 payment
-
  ☐ add price check function https://blockchain.info/tobtc?currency=" + currencyType + "&value=" + amount*
  
 

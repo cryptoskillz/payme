@@ -29,21 +29,50 @@ whenDocumentReady(isReady = () => {
     let theData = getData();
     //turn it into an array
     let tmp = JSON.parse(theData);
+    //console.log(theData)
     //set a vlaid falg
-    let validData = 1;
+    //let validData = 1;
     //check there is something there.
     if (theData != false) {
         //check we have some data
-        if (tmp.data.length != 0)
-            validData = 0;
+        console.log(tmp.data.length)
+        if (tmp.data.length == 0) {
+            //validData = 0;
+            document.getElementById("dashboardcounter").innerHTML = 0;
+        } else {
+            document.getElementById("dashboardcounter").innerHTML = tmp.data.length;
+        }
+        document.getElementById('showBody').classList.remove('d-none')
+
     } else {
-        validData = 0;
+
+        let xhrDone = (res) => {
+            //store it in local storage
+            storeData(res, 0);
+            //get the data
+            let theData = getData();
+            //parse it
+            theData = JSON.parse(theData)
+            //let tmp = JSON.parse(theData);
+            //update the counter
+            document.getElementById("dashboardcounter").innerHTML = theData.data.length
+            document.getElementById('showBody').classList.remove('d-none')
+
+        }
+        //validData = 0;
+        let bodyobj = {
+            email: theUser.email,
+        }
+        var bodyobjectjson = JSON.stringify(bodyobj);
+        xhrcall(1, "api/" + dataMainMethod + "/", bodyobjectjson, "json", "", xhrDone, token)
     }
+
+    //console.log(validData)
     //render it
-    if (validData == 1)
-        document.getElementById("dashboardcounter").innerHTML = tmp.data.length;
-    else
-        document.getElementById("dashboardcounter").innerHTML = 0;
-    document.getElementById('showBody').classList.remove('d-none')
+    //if (validData == 1)
+    //    document.getElementById("dashboardcounter").innerHTML = tmp.data.length;
+    //else
+    //    document.getElementById("dashboardcounter").innerHTML = 0;
+    //document.getElementById('showBody').classList.remove('d-none')
 
 });
