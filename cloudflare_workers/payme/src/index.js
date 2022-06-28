@@ -3,6 +3,8 @@ let _backupAddress = BTCADDRESS
 let _companyName = COMPANYNAME;
 let _customerName = "";
 let _amount = 0;
+let _secret = "";
+let _id = "";
 
 
 //as this is used in workers and pages we should maybe make it an envvar
@@ -58,14 +60,13 @@ async function handleRequest(request) {
     let _customerdetails = "";
     let _errormessage = ""
     let valid = 1;
-    let secret = "";
-    console.log(tmp[1] )
+    //console.log(tmp[1] )
     if ((tmp[1] != undefined) && (tmp[1] != null)) {
 
         let stmp = tmp[1].split("&");
-        secret = stmp[0];
+        _secret = stmp[0];
         paymentType = "s"
-        paymentKVName = `settings${secret}`
+        paymentKVName = `settings${_secret}`
         details = await PAYME.get(paymentKVName);
         if (details != null) {
             details = JSON.parse(details)
@@ -87,7 +88,8 @@ async function handleRequest(request) {
     if ((tmp2[1] != undefined) && (tmp2[1] != null) && (valid == 1)) {
         //naming convertion for KV stores <datamain><payloadname>]<payloadid>
         //datamain  +"-"+user.user.secret + "]"+payLoad.id
-        paymentKVName = `${datamain}-${secret}]${tmp2[1]}`
+        _id = tmp2[1];
+        paymentKVName = `${datamain}-${_secret}]${tmp2[1]}`
         details = await PAYME.get(paymentKVName);
         if (details != null) {
             details = JSON.parse(details);
@@ -116,6 +118,12 @@ async function handleRequest(request) {
 
     //the html
     if (valid == 1) {
+        //hold the checkpayment div
+        let _checkpaymentdiv = "";
+        //check if we should show the checkpayment or not, we only want to do it for ids and secrets and not the fall back (for now)
+        if ((_secret != '') && (_id != ""))
+            _checkpaymentdiv = `<div class="center">Click here to <a href="${URL}/?s=${_secret}&i=${_id}" >check payment</a></div>`
+
         html = `<style>
                 .center {
                   text-align: center;
@@ -134,7 +142,10 @@ async function handleRequest(request) {
                 <h1 class="center">PAY ${_companyName} IN BITCOIN</h1>
                 <h2 class="center">${_backupAddress}</h2>
                 ${_customerdetails}
-                <div class="center">Click here to <a href="https://mempool.space/address/${_backupAddress}" target="_blank">check</a> for payment</div>
+                <div class="center">Click here to <a href="https://mempool.space/address/${_backupAddress}" target="_blank">check on explorer</a></div>
+                ${_checkpaymentdiv}
+
+
                 <div class="center">${_errormessage}</div>`;
     }
     //return it

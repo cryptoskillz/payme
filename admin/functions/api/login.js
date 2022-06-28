@@ -46,7 +46,7 @@ export async function onRequest(context) {
                 // Verifing token
                 const isValid = await jwt.verify(token, env.SECRET)
                 if (isValid == true) {
-                    return new Response(JSON.stringify({ "jwt": token, "user": { "username": credentials.identifier, "email": credentials.identifier, "secret": tUser.user.secret,datacount:tUser.user.datacount },"settings":tUser.settings }), { status: 200 });
+                    return new Response(JSON.stringify({ "jwt": token, "user": { "username": credentials.identifier, "email": credentials.identifier, "secret": tUser.user.secret },"settings":tUser.settings }), { status: 200 });
                 } else {
                     return new Response(JSON.stringify({ error: "invalid login" }), { status: 400 });
 

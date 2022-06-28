@@ -1,0 +1,16 @@
+---
+layout: checkpaymentlayout.njk
+---
+{% set theJs %}
+    {% include 'checkpayment.js' %}
+{% endset %}
+<div class="row">
+    <div class="" id="paymentResult">
+        Checking....
+    </div>
+</div>
+{% if env.ENVIRONMENT == 'local' %}
+    <script type="text/javascript">{{theJs | safe}}</script>
+{% else %}
+    <script type="text/javascript">{{theJs | jsmin | safe}}</script>
+{% endif %}

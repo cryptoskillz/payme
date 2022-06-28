@@ -118,11 +118,9 @@ export async function onRequestPut(context) {
              //add this as the secret id so the payme worker knows about it we dont want to pass the email address around. 
             //note: We are sending the whole object but we could easily strip this down if we wanted to. 
             await KV.put("settings" +  user.user.secret, JSON.stringify(user));
-
             //return the response
             //note we are not returning  the  token here as they still have a valid one but we could for added security
-            return new Response(JSON.stringify({ "jwt": "", "user": { "username": details.identifier, "email": details.identifier, "secret": user.secret,datacount:user.datacount },"settings":user.settings }), { status: 200 });
-
+            return new Response(JSON.stringify({ "jwt": "", "user": { "username": details.identifier, "email": details.identifier, "secret": user.secret },"settings":user.settings }), { status: 200 });
             //return new Response(JSON.stringify(user), { status: 200 });
         }
 

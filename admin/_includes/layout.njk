@@ -86,6 +86,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">{{env.DATAMAIN | capitalize}}:</h6>
                         <div id="backpageprojectmenu"></div>
+                        <a class="collapse-item" href="/{{env.DATAMAIN}}/new/">Create</a>
                         <a class="collapse-item" href="/{{env.DATAMAIN}}/">View</a>
                     </div>
                 </div>
@@ -128,9 +129,7 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">  
-                      <div class="spinner-border float-right d-none" role="status" id="spinner">
-                        <span class="sr-only">Loading...</span>
-                      </div>
+  
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -154,7 +153,6 @@
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
-                               
                                 <div class="dropdown-divider"></div> 
                                 <a class="dropdown-item" href="/logout/" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -177,6 +175,11 @@
                     <div class="alert alert-danger  d-none" role="alert" id="accountsDanger">
                     </div>
                     <div id="showBody" class="d-none">
+                   
+                    <div class="lds-circle"><div></div></div>
+                      <div class="spinner-border float-right d-none" role="status" id="spinner">
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     {{ content | safe }}
                     </div>                    
                  </div>
