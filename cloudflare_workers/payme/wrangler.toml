@@ -17,7 +17,7 @@ name = "payme"
 
 [env.production.vars]
 ENV="PROD"
-URL = "https://checkpayment.cryptoskillz.com/"
+URL = "https://paymeadmin.cryptoskillz.com/"
 BTCADDRESS = "bc1q63vhza4jc7096w4skyzf6jtk30ylnf2ssmhpfj"
 COMPANYNAME = "CRYPTOSKILLZ"
 kv-namespaces = [{ binding = "PAYME", id = "6bf68fe0b0ea4a2baa91f38d7d8e2d57", preview_id = "6bf68fe0b0ea4a2baa91f38d7d8e2d57" }]

@@ -122,7 +122,7 @@ async function handleRequest(request) {
         let _checkpaymentdiv = "";
         //check if we should show the checkpayment or not, we only want to do it for ids and secrets and not the fall back (for now)
         if ((_secret != '') && (_id != ""))
-            _checkpaymentdiv = `<div class="center">Click here to <a href="${URL}/?s=${_secret}&i=${_id}" >check payment</a></div>`
+            _checkpaymentdiv = `<div class="center">Click here to <a href="${URL}checkpayment/?s=${_secret}&i=${_id}" >check payment</a></div>`
 
         html = `<style>
                 .center {
