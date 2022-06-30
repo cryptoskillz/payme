@@ -19,6 +19,8 @@ let pollServer = () => {
         let tmp = theItems.data[i];
         //parse it
         tmp = JSON.parse(tmp)
+        //debug 
+       // tmp.paid=1
         //console.log(tmp);
         //loop through the element data
         for (var j = 0; j < tmp.elementData.length; ++j) {
@@ -35,6 +37,7 @@ let pollServer = () => {
             }
         }
     }
+
     //console.log("paymentArray");
     //console.log(paymentArray);
     let pollDone = (res) => {
@@ -42,7 +45,9 @@ let pollServer = () => {
         //console.log(res)
         for (var i = 0; i < res.length; ++i) {
             let tmp = res[i];
-            //console.log(tmp)
+            //debug
+            //console.log(tmp);
+            //tmp.paid =1;
             if (tmp.paid == 1) {
                 let theItem = getData(0, tmp.paymentId);
                 //console.log(theItem)
@@ -52,6 +57,8 @@ let pollServer = () => {
                 updateData(JSON.stringify(theItem), 0);
                 //udpate the table
                 document.getElementById(`payid-${tmp.paymentId}`).innerHTML = 1;
+                //remove the check button
+                document.getElementById(`check-${tmp.paymentId}`).classList.add('d-none')
                 let alertMessage = `${tmp.paymentId} has been paid, yay.  You can view it on memspace by clicking <a  href="https://mempool.space/address/${tmp.btcAddress }" target="_blank">here</a>`;
                 //let paymentId = tmp.DatasetControll
                 showAlert(alertMessage, 1);
@@ -178,9 +185,16 @@ whenDocumentReady(isReady = () => {
             }
 
             if (paid == 0)
-                checkbutton = `<a href="javascript:checkPayment('${user.secret}','${tmp.id}')" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> <i class="fas fa-globe fa-sm text-white-50"></i> Check</a>`
+                checkbutton = `<span id="check-${tmp.id}" ><a href="javascript:checkPayment('${user.secret}','${tmp.id}')" class=" d-sm-inline-block btn btn-sm btn-primary shadow-sm"> 
+                                <i class="fas fa-globe fa-sm text-white-50"></i> Check</a></span>
+<span><a href="https://mempool.space/address/${paymentAddress}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">
+                 <i class="fas fa-globe fa-sm text-white-50"></i> View</a></span>`
             else
-                checkbutton = `<a href="https://mempool.space/address/${paymentAddress}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank"> <i class="fas fa-globe fa-sm text-white-50"></i> View</a>`
+               checkbutton = `<span id="check-${tmp.id}" class="d-none"><a href="javascript:checkPayment('${user.secret}','${tmp.id}')" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> 
+                                <i class="fas fa-globe fa-sm text-white-50"></i> Check</a></span>
+<span><a href="https://mempool.space/address/${paymentAddress}" class=" d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">
+                 <i class="fas fa-globe fa-sm text-white-50"></i> View</a></span>`
+
 
             //build the other buttons
             paymentlink = `<a href="${paymentWorkerUrl}?s=${user.secret}&i=${tmp.id}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">

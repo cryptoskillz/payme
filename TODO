@@ -10,25 +10,15 @@ global
  ☐ fix the spinner with my wicked CSS skills :[
  ☐ check the sendemail works for forogot password
  ☐ add a parse  / stringy flag to the cache renders
- ✔ add required field to elementdata @done (22-06-23 23:25)
- ✔ add a create new to the menu on the left* @done (22-06-28 15:10)
- ✔ remove the datacount from the user object as we are doing it live! @done (22-06-28 15:12)
-
-
 
 create / edit data
 
 
 check payment (we only want to do this when we have bitcoin js running in the serverless)
 
-  ✔ check payment view @done (22-06-28 15:24)
-  ✔ create a subdmain that points to this @done (22-06-28 15:25)
-  ✔ take a check payment secret and id and it checks the status every 30 seconds @done (22-06-28 15:25)
-  ☐ extract id and secret from the url call
-  ☐ make a xhr call to the payment end point (we can reuse this as we do in admin)
   ☐ if payment has been made update the view
   ☐ update the check payment in the payme worker 
-  
+
 
 login.njk
 
@@ -45,15 +35,14 @@ forgot password
 
 data
 
- ☐ show both buttons and hide the one that is not used*
- ☐ when a payment checks is true hide check payment and show view payment button*
  ☐ update buildForm to use the new data types to have richtext edit etc
+ ☐ added an invoice to live and it did not show up until I cleared the cache. 
+ ☐ add a description the payment object (we could make this dynamic later using the elementdata functionality)
 
  
 data edit
 
 dashboard
-  ✔ id the local storage data object is empty then pull down the data so the counter works.* @done (22-06-23 23:08)
 
 API
 
