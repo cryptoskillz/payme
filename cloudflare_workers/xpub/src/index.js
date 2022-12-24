@@ -1,12 +1,6 @@
 /**
 
-This is a xpub as a service clourflare worker.  Currently it calls out to my legacy xpub server which is a 
-traditional node js service until our 100% serverless implementation is ready. 
-
-xoub service
-
-https://xpubaas.herokuapp.com/xpub/?xpub=xpub6CatWdiZiodmUeTDp8LT5or8nmbKNcuyvz7WyksVFkKB4RHwCD3XyuvPEbvqAQY3rAPshWcMLoP2fMFMKHPJ4ZeZXYVUhLv1VMrjPC7PW6V&network=ffff&biptype=84&newaddresscheck=1&startaddress=0&numberofaddresses=10&randomaddress=0
-
+This is a xpub as a service clourflare worker.  
 
 xpub = xpub key (required)
 
@@ -30,27 +24,30 @@ import { addressFromExtPubKey } from '@swan-bitcoin/xpub-lib';
 
 
 async function handleRequest(request) {
+    //set up a response object
     let theResponse = {}
+    //get the url paramaters
     const { searchParams } = new URL(request.url);
     const xpub = searchParams.get('xpub');
     const network = searchParams.get('network');
     /*
-     const key = searchParams.get('key');
+    //note implement each of these url paramaters so it has feature parity with the xpubasaservice
+    const key = searchParams.get('key');
     const biptype = searchParams.get('biptype');
     const newaddresscheck = searchParams.get('newaddresscheck');
     const startaddress = searchParams.get('startaddress');
     const numberofaddresses = searchParams.get('numberofaddresses');
     const randomaddress = searchParams.get('randomaddress');
     */
-    //const xpub = "xpub67yMUMbr2gAnBgnYvXcbJq8iUBe54Ev2dbUYKGN8jGY21AHJFeR7mnZqhbUNze4UbpRE9S1fWvmFCsFN4EvU1rWdqegW7dzoa7vZmYCLAAy"
-    //const network = "mainnet";
+    //call the pubkey method
     const address = addressFromExtPubKey({ extPubKey: xpub, network: network });
-    console.log(address);
+    //console.log(address);
+    //build the response
     theResponse.address = address.address
     theResponse.qrUrl = `https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${theResponse.address}`
     theResponse.path = address.path;
     theResponse.network = network
-
+    //return the response
     return new Response(JSON.stringify(theResponse));
 
 }

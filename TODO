@@ -4,6 +4,15 @@ https://github.com/aziz/PlainTasks
 
 PAGES
 
+GENERAL
+
+ ☐ replace admin with cpages admin, infact we can retire this admin 
+ ☐ move the xpub,checkpayment,exchangerate to v2
+ ☐ refactor checkpayment
+ ☐ refactor exchange rate
+ ☐ retire this repo.
+ ☐ look into morbius and ether js
+ 
 
 global
 
