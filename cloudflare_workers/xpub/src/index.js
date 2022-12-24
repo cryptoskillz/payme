@@ -26,54 +26,33 @@ http://localhost:8787/?key=test12345&biptype=84&newaddresscheck=1&startaddress=0
 
  */
 
+import { addressFromExtPubKey } from '@swan-bitcoin/xpub-lib';
 
-async function gatherResponse(response) {
-    const { headers } = response;
-    const contentType = headers.get('content-type') || '';
-    if (contentType.includes('application/json')) {
-        return JSON.stringify(await response.json());
-    } else if (contentType.includes('application/text')) {
-        return response.text();
-    } else if (contentType.includes('text/html')) {
-        return response.text();
-    } else {
-        return response.text();
-    }
-}
 
 async function handleRequest(request) {
-    //build a new URL
+    let theResponse = {}
     const { searchParams } = new URL(request.url);
-    //get the data
-    let key = searchParams.get('key');
-    let biptype = searchParams.get('biptype');
-    let newaddresscheck = searchParams.get('newaddresscheck');
-    let startaddress = searchParams.get('startaddress');
-    let numberofaddresses = searchParams.get('numberofaddresses');
-    let randomaddress = searchParams.get('randomaddress');
-    //move this a KV so we can  use the secret key to control  it.
-    let xpub = "xpub6CatWdiZiodmUeTDp8LT5or8nmbKNcuyvz7WyksVFkKB4RHwCD3XyuvPEbvqAQY3rAPshWcMLoP2fMFMKHPJ4ZeZXYVUhLv1VMrjPC7PW6V";
-    //debug
-    console.log(request.url)
-    console.log(key)
-    console.log(biptype)
-    console.log(newaddresscheck)
-    console.log(startaddress)
-    console.log(numberofaddresses)
-    console.log(randomaddress)
-    const url = `https://xpubaas.herokuapp.com/xpub/?xpub=${xpub}&network=ffff&biptype=${biptype}&newaddresscheck=${newaddresscheck}&startaddress=${startaddress}&numberofaddresses=${numberofaddresses}&randomaddress=${randomaddress}&key=12345`;
-    //console.log(url)
-    const init = {
-        headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            'X-Api-Key': APIKEY
-        },
-    };
-    
-    const response = await fetch(url, init);
-    const results = await gatherResponse(response);
-    return new Response(results, init);
-    
+    const xpub = searchParams.get('xpub');
+    const network = searchParams.get('network');
+    /*
+     const key = searchParams.get('key');
+    const biptype = searchParams.get('biptype');
+    const newaddresscheck = searchParams.get('newaddresscheck');
+    const startaddress = searchParams.get('startaddress');
+    const numberofaddresses = searchParams.get('numberofaddresses');
+    const randomaddress = searchParams.get('randomaddress');
+    */
+    //const xpub = "xpub67yMUMbr2gAnBgnYvXcbJq8iUBe54Ev2dbUYKGN8jGY21AHJFeR7mnZqhbUNze4UbpRE9S1fWvmFCsFN4EvU1rWdqegW7dzoa7vZmYCLAAy"
+    //const network = "mainnet";
+    const address = addressFromExtPubKey({ extPubKey: xpub, network: network });
+    console.log(address);
+    theResponse.address = address.address
+    theResponse.qrUrl = `https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${theResponse.address}`
+    theResponse.path = address.path;
+    theResponse.network = network
+
+    return new Response(JSON.stringify(theResponse));
+
 }
 
 addEventListener('fetch', event => {
